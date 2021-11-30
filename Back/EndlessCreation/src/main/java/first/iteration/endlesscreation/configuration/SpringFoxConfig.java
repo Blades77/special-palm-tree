@@ -18,8 +18,8 @@ import static java.util.Collections.singletonList;
 @Configuration
 @EnableSwagger2
 public class SpringFoxConfig {
-    public static final String ksiazka = "ksiazka";
     public static final String tile = "tile";
+    public static final String tag = "tag";
 
     @Bean
     public Docket api() {
@@ -31,7 +31,7 @@ public class SpringFoxConfig {
 //                .paths(PathSelectors.regex("(?!/userEntities).+"))
                 .build()
                 .apiInfo(createApiInfo())
-                .tags(new Tag(ksiazka, ""),new Tag(tile, ""));
+                .tags(new Tag(tile, ""),new Tag(tag, ""));
 //                .ignoredParameterTypes(UserDetailsImp.class, RequestHeader.class)
 //                .securityContexts(singletonList(createContext()))
 //                .securitySchemes(singletonList(createSchema()));

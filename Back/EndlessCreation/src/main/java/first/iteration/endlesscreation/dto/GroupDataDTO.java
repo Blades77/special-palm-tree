@@ -2,37 +2,39 @@ package first.iteration.endlesscreation.dto;
 
 public class GroupDataDTO {
 
-    private Long group_id;
-    private String group_name;
-    private String group_type;
+    private Long groupId;
+    private String groupName;
+    private String groupType;
 
-    public GroupDataDTO(Long group_id, String group_name, String group_type){
-        this.group_id = group_id;
-        this.group_name = group_name;
-        this.group_type = group_type;
+    public GroupDataDTO(Long groupId, String groupName, String groupType){
+        this.groupId = groupId;
+        this.groupName = groupName;
+        this.groupType = groupType;
     }
 
-    public Long getGroup_id() {
-        return group_id;
+    public GroupDataDTO(){}
+
+    public Long getGroupId() {
+        return groupId;
     }
 
-    public void setGroup_id(Long group_id) {
-        this.group_id = group_id;
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
     }
 
-    public String getGroup_name() {
-        return group_name;
+    public String getGroupName() {
+        return groupName;
     }
 
-    public void setGroup_name(String group_name) {
-        this.group_name = group_name;
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
     }
 
-    public String getGroup_type() {
-        return group_type;
+    public String getGroupType() {
+        return groupType;
     }
 
-    public void setGroup_type(String group_type) {
-        this.group_type = group_type;
+    public void setGroupType(String groupType) {
+        this.groupType = groupType;
     }
 }

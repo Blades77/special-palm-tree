@@ -4,7 +4,7 @@ package first.iteration.endlesscreation.service;
 import first.iteration.endlesscreation.exception.ResourceNotFoundException;
 import first.iteration.endlesscreation.repository.GroupDataRepository;
 import org.springframework.stereotype.Service;
-import first.iteration.endlesscreation.Model.Group_dataEntity;
+import first.iteration.endlesscreation.Model.GroupDataEntity;
 
 @Service
 public class GroupDataService {
@@ -15,7 +15,7 @@ public class GroupDataService {
         this.groupDataRepository = groupDataRepository;
     }
 
-    public Group_dataEntity findById(Long id){
+    public GroupDataEntity findById(Long id){
         return groupDataRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot find specified group"));
 
