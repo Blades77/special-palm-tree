@@ -1,6 +1,7 @@
 package first.iteration.endlesscreation.Model;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,6 +16,8 @@ public class TileEntity {
     private String tileTitle;
     private String tileData;
     private Long ownerUserId;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
@@ -54,13 +57,28 @@ public class TileEntity {
         this.tileData = tile_data;
     }
 
-
     public Long getOwnerUserId() {
         return ownerUserId;
     }
 
     public void setOwnerUserId(Long ownerUserId) {
         this.ownerUserId = ownerUserId;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime created_at) {
+        this.createdAt = created_at;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updated_at) {
+        this.updatedAt = updated_at;
     }
 
     public GroupDataEntity getGroupDataEntity() {

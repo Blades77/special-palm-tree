@@ -20,6 +20,8 @@ import static java.util.Collections.singletonList;
 public class SpringFoxConfig {
     public static final String tile = "tile";
     public static final String tag = "tag";
+    public static final String groupData = "GroupData";
+    public static final String color = "color";
 
     @Bean
     public Docket api() {
@@ -31,7 +33,7 @@ public class SpringFoxConfig {
 //                .paths(PathSelectors.regex("(?!/userEntities).+"))
                 .build()
                 .apiInfo(createApiInfo())
-                .tags(new Tag(tile, ""),new Tag(tag, ""));
+                .tags(new Tag(tile, ""),new Tag(tag, ""), new Tag(groupData,""), new Tag(color, ""));
 //                .ignoredParameterTypes(UserDetailsImp.class, RequestHeader.class)
 //                .securityContexts(singletonList(createContext()))
 //                .securitySchemes(singletonList(createSchema()));

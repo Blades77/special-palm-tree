@@ -13,10 +13,13 @@ public class TagEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long tagId;
     private String tagName;
-    private String tagColor;
 
     @ManyToMany(mappedBy = "tags")
     private Set<TileEntity> tiles = new HashSet<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="color_id")
+    private ColorEntity colorEntity;
 
     public Long getTagId() {
         return tagId;
@@ -34,20 +37,20 @@ public class TagEntity {
         this.tagName = tag_name;
     }
 
-    public String getTagColor() {
-        return tagColor;
-    }
-
-    public void setTagColor(String tag_color) {
-        this.tagColor = tag_color;
-    }
-
     public Set<TileEntity> getTiles() {
         return tiles;
     }
 
     public void setTiles(Set<TileEntity> tiles) {
         this.tiles = tiles;
+    }
+
+    public ColorEntity getColorEntity() {
+        return colorEntity;
+    }
+
+    public void setColorEntity(ColorEntity colorEntity) {
+        this.colorEntity = colorEntity;
     }
 }
 

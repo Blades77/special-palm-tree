@@ -1,16 +1,26 @@
 package first.iteration.endlesscreation.dto.create;
 
+
 public class TagCreateDTO {
 
     private String tagName;
-    private String tagColor;
+    private ColorCreateDTO colorCreateDTO;
 
-    public TagCreateDTO(String tag_name, String tag_color) {
-        this.tagName = tag_name;
-        this.tagColor = tag_color;
+    public TagCreateDTO(String tagName, ColorCreateDTO colorCreateDTO) {
+        this.tagName = tagName;
+        this.colorCreateDTO = colorCreateDTO;
+
     }
 
     public TagCreateDTO(){}
+
+    public ColorCreateDTO getColorCreateDTO() {
+        return colorCreateDTO;
+    }
+
+    public void setColorCreateDTO(ColorCreateDTO colorCreateDTO) {
+        this.colorCreateDTO = colorCreateDTO;
+    }
 
     public String getTagName() {
         return tagName;
@@ -20,19 +30,10 @@ public class TagCreateDTO {
         this.tagName = tagName;
     }
 
-    public String getTagColor() {
-        return tagColor;
-    }
-
-    public void setTagColor(String tagColor) {
-        this.tagColor = tagColor;
-    }
-
     @Override
     public String toString() {
         return "TagCreateDTO{" +
                 ", tag_name='" + tagName + '\'' +
-                ", tag_color='" + tagColor + '\'' +
                 '}';
     }
 }
