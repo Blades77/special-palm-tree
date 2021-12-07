@@ -9,12 +9,16 @@ import first.iteration.endlesscreation.dao.TileDAO;
 import first.iteration.endlesscreation.dto.GroupDataDTO;
 import first.iteration.endlesscreation.dto.TagDTO;
 import first.iteration.endlesscreation.dto.TileDTO;
+import first.iteration.endlesscreation.dto.Update.TileUpdateDTO;
+import first.iteration.endlesscreation.dto.create.TagCreateDTO;
 import first.iteration.endlesscreation.dto.create.TileCreateDTO;
 import first.iteration.endlesscreation.repository.TagRepository;
 import first.iteration.endlesscreation.repository.TileRepository;
 import first.iteration.endlesscreation.repository.GroupDataRepository;
 import org.springframework.stereotype.Service;
 
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,13 +82,19 @@ public class TileService {
 
 
     public void createTile(TileCreateDTO tileCreateDTO){
-        tileRepository.save(mapCreateToTileEntity(tileCreateDTO));
+        TileEntity tileEntity = mapCreateToTileEntity(tileCreateDTO);
+        List<TagEntity> tagEntityList = tagService.getTagsEntityListByTagCreateDTOList(tileCreateDTO.getTagCreateDTOList());
+        for(TagEntity tagEntity : tagEntityList){
+            tileEntity.addTag(tagEntity);
+        }
+        tileRepository.save(tileEntity);
+
     }
 
-    public void editTile(TileDTO tileDTO){
-        Long id = tileDTO.getTileId();
+    public void editTile(TileUpdateDTO tileUpdateDTO){
+        Long id = tileUpdateDTO.getTileId();
         TileEntity tileEntity = tileDAO.getTileEntity(id);
-        tileRepository.save(mapToTileEntity(tileDTO,tileEntity));
+        tileRepository.save(mapUpdateToTileEntity(tileUpdateDTO,tileEntity));
     }
 
     public void deleteTile(Long id){
@@ -116,34 +126,26 @@ public class TileService {
         return tagDTOList;
     }
 
-    public void addExistingTagToTile(Long tileId,Long tagId){
-        TileEntity tileEntity =  tileDAO.getTileEntity(tileId);
-        TagEntity tagEntity = tagDAO.getTagEntityById(tagId);
+    public void addTagToTile(Long tileId, TagCreateDTO tagCreateDTO){
+        TileEntity tileEntity = tileDAO.getTileEntity(tileId);
+        TagEntity tagEntity = tagService.findOrCreateTag(tagCreateDTO);
         tileEntity.addTag(tagEntity);
         tileRepository.save(tileEntity);
     }
 
-//    public void addNewTagToTile(Long id, TagCreateDTO tagCreateDTO){
-//        TileEntity tileEntity =  tileDAO.getTileEntity(id);
-//        TagEntity tagEntity = new TagEntity();
-//        tagEntity.setTagName();
-//        tileEntity.addTag(tag);
-//        tileRepository.save(tileEntity);
-//    }
-    public void deleteTagsForTile(){
-        long id = 5;
-        TileEntity tileEntity =  tileRepository.getById(id);
-        long[] myLongArray = {2, 3,4};
-        int i =0;
-        while(i< myLongArray.length){
-           long id4 = myLongArray[i];
-           TagEntity tagEntity = tagRepository.getById(id4);
-           tileEntity.removeTag(tagEntity);
-           i++;
-        }
+    public void deleteTagFromTile(Long tileId, Long tagId){
+        TileEntity tileEntity = tileDAO.getTileEntity(tileId);
+        TagEntity tagEntity = tagDAO.getTagEntityById(tagId);
+        tileEntity.removeTag(tagEntity);
         tileRepository.save(tileEntity);
     }
 
+    private TileEntity mapUpdateToTileEntity(TileUpdateDTO tileUpdateDTO, TileEntity tileEntity){
+        tileEntity.setTileTitle(tileUpdateDTO.getTileTitle());
+        tileEntity.setTileData(tileUpdateDTO.getTileData());
+        tileEntity.setUpdatedAt(LocalDateTime.now());
+        return tileEntity;
+    }
 
     private static TileDTO mapToTileDTO(TileEntity tileEntity, GroupDataDTO groupDataDTO, List<TagDTO> tagDTOList){
         TileDTO tileDTO = new TileDTO();
@@ -172,8 +174,10 @@ public class TileService {
         TileEntity tileEntity = new TileEntity();
         tileEntity.setTileTitle(tileCreateDTO.getTileTitle());
         tileEntity.setTileData(tileCreateDTO.getTileData());
+        tileEntity.setCreatedAt(LocalDateTime.now());
+        tileEntity.setUpdatedAt(LocalDateTime.now());
         tileEntity.setOwnerUserId(tileCreateDTO.getOwnerUserId());
-        tileEntity.setGroupDataEntity(groupDataService.findById(tileCreateDTO.getGroupId()));
+        tileEntity.setGroupDataEntity(groupDataService.findById(tileCreateDTO.getGroupDataDTO().getGroupId()));
         return tileEntity;
     }
 
@@ -192,6 +196,7 @@ public class TileService {
         groupDataDTO.setGroupType(groupDataEntity.getGroupType());
         return groupDataDTO;
     }
+
 
 //    private TagDTO mapToTagDTO(TagEntity tagEntity){
 //        TagDTO tagDTO = new TagDTO();

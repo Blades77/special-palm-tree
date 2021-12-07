@@ -1,18 +1,30 @@
 package first.iteration.endlesscreation.dto.create;
 
+import first.iteration.endlesscreation.dto.GroupDataDTO;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
 public class TileCreateDTO {
     private String tileTitle;
     private String tileData;
     private Long ownerUserId;
-    private Long groupId;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private GroupDataDTO groupDataDTO;
+    private List<TagCreateDTO> tagCreateDTOList;
 
     public TileCreateDTO(){}
 
-    public TileCreateDTO(String tileTitle, String tileData, Long ownerUserId, Long groupId){
+    public TileCreateDTO(String tileTitle, String tileData, Long ownerUserId, LocalDateTime createdAt, LocalDateTime updatedAt, GroupDataDTO groupDataDTO, List<TagCreateDTO> tagCreateDTOList){
         this.tileTitle = tileTitle;
         this.tileData = tileData;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
         this.ownerUserId = ownerUserId;
-        this.groupId = groupId;
+        this.groupDataDTO = groupDataDTO;
+        this.tagCreateDTOList = tagCreateDTOList;
+
     }
 
     public String getTileTitle() {
@@ -39,11 +51,35 @@ public class TileCreateDTO {
         this.ownerUserId = ownerUserId;
     }
 
-    public Long getGroupId() {
-        return groupId;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setGroupId(Long groupId) {
-        this.groupId = groupId;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public GroupDataDTO getGroupDataDTO() {
+        return groupDataDTO;
+    }
+
+    public void setGroupDataDTO(GroupDataDTO groupDataDTO) {
+        this.groupDataDTO = groupDataDTO;
+    }
+
+    public List<TagCreateDTO> getTagCreateDTOList() {
+        return tagCreateDTOList;
+    }
+
+    public void setTagCreateDTOList(List<TagCreateDTO> tagCreateDTOList) {
+        this.tagCreateDTOList = tagCreateDTOList;
     }
 }

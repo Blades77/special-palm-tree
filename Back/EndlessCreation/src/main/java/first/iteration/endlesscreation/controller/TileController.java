@@ -1,6 +1,9 @@
 package first.iteration.endlesscreation.controller;
 
+import first.iteration.endlesscreation.dto.GroupDataDTO;
 import first.iteration.endlesscreation.dto.TagDTO;
+import first.iteration.endlesscreation.dto.Update.TileUpdateDTO;
+import first.iteration.endlesscreation.dto.create.TagCreateDTO;
 import first.iteration.endlesscreation.service.TileService;
 import first.iteration.endlesscreation.dto.TileDTO;
 import first.iteration.endlesscreation.dto.create.TileCreateDTO;
@@ -66,8 +69,8 @@ public class TileController {
 
     @ApiOperation(value = "Edit specific tile")
     @PutMapping("/tile")
-    private void editTile(@RequestBody TileDTO tileDTO){
-        tileService.editTile(tileDTO);
+    private void editTile(@RequestBody TileUpdateDTO tileUpdateDTO){
+        tileService.editTile(tileUpdateDTO);
         }
 
 
@@ -77,11 +80,11 @@ public class TileController {
         tileService.deleteTile(id);
     }
 
-//    @ApiOperation(value = "Get groups for tile")
-//    @GetMapping("/tile/groups/{id}")
-//    private GroupDataDTO getGroups(@ApiParam(value = "Id of tile", example = "1", required = true) @PathVariable Long id){
-//        return tileService.getGroupForTile(id);
-//    }
+    @ApiOperation(value = "Get groups for tile")
+    @GetMapping("/tile/groups/{id}")
+    private GroupDataDTO getGroups(@ApiParam(value = "Id of tile", example = "1", required = true) @PathVariable Long id){
+        return tileService.getGroupForTile(id);
+    }
 
     @ApiOperation(value = "Gets tags by tile id")
     @GetMapping("/tile/tags/{id}")
@@ -89,20 +92,16 @@ public class TileController {
         return tileService.getTagsForTile(id);
     }
 
-//    @ApiOperation(value = "Add tag to tile")
-//    @PostMapping("/tile/tags/{id}")
-//    private void addTagToTile(@ApiParam(value = "Id of tile", example = "1", required = true) @PathVariable Long id,@RequestBody TagCreateDTO tagCreateDTO) {
-//        tileService.addNewTagToTile(id,tagCreateDTO);
-//    }
-
-    @ApiOperation(value = "insert tags")
-    @GetMapping("/inserttags")
-    private void insertTags() {
-        tileService.deleteTagsForTile();
+    @ApiOperation(value = "Add tag to tile")
+    @PostMapping("/tile/tag/{id}")
+    private void addTagToTile(@ApiParam(value = "Id of tile", example = "1", required = true) @PathVariable Long id,@RequestBody TagCreateDTO tagCreateDTO) {
+        tileService.addTagToTile(id,tagCreateDTO);
     }
 
-
-
-
+    @ApiOperation(value = "Remove tag from tile")
+    @DeleteMapping("/tile/tag/{tileId}/{tagId}")
+    private void removeTagFromTile(@ApiParam(value = "Id of tile", example = "1", required = true) @PathVariable Long tileId,@ApiParam(value = "Id of tag", example = "1", required = true) @PathVariable Long tagId) {
+        tileService.deleteTagFromTile(tileId,tagId);
+    }
 
 }

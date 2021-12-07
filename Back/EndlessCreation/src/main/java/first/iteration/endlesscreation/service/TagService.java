@@ -2,17 +2,14 @@ package first.iteration.endlesscreation.service;
 
 import first.iteration.endlesscreation.Model.ColorEntity;
 import first.iteration.endlesscreation.Model.TagEntity;
-import first.iteration.endlesscreation.Model.TileEntity;
 import first.iteration.endlesscreation.dao.ColorDAO;
 import first.iteration.endlesscreation.dao.TagDAO;
-import first.iteration.endlesscreation.dto.ColorDTO;
 import first.iteration.endlesscreation.dto.TagDTO;
 import first.iteration.endlesscreation.dto.create.TagCreateDTO;
 import first.iteration.endlesscreation.exception.ResourceNotFoundException;
 import first.iteration.endlesscreation.repository.TagRepository;
 import org.springframework.stereotype.Service;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +21,6 @@ public class TagService {
     private final ColorService colorService;
     private final ColorDAO colorDAO;
     private final TagDAO tagDAO;
-    private boolean isTagInBase;
 
     public TagService(TagRepository tagRepository,ColorDAO colorDAO,TagDAO tagDAO, ColorService colorService)
     {
@@ -34,35 +30,58 @@ public class TagService {
         this.tagDAO = tagDAO;
     }
 
-    public void createTag(TagCreateDTO tagCreateDTO){
-        isTagInBase = false;
-        ColorEntity colorEntity = new ColorEntity();
-        try{
-            colorEntity = colorDAO.getColorEntityByHexValue(tagCreateDTO.getColorCreateDTO().getColorValueHex());
-        }
-        catch(ResourceNotFoundException e){
-            colorService.createColor(tagCreateDTO.getColorCreateDTO());
-            colorEntity = colorDAO.getColorEntityByHexValue(tagCreateDTO.getColorCreateDTO().getColorValueHex());
-        }
 
-        List<TagEntity> tagEntityList = tagRepository.getTagEntityByColorEntity(colorEntity);
-        if(tagEntityList.isEmpty() == true){
+    public TagEntity findOrCreateTag(TagCreateDTO tagCreateDTO) {
+        ColorEntity colorEntity = colorService.findOrCreateColor(tagCreateDTO.getColorCreateDTO());
+        TagEntity tagEntity = new TagEntity();
+        try {
+            tagEntity = tagDAO.getTagEntityByTagNameAndColorEntity(tagCreateDTO.getTagName(),colorEntity);
+        } catch (ResourceNotFoundException e) {
             tagRepository.save(mapToTagEntity(tagCreateDTO,colorEntity));
-
+            tagEntity = tagDAO.getTagEntityByTagNameAndColorEntity(tagCreateDTO.getTagName(),colorEntity);
         }
+        return tagEntity;
+    }
 
-        else{
-            for(TagEntity tagEntity : tagEntityList) {
-                if(tagCreateDTO.getTagName().equals(tagEntity.getTagName())){
-                    isTagInBase = true;
-                }
-            }
-            if(isTagInBase == false){
-                tagRepository.save(mapToTagEntity(tagCreateDTO,colorEntity));
-            }
+    public List<TagEntity> getTagsEntityListByTagCreateDTOList(List<TagCreateDTO> tagCreateDTOList){
+        List<TagEntity> tagEntityList = new ArrayList<>();
+        for(TagCreateDTO tagCreateDTO: tagCreateDTOList){
+            tagEntityList.add(findOrCreateTag(tagCreateDTO));
         }
+        return tagEntityList;
 
     }
+
+
+//
+//        List<TagEntity> tagEntityList = tagRepository.getTagEntityByColorEntity(colorEntity);
+//        if(tagEntityList.isEmpty() == true){
+//            tagRepository.save(mapToTagEntity(tagCreateDTO,colorEntity));
+//
+//        }
+//
+//        else{
+//            for(TagEntity tagEntity : tagEntityList) {
+//                if(tagCreateDTO.getTagName().equals(tagEntity.getTagName())){
+//                    isTagInBase = true;
+//                }
+//            }
+//            if(isTagInBase == false){
+//                tagRepository.save(mapToTagEntity(tagCreateDTO,colorEntity));
+//            }
+//        }
+//
+//        return mapToTagEntity(tagCreateDTO,colorEntity);
+
+//    }
+
+//    public List<TagEntity> getTagsEntityListByTagCreateDTOList(List<TagCreateDTO> tagCreateDTOList){
+//        List<TagEntity> tagEntityList = new ArrayList<>();
+//        for(TagCreateDTO tagCreateDTO : tagCreateDTOList){
+//                tagEntityList.add(checkIfExistOrCreateTag(tagCreateDTO));
+//        }
+//        return  tagEntityList;
+//    }
 
     public List<TagDTO> getAllTags(){
 

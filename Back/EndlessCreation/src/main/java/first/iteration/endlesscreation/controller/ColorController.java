@@ -23,6 +23,6 @@ public class ColorController {
     @ApiOperation(value = "Creates color")
     @PostMapping("/color")
     private void createColor(@RequestBody ColorCreateDTO colorCreateDTO){
-        colorService.createColor(colorCreateDTO);
+        colorService.findOrCreateColor(colorCreateDTO);
     }
 }
