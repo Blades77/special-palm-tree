@@ -6,6 +6,7 @@ import first.iteration.endlesscreation.dao.ColorDAO;
 import first.iteration.endlesscreation.dto.ColorDTO;
 import first.iteration.endlesscreation.dto.create.ColorCreateDTO;
 import first.iteration.endlesscreation.exception.ResourceNotFoundException;
+import first.iteration.endlesscreation.mapper.ColorMapper;
 import first.iteration.endlesscreation.repository.ColorRepository;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +27,7 @@ public class ColorService {
 
     public ColorDTO findById(Long id){
         ColorEntity colorEntity = colorDAO.getColorEntity(id);
-        return  mapToColorDTO(colorEntity);
+        return ColorMapper.mapToColorDTO(colorEntity);
     }
 
     public ColorEntity findOrCreateColor(ColorCreateDTO colorCreateDTO){
@@ -58,7 +59,7 @@ public class ColorService {
         List<ColorEntity> colorEntityList = colorRepository.findAll();
         List<ColorDTO> colorDTOList = new ArrayList<>();
         for(ColorEntity colorEntity : colorEntityList){
-            colorDTOList.add(mapToColorDTO(colorEntity));
+            colorDTOList.add(ColorMapper.mapToColorDTO(colorEntity));
         }
         return colorDTOList;
      }
@@ -71,14 +72,6 @@ public class ColorService {
         colorRepository.save(colorEntity);
      }
 
-    public ColorDTO mapToColorDTO(ColorEntity colorEntity){
-        ColorDTO colorDTO = new ColorDTO();
-        colorDTO.setColorId(colorEntity.getColorId());
-        colorDTO.setColorValueHex(colorEntity.getColorValueHex());
-        colorDTO.setColorDesc(colorEntity.getColorDesc());
-        return  colorDTO;
-
-    }
 
 
     private ColorEntity mapCreateToColorEntity(ColorCreateDTO colorCreateDTO){

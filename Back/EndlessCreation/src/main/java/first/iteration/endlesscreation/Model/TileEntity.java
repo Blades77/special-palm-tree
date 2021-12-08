@@ -31,7 +31,7 @@ public class TileEntity {
     private GroupDataEntity groupDataEntity;
 
     @OneToMany(mappedBy = "tileEntity", cascade = CascadeType.ALL)
-    private Set<CommentTileEntity> tileComments = new HashSet<>();
+    private Set<CommentEntity> tileComments = new HashSet<>();
 
     public Long getTileId() {
         return tileId;
@@ -89,11 +89,11 @@ public class TileEntity {
         this.groupDataEntity = groupDataEntity;
     }
 
-    public Set<CommentTileEntity> getTileComments() {
+    public Set<CommentEntity> getTileComments() {
         return tileComments;
     }
 
-    public void setTileComments(Set<CommentTileEntity> tileComments) {
+    public void setTileComments(Set<CommentEntity> tileComments) {
         this.tileComments = tileComments;
     }
 

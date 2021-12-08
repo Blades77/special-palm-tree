@@ -3,9 +3,12 @@ package first.iteration.endlesscreation.dao;
 
 import first.iteration.endlesscreation.Model.ColorEntity;
 import first.iteration.endlesscreation.Model.TagEntity;
+import first.iteration.endlesscreation.Model.TileEntity;
 import first.iteration.endlesscreation.exception.ResourceNotFoundException;
 import first.iteration.endlesscreation.repository.TagRepository;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class TagDAO {
@@ -24,5 +27,9 @@ public class TagDAO {
     public TagEntity getTagEntityByTagNameAndColorEntity(String tagName, ColorEntity colorEntity){
         return tagRepository.getTagEntityByTagNameAndColorEntity(tagName,colorEntity)
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot find specified tag"));
+    }
+
+    public List<TagEntity> getTagEntityListByTile(TileEntity tileEntity){
+        return  tagRepository.getTagEntityByTiles(tileEntity);
     }
 }

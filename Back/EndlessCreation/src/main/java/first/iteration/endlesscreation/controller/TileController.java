@@ -1,6 +1,5 @@
 package first.iteration.endlesscreation.controller;
 
-import first.iteration.endlesscreation.dto.GroupDataDTO;
 import first.iteration.endlesscreation.dto.TagDTO;
 import first.iteration.endlesscreation.dto.Update.TileUpdateDTO;
 import first.iteration.endlesscreation.dto.create.TagCreateDTO;
@@ -29,9 +28,9 @@ public class TileController {
     }
 
     @ApiOperation(value ="Return data of specific tile")
-    @GetMapping("tiles/{id}")
+    @GetMapping("tile/{id}")
     private TileDTO getSpecificTile(@ApiParam(value = "Id of tile", example = "1", required = true) @PathVariable Long id) {
-        return tileService.getTileById(id);
+        return tileService.getFullTileById(id);
     }
 
     @ApiOperation(value = "Returns list of tiles")
@@ -80,17 +79,47 @@ public class TileController {
         tileService.deleteTile(id);
     }
 
-    @ApiOperation(value = "Get groups for tile")
-    @GetMapping("/tile/groups/{id}")
-    private GroupDataDTO getGroups(@ApiParam(value = "Id of tile", example = "1", required = true) @PathVariable Long id){
-        return tileService.getGroupForTile(id);
-    }
+//    @ApiOperation(value = "Get groups for tile")
+//    @GetMapping("/tile/groups/{id}")
+//    private GroupDataDTO getGroups(@ApiParam(value = "Id of tile", example = "1", required = true) @PathVariable Long id){
+//        return tileService.getGroupForTile(id);
+//    }
 
     @ApiOperation(value = "Gets tags by tile id")
     @GetMapping("/tile/tags/{id}")
     private List<TagDTO> getTagsForTile(@ApiParam(value = "Id of tile", example = "1", required = true) @PathVariable Long id){
         return tileService.getTagsForTile(id);
     }
+//
+//    @ApiOperation(value = "Gets comments by tile id")
+//    @GetMapping("/tile/comments/{id}")
+//    private List<CommentDTO> getCommentsForTile(@ApiParam(value = "Id of tile", example = "1", required = true) @PathVariable Long id){
+//        return tileService.getCommentsForTile(id);
+//    }
+//
+//    @ApiOperation(value = "Gets comments by parentComment id")
+//    @GetMapping("/tile/comments/parrent/{id}")
+//    private List<CommentDTO> getCommentsByParentCommentId(@ApiParam(value = "Id of parent comment", example = "1", required = true) @PathVariable Long id){
+//        return tileService.getCommentsByParentCommentId(id);
+//    }
+//
+//    @ApiOperation(value = "Add comment to tile")
+//    @PostMapping("/tile/comment/")
+//    private void createComment(@RequestBody CommentCreateDTO commentCreateDTO) {
+//        tileService.createComment(commentCreateDTO);
+//    }
+//
+//    @ApiOperation(value = "Edit specific tile")
+//    @PutMapping("/tile/comment")
+//    private void editComment(@RequestBody CommentUpdateDTO commentUpdateDTO){
+//        tileService.editCommentTile(commentUpdateDTO);
+//    }
+//
+//    @ApiOperation(value = "Delete tile")
+//    @DeleteMapping("/tile/comment/{commentId}")
+//    private void deleComment(@ApiParam(value = "Id of comment", example = "1", required = true) @PathVariable Long commentId) {
+//        tileService.deleteCommentsCascade(commentId);
+//    }
 
     @ApiOperation(value = "Add tag to tile")
     @PostMapping("/tile/tag/{id}")

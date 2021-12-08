@@ -8,8 +8,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface GroupDataRepository extends JpaRepository<GroupDataEntity, Long> {
-    GroupDataEntity getGroupDataEntityByTiles(TileEntity tileEntity);
+    Optional<GroupDataEntity> getGroupDataEntityByTiles(TileEntity tileEntity);
 }

@@ -2,11 +2,14 @@ package first.iteration.endlesscreation.service;
 
 import first.iteration.endlesscreation.Model.ColorEntity;
 import first.iteration.endlesscreation.Model.TagEntity;
+import first.iteration.endlesscreation.Model.TileEntity;
 import first.iteration.endlesscreation.dao.ColorDAO;
 import first.iteration.endlesscreation.dao.TagDAO;
+import first.iteration.endlesscreation.dto.ColorDTO;
 import first.iteration.endlesscreation.dto.TagDTO;
 import first.iteration.endlesscreation.dto.create.TagCreateDTO;
 import first.iteration.endlesscreation.exception.ResourceNotFoundException;
+import first.iteration.endlesscreation.mapper.TagMapper;
 import first.iteration.endlesscreation.repository.TagRepository;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +33,9 @@ public class TagService {
         this.tagDAO = tagDAO;
     }
 
+    public TagEntity getTagEntityById(Long id){
+        return tagDAO.getTagEntityById(id);
+    }
 
     public TagEntity findOrCreateTag(TagCreateDTO tagCreateDTO) {
         ColorEntity colorEntity = colorService.findOrCreateColor(tagCreateDTO.getColorCreateDTO());
@@ -49,9 +55,22 @@ public class TagService {
             tagEntityList.add(findOrCreateTag(tagCreateDTO));
         }
         return tagEntityList;
-
     }
 
+    public List<TagEntity> getTagEntityListByTile(TileEntity tileEntity){
+        return  tagDAO.getTagEntityListByTile(tileEntity);
+    }
+
+    public List<TagDTO>getTagsForTile(TileEntity tileEntity){
+        List<TagEntity> tagEntityList = getTagEntityListByTile(tileEntity);
+        List<TagDTO> tagDTOList = new ArrayList<>();
+        for(TagEntity tagEntity : tagEntityList){
+            ColorDTO colorDTO = colorService.findById(tagEntity.getColorEntity().getColorId());
+            tagDTOList.add(TagMapper.mapToTagDTO(tagEntity,colorDTO));
+
+        }
+        return tagDTOList;
+    }
 
 //
 //        List<TagEntity> tagEntityList = tagRepository.getTagEntityByColorEntity(colorEntity);
@@ -113,13 +132,7 @@ public class TagService {
         tagRepository.save(tagEntity);
     }
 
-    public TagDTO mapToTagDTO(TagEntity tagEntity){
-        TagDTO tagDTO = new TagDTO();
-        tagDTO.setTagId(tagEntity.getTagId());
-        tagDTO.setTagName(tagEntity.getTagName());
-        tagDTO.setColorDTO(colorService.findById(tagEntity.getColorEntity().getColorId()));
-        return  tagDTO;
-    }
+
 
     private TagEntity mapToTagEntity(TagCreateDTO tagCreateDTO, ColorEntity colorEntity){
         TagEntity tagEntity = new TagEntity();
