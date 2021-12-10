@@ -17,6 +17,9 @@ public class TagEntity {
     @ManyToMany(mappedBy = "tags")
     private Set<TileEntity> tiles = new HashSet<>();
 
+    @ManyToMany(mappedBy = "tags")
+    private Set<BookEntity> books = new HashSet<>();
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="color_id")
     private ColorEntity colorEntity;
@@ -51,6 +54,14 @@ public class TagEntity {
 
     public void setColorEntity(ColorEntity colorEntity) {
         this.colorEntity = colorEntity;
+    }
+
+    public Set<BookEntity> getBooks() {
+        return books;
+    }
+
+    public void setBooks(Set<BookEntity> books) {
+        this.books = books;
     }
 }
 
