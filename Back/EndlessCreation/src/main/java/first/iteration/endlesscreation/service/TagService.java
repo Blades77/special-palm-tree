@@ -1,5 +1,6 @@
 package first.iteration.endlesscreation.service;
 
+import first.iteration.endlesscreation.Model.BookEntity;
 import first.iteration.endlesscreation.Model.ColorEntity;
 import first.iteration.endlesscreation.Model.TagEntity;
 import first.iteration.endlesscreation.Model.TileEntity;
@@ -61,8 +62,22 @@ public class TagService {
         return  tagDAO.getTagEntityListByTile(tileEntity);
     }
 
+    public List<TagEntity> getTagEntityListByBook(BookEntity bookEntity){
+        return  tagDAO.getTagEntityListByBook(bookEntity);
+    }
     public List<TagDTO>getTagsForTile(TileEntity tileEntity){
         List<TagEntity> tagEntityList = getTagEntityListByTile(tileEntity);
+        List<TagDTO> tagDTOList = new ArrayList<>();
+        for(TagEntity tagEntity : tagEntityList){
+            ColorDTO colorDTO = colorService.findById(tagEntity.getColorEntity().getColorId());
+            tagDTOList.add(TagMapper.mapToTagDTO(tagEntity,colorDTO));
+
+        }
+        return tagDTOList;
+    }
+
+    public List<TagDTO>getTagsForBook(BookEntity bookEntity){
+        List<TagEntity> tagEntityList = getTagEntityListByBook(bookEntity);
         List<TagDTO> tagDTOList = new ArrayList<>();
         for(TagEntity tagEntity : tagEntityList){
             ColorDTO colorDTO = colorService.findById(tagEntity.getColorEntity().getColorId());

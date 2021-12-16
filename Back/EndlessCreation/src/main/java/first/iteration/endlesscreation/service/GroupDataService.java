@@ -33,5 +33,4 @@ public class GroupDataService {
         return GroupDataMapper.mapToGroupDataDTO(groupDataEntity);
     }
 
-
 }

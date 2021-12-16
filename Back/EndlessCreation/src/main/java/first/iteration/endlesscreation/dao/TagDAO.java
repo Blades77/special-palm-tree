@@ -1,6 +1,7 @@
 package first.iteration.endlesscreation.dao;
 
 
+import first.iteration.endlesscreation.Model.BookEntity;
 import first.iteration.endlesscreation.Model.ColorEntity;
 import first.iteration.endlesscreation.Model.TagEntity;
 import first.iteration.endlesscreation.Model.TileEntity;
@@ -31,5 +32,9 @@ public class TagDAO {
 
     public List<TagEntity> getTagEntityListByTile(TileEntity tileEntity){
         return  tagRepository.getTagEntityByTiles(tileEntity);
+    }
+
+    public List<TagEntity> getTagEntityListByBook(BookEntity bookEntity){
+        return  tagRepository.getTagEntityByBooks(bookEntity);
     }
 }

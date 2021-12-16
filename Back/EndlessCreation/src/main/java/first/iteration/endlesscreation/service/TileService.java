@@ -144,7 +144,7 @@ public class TileService {
     }
 
 
-    private List<TileDTO> mapToTileDTOList(List<TileEntity> tileEntityList){ /// pomyślec nad tym
+    private List<TileDTO> mapToTileDTOList(List<TileEntity> tileEntityList){
         List<TileDTO> tileDTOList = new ArrayList<>();
         for(TileEntity tileEntity : tileEntityList){
             GroupDataDTO groupDataDTO = groupDataService.getGroupDataDTOByTileEntity(tileEntity);

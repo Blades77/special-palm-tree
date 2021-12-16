@@ -23,6 +23,8 @@ public class BookDTO {
         this.tagDTOList = tagDTOList;
     }
 
+    public BookDTO(){}
+
     public Long getBookId() {
         return bookId;
     }

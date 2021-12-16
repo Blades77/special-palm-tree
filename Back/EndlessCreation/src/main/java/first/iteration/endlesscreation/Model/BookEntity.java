@@ -26,10 +26,10 @@ public class BookEntity {
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private Set<TagEntity> tags = new HashSet<>();
 
-    @OneToMany(mappedBy = "bookEntity", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "bookEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<BookPageEntity> pages = new HashSet<>();
 
-    @OneToMany(mappedBy = "bookEntity", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "bookEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<BookReviewEntity> reviews = new HashSet<>();
 
 
@@ -87,6 +87,16 @@ public class BookEntity {
 
     public void setTags(Set<TagEntity> tags) {
         this.tags = tags;
+    }
+
+    public void addTag(TagEntity tag) {
+        this.tags.add(tag);
+        tag.getBooks().add(this);
+    }
+
+    public void removeTag(TagEntity tag) {
+        this.tags.remove(tag);
+        tag.getBooks().remove(this);
     }
 
     public Set<BookPageEntity> getPages() {
