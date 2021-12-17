@@ -34,7 +34,7 @@ public class CommentService {
     }
 
     public List<CommentDTO> getCommentsByParentCommentId(Long commentId){
-        List<CommentEntity> commentEntityList = commentRepository.findCommentTileEntityByAboveCommentId(commentId);
+        List<CommentEntity> commentEntityList = commentRepository.findCommentTileEntityByParentCommentId(commentId);
         return  CommentMapper.mapToCommentDTOList(commentEntityList);
     }
 

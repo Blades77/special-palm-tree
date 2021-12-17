@@ -2,13 +2,10 @@ package first.iteration.endlesscreation.service;
 
 import first.iteration.endlesscreation.Model.BookEntity;
 import first.iteration.endlesscreation.Model.BookPageEntity;
-import first.iteration.endlesscreation.dao.BookDAO;
 import first.iteration.endlesscreation.dao.BookPageDAO;
 import first.iteration.endlesscreation.dto.BookPageDTO;
 import first.iteration.endlesscreation.dto.Update.BookPageUpdateDTO;
-import first.iteration.endlesscreation.dto.Update.BookUpdateDTO;
 import first.iteration.endlesscreation.dto.create.BookPageCreateDTO;
-import first.iteration.endlesscreation.mapper.BookMapper;
 import first.iteration.endlesscreation.mapper.BookPageMapper;
 import first.iteration.endlesscreation.repository.BookPageRepository;
 import org.springframework.stereotype.Service;
@@ -33,8 +30,9 @@ public class BookPageService {
         return BookPageMapper.mapToBookPageDTO(bookPageEntity);
     }
 
-    public BookPageDTO getBookPageByPageNumber(Long pageNumber){
-        BookPageEntity bookPageEntity = bookPageDAO.getBookPageEntityByPageNumber(pageNumber);
+    public BookPageDTO getBookPageByPageNumber(Long bookId,int pageNumber){
+        BookEntity bookEntity = bookService.getBookEntityById(bookId);
+        BookPageEntity bookPageEntity = bookPageDAO.getBookPageEntityByBookEntityAndPageNumber(bookEntity,pageNumber);
         return BookPageMapper.mapToBookPageDTO(bookPageEntity);
     }
 
@@ -44,7 +42,7 @@ public class BookPageService {
         return BookPageMapper.mapToBookPageDTOList(bookPageEntityList);
     }
 
-    public List<BookPageDTO> getBookPagesByBookIdAndPages(Long bookId,Long startPage,Long endPage){
+    public List<BookPageDTO> getBookPagesByBookIdAndPages(Long bookId,int startPage,int endPage){
         List<BookPageEntity> bookPageEntityList = bookPageDAO.getBookPageEntityByBookIdAndPages(bookId,startPage,endPage);
         return BookPageMapper.mapToBookPageDTOList(bookPageEntityList);
     }

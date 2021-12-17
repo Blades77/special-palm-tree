@@ -4,6 +4,7 @@ package first.iteration.endlesscreation.mapper;
 import first.iteration.endlesscreation.Model.BookEntity;
 import first.iteration.endlesscreation.Model.BookReviewEntity;
 import first.iteration.endlesscreation.dto.BookReviewDTO;
+import first.iteration.endlesscreation.dto.Update.BookReviewUpdateDTO;
 import first.iteration.endlesscreation.dto.create.BookCreateDTO;
 import first.iteration.endlesscreation.dto.create.BookReviewCreateDTO;
 
@@ -33,5 +34,13 @@ public class BookReviewMapper {
         bookReviewEntity.setUpdatedAt(LocalDateTime.now());
         bookReviewEntity.setBookEntity(bookEntity);
         return  bookReviewEntity;
+    }
+
+    public static BookReviewEntity mapUpdateToBookEntity(BookReviewUpdateDTO bookReviewUpdateDTO, BookReviewEntity bookReviewEntity){
+        bookReviewEntity.setReviewContent(bookReviewUpdateDTO.getReviewContent());
+        bookReviewEntity.setReviewRating(bookReviewUpdateDTO.getReviewRating());
+        bookReviewUpdateDTO.setReviewContent(bookReviewUpdateDTO.getReviewContent());
+        return bookReviewEntity;
+
     }
 }

@@ -79,47 +79,11 @@ public class TileController {
         tileService.deleteTile(id);
     }
 
-//    @ApiOperation(value = "Get groups for tile")
-//    @GetMapping("/tile/groups/{id}")
-//    private GroupDataDTO getGroups(@ApiParam(value = "Id of tile", example = "1", required = true) @PathVariable Long id){
-//        return tileService.getGroupForTile(id);
-//    }
-
     @ApiOperation(value = "Gets tags by tile id")
     @GetMapping("/tile/tags/{id}")
     private List<TagDTO> getTagsForTile(@ApiParam(value = "Id of tile", example = "1", required = true) @PathVariable Long id){
         return tileService.getTagsForTile(id);
     }
-//
-//    @ApiOperation(value = "Gets comments by tile id")
-//    @GetMapping("/tile/comments/{id}")
-//    private List<CommentDTO> getCommentsForTile(@ApiParam(value = "Id of tile", example = "1", required = true) @PathVariable Long id){
-//        return tileService.getCommentsForTile(id);
-//    }
-//
-//    @ApiOperation(value = "Gets comments by parentComment id")
-//    @GetMapping("/tile/comments/parrent/{id}")
-//    private List<CommentDTO> getCommentsByParentCommentId(@ApiParam(value = "Id of parent comment", example = "1", required = true) @PathVariable Long id){
-//        return tileService.getCommentsByParentCommentId(id);
-//    }
-//
-//    @ApiOperation(value = "Add comment to tile")
-//    @PostMapping("/tile/comment/")
-//    private void createComment(@RequestBody CommentCreateDTO commentCreateDTO) {
-//        tileService.createComment(commentCreateDTO);
-//    }
-//
-//    @ApiOperation(value = "Edit specific tile")
-//    @PutMapping("/tile/comment")
-//    private void editComment(@RequestBody CommentUpdateDTO commentUpdateDTO){
-//        tileService.editCommentTile(commentUpdateDTO);
-//    }
-//
-//    @ApiOperation(value = "Delete tile")
-//    @DeleteMapping("/tile/comment/{commentId}")
-//    private void deleComment(@ApiParam(value = "Id of comment", example = "1", required = true) @PathVariable Long commentId) {
-//        tileService.deleteCommentsCascade(commentId);
-//    }
 
     @ApiOperation(value = "Add tag to tile")
     @PostMapping("/tile/tag/{id}")

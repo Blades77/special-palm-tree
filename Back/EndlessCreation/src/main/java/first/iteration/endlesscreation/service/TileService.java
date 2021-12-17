@@ -97,7 +97,7 @@ public class TileService {
     }
 
     public void createTile(TileCreateDTO tileCreateDTO){
-        GroupDataEntity groupDataEntity = groupDataService.findById(tileCreateDTO.getGroupDataDTO().getGroupId());
+        GroupDataEntity groupDataEntity = groupDataService.findById(tileCreateDTO.getGroupId());
         TileEntity tileEntity = TileMapper.mapCreateToTileEntity(tileCreateDTO, groupDataEntity);
         List<TagEntity> tagEntityList = tagService.getTagsEntityListByTagCreateDTOList(tileCreateDTO.getTagCreateDTOList());
         for(TagEntity tagEntity : tagEntityList){

@@ -13,11 +13,11 @@ import java.util.Optional;
 
 @Repository
 public interface BookRepository extends JpaRepository<BookEntity, Long> {
-    @Query(value ="SELECT * FROM book WHERE book_title LIKE :string",nativeQuery = true)
+    @Query(value ="SELECT * FROM book WHERE book_title LIKE %:string%",nativeQuery = true)
     Optional<List<BookEntity>> searchBookTitleByParam(@Param("string") String search);
 
     @Query(value="SELECT * FROM book WHERE  book_id IN ( SELECT book_id FROM book_tag WHERE tag_id IN :tagIdList\n" +
-            " GROUP BY tile_id HAVING COUNT(tile_id) = :listLength)",nativeQuery = true)
+            " GROUP BY book_id HAVING COUNT(book_id) = :listLength)",nativeQuery = true)
     Optional<List<BookEntity>> getBookEntityByTagIdList(@Param("tagIdList") List<Long> tagIdList, @Param("listLength") int listLength);
 
     @Query(value="SELECT DISTINCT b.* FROM book b JOIN book_tag g ON b.book_id = g.book_id WHERE g.tag_id IN :tagIdList" ,nativeQuery = true)

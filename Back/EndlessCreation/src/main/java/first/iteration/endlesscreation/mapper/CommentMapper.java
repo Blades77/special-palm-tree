@@ -24,7 +24,7 @@ public class CommentMapper {
     private static CommentDTO mapToCommentTileDTO(CommentEntity commentEntity){
         CommentDTO commentDTO = new CommentDTO();
         commentDTO.setCommentId(commentEntity.getCommentId());
-        commentDTO.setAboveCommentId(commentEntity.getAboveCommentId());
+        commentDTO.setAboveCommentId(commentEntity.getParentCommentId());
         commentDTO.setCommentContent(commentEntity.getCommentContent());
         commentDTO.setAuthor(commentEntity.getAuthor());
         commentDTO.setTileId(commentEntity.getTileEntity().getTileId());
@@ -39,7 +39,7 @@ public class CommentMapper {
         commentEntity.setCreated_at(LocalDateTime.now());
         commentEntity.setUpdated_at(LocalDateTime.now());
         commentEntity.setCommentContent(commentCreateDTO.getCommentContent());
-        commentEntity.setAboveCommentId(commentCreateDTO.getAboveCommentId());
+        commentEntity.setParentCommentId(commentCreateDTO.getAboveCommentId());
         commentEntity.setTileEntity(tileEntity);
         return commentEntity;
 

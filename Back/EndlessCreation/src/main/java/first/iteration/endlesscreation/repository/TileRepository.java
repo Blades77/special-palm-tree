@@ -23,6 +23,6 @@ public interface TileRepository extends JpaRepository<TileEntity, Long> {
     @Query(value="SELECT DISTINCT t.* FROM tile t JOIN tile_tag g ON t.tile_id = g.tile_id WHERE t.group_id = :groupId AND g.tag_id IN :tagIdList" ,nativeQuery = true)
     Optional<List<TileEntity>> getTileEntityByAtLeastOneTagIdList(@Param("tagIdList") List<Long> tagIdList,@Param("groupId") Long groupId);
 
-    @Query(value ="SELECT * FROM tile WHERE tile_title LIKE :string",nativeQuery = true)
+    @Query(value ="SELECT * FROM tile WHERE tile_title LIKE %:string%",nativeQuery = true)
     Optional<List<TileEntity>> searchTileTitleByParam(@Param("string") String search);
 }

@@ -12,7 +12,7 @@ public class CommentEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long commentId;
     private String commentContent;
-    private Long aboveCommentId;
+    private Long parentCommentId;
     private Long author;
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
@@ -20,6 +20,12 @@ public class CommentEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="tile_id")
     private TileEntity tileEntity;
+
+//    @ManyToOne(cascade = CascadeType.ALL)
+//    private CommentEntity parentCommentEntity;
+//
+//    @OneToMany(mappedBy = "parentCommentEntity", fetch = FetchType.LAZY)
+//    private Set<CommentEntity> children = new HashSet<>();
 
     public Long getCommentId() {
         return commentId;
@@ -37,12 +43,12 @@ public class CommentEntity {
         this.commentContent = commentContent;
     }
 
-    public Long getAboveCommentId() {
-        return aboveCommentId;
+    public Long getParentCommentId() {
+        return parentCommentId;
     }
 
-    public void setAboveCommentId(Long aboveCommentId) {
-        this.aboveCommentId = aboveCommentId;
+    public void setParentCommentId(Long parentCommentId) {
+        this.parentCommentId = parentCommentId;
     }
 
     public TileEntity getTileEntity() {
@@ -76,4 +82,7 @@ public class CommentEntity {
     public void setUpdated_at(LocalDateTime updated_at) {
         this.updated_at = updated_at;
     }
+
+
+
 }

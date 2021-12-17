@@ -1,21 +1,17 @@
 package first.iteration.endlesscreation.dto.Update;
 
-import first.iteration.endlesscreation.dto.BookReviewDTO;
-
-import java.time.LocalDateTime;
-
-public class BookReviewUpdate {
+public class BookReviewUpdateDTO {
     private Long reviewId;
     private String reviewContent;
     private Double reviewRating;
 
-    public BookReviewUpdate(Long reviewId, String reviewContent, Double reviewRating) {
+    public BookReviewUpdateDTO(Long reviewId, String reviewContent, Double reviewRating) {
         this.reviewId = reviewId;
         this.reviewContent = reviewContent;
         this.reviewRating = reviewRating;
     }
 
-    public BookReviewUpdate(){}
+    public BookReviewUpdateDTO(){}
 
     public Long getReviewId() {
         return reviewId;

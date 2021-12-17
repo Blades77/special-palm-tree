@@ -15,9 +15,9 @@ import java.util.Optional;
 @Repository
 public interface BookPageRepository extends JpaRepository<BookPageEntity, Long> {
     List<BookPageEntity> getBookPageEntityByBookEntity(BookEntity bookEntity);
-    Optional<BookPageEntity> getBookPageEntityByPageNumber(Long pageNumber);
+    Optional<BookPageEntity> getBookPageEntityByBookEntityAndPageNumber(BookEntity bookEntity,int pageNumber);
 
     @Query(value="SELECT * FROM book_page WHERE book_id = :bookId AND (page_number BETWEEN :startPage AND :endPage)",nativeQuery = true)
-    List<BookPageEntity> getBookPageEntitiesByPageNumbers(@Param("bookId") Long bookId,@Param("startPage") Long startPage,@Param("endPage") Long endPage);
+    List<BookPageEntity> getBookPageEntitiesByPageNumbers(@Param("bookId") Long bookId,@Param("startPage") int startPage,@Param("endPage") int endPage);
 
 }
