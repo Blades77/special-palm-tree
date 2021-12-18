@@ -26,6 +26,7 @@ public class SpringFoxConfig {
     public static final String book = "book";
     public static final String bookPage = "page";
     public static final String bookReview = "review";
+    public static final String user = "user";
 
     @Bean
     public Docket api() {
@@ -38,7 +39,7 @@ public class SpringFoxConfig {
                 .build()
                 .apiInfo(createApiInfo())
                 .tags(new Tag(tile, ""),new Tag(tag, ""), new Tag(groupData,""), new Tag(color, ""),new Tag(comment,""),
-                        new Tag(book,""),new Tag(bookPage,""),new Tag(bookReview,""));
+                        new Tag(book,""),new Tag(bookPage,""),new Tag(bookReview,""),new Tag(user, ""));
 //                .ignoredParameterTypes(UserDetailsImp.class, RequestHeader.class)
 //                .securityContexts(singletonList(createContext()))
 //                .securitySchemes(singletonList(createSchema()));
