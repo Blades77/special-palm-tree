@@ -6,6 +6,7 @@ import first.iteration.endlesscreation.Model.UserEntity;
 import first.iteration.endlesscreation.exception.ResourceNotFoundException;
 import first.iteration.endlesscreation.repository.RoleRepository;
 import first.iteration.endlesscreation.repository.UserRepository;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -23,8 +24,7 @@ public class UserDAO {
 
     public UserEntity getUserEntityByUserName(String name){
         return userRepository.findByAppUserName(name)
-                .orElseThrow(() -> new ResourceNotFoundException("Cannot find user"));
-//            .orElseThrow(() -> new UsernameNotFoundException("Cannot find user"));
+                .orElseThrow(() -> new UsernameNotFoundException("Cannot find user"));
     }
 
     public boolean checkIfUserExistsByUserName(String name){

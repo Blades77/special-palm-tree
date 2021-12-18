@@ -7,6 +7,7 @@ import first.iteration.endlesscreation.dao.UserDAO;
 import first.iteration.endlesscreation.dto.UserDTO;
 import first.iteration.endlesscreation.repository.RoleRepository;
 import first.iteration.endlesscreation.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -19,8 +20,10 @@ public class UserService {
     private final UserDAO userDAO;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository,UserDAO userDAO) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository,UserDAO userDAO,PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.userDAO = userDAO;
@@ -41,6 +44,14 @@ public class UserService {
         userDTO.setRoles(roles);
         return userDTO;
 
+    }
+
+    public void saveUser(UserDTO userDTO){
+        UserEntity userEntity = new UserEntity();
+        userEntity.setAppUserName(userDTO.getUsername());
+        userEntity.setAppUserEmail(userDTO.getEmail());
+        userEntity.setAppUserPassword(passwordEncoder.encode(userDTO.getPassword()));
+        userRepository.save(userEntity);
     }
 
 
