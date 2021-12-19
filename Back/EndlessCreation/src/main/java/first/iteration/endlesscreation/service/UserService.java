@@ -7,6 +7,8 @@ import first.iteration.endlesscreation.dao.UserDAO;
 import first.iteration.endlesscreation.dto.UserDTO;
 import first.iteration.endlesscreation.repository.RoleRepository;
 import first.iteration.endlesscreation.repository.UserRepository;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -44,6 +46,20 @@ public class UserService {
         userDTO.setRoles(roles);
         return userDTO;
 
+    }
+
+    public UserEntity getUserEntityByName (String name){
+        return userDAO.getUserEntityByUserName(name);
+    }
+
+
+
+    public Set<GrantedAuthority> getAuthorities(UserEntity userEntity) {
+        Set<GrantedAuthority> grantedAuthoritySet = new HashSet<>();
+        for(RoleEntity roleEntity : userEntity.getRoles()){
+            grantedAuthoritySet.add(new SimpleGrantedAuthority(roleEntity.getRoleName()));
+        }
+        return grantedAuthoritySet;
     }
 
     public void saveUser(UserDTO userDTO){

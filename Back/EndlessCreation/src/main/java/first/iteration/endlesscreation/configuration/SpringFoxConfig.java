@@ -1,5 +1,6 @@
 package first.iteration.endlesscreation.configuration;
 
+import first.iteration.endlesscreation.service.UserDetailsImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -38,11 +39,11 @@ public class SpringFoxConfig {
 //                .paths(PathSelectors.regex("(?!/userEntities).+"))
                 .build()
                 .apiInfo(createApiInfo())
-                .tags(new Tag(tile, ""),new Tag(tag, ""), new Tag(groupData,""), new Tag(color, ""),new Tag(comment,""),
-                        new Tag(book,""),new Tag(bookPage,""),new Tag(bookReview,""),new Tag(user, ""));
-//                .ignoredParameterTypes(UserDetailsImp.class, RequestHeader.class)
-//                .securityContexts(singletonList(createContext()))
-//                .securitySchemes(singletonList(createSchema()));
+                .tags(new Tag(tile, ""), new Tag(tag, ""), new Tag(groupData, ""), new Tag(color, ""), new Tag(comment, ""),
+                        new Tag(book, ""), new Tag(bookPage, ""), new Tag(bookReview, ""), new Tag(user, ""))
+                .ignoredParameterTypes(UserDetailsImpl.class, RequestHeader.class)
+                .securityContexts(singletonList(createContext()))
+                .securitySchemes(singletonList(createSchema()));
     }
 
     private ApiInfo createApiInfo() {
@@ -55,26 +56,28 @@ public class SpringFoxConfig {
                 "",
                 Collections.emptyList());
     }
-}
 
-//    private SecurityContext createContext() {
-//        return SecurityContext.builder()
-//                .securityReferences(createRef())
-//                .forPaths(PathSelectors.any())
-//                .build();
-//    }
-//
-//    private List<SecurityReference> createRef() {
-//        AuthorizationScope authorizationScope = new AuthorizationScope(
-//                "global", "accessEverything");
-//        AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
-//        authorizationScopes[0] = authorizationScope;
-//        return singletonList(new SecurityReference("apiKey", authorizationScopes));
-//    }
-//
-//    private SecurityScheme createSchema() {
-//        return new ApiKey("apiKey", "Authorization", "header");
-//    }
-//}
+
+    private SecurityContext createContext() {
+        return SecurityContext.builder()
+                .securityReferences(createRef())
+                .forPaths(PathSelectors.any())
+                .build();
+    }
+
+    //
+    private List<SecurityReference> createRef() {
+        AuthorizationScope authorizationScope = new AuthorizationScope(
+                "global", "accessEverything");
+        AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
+        authorizationScopes[0] = authorizationScope;
+        return singletonList(new SecurityReference("apiKey", authorizationScopes));
+    }
+
+
+    private SecurityScheme createSchema() {
+        return new ApiKey("apiKey", "Authorization", "header");
+    }
+}
 
 
