@@ -1,7 +1,7 @@
 package first.iteration.endlesscreation.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import first.iteration.endlesscreation.filter.CustomAuthTokenFilter;
+//import first.iteration.endlesscreation.filter.CustomAuthTokenFilter;
 import first.iteration.endlesscreation.filter.CustomAuthorizationFilter;
 import org.hibernate.jdbc.Expectation;
 import org.springframework.context.annotation.Bean;
@@ -45,7 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/swagger-ui/#/**").permitAll();
         http.authorizeRequests().antMatchers(GET,"/book/**").hasAnyAuthority("ADMIN");
 //        http.authorizeRequests().anyRequest().authenticated();
-        http.addFilter(new CustomAuthTokenFilter(authenticationManagerBean(),objectMapper));
+//        http.addFilter(new CustomAuthTokenFilter(authenticationManagerBean(),objectMapper));
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 

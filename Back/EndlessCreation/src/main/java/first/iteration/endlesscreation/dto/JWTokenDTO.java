@@ -10,6 +10,7 @@ public class JWTokenDTO {
         this.refreshToken = refreshToken;
     }
 
+    public JWTokenDTO(){}
     public String getAccessToken() {
         return accessToken;
     }

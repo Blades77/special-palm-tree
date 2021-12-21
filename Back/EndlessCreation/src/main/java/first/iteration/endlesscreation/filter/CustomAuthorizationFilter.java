@@ -5,11 +5,12 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import first.iteration.endlesscreation.configuration.JWTUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
-
+import org.springframework.security.core.userdetails.UserDetails;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -35,16 +36,11 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
             String authorizationHeader = request.getHeader(AUTHORIZATION);
             if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")){
                 try{
-                    String token = authorizationHeader.substring("Bearer ".length());
-                    Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());  // to powinno być w osobnej klasie podobie jak secret
-                    JWTVerifier verifier = JWT.require(algorithm).build();
-                    DecodedJWT decodedJWT = verifier.verify(token);
-                    String username = decodedJWT.getSubject();
-                    String[] roles = decodedJWT.getClaim("roles").asArray(String.class);
-                    Collection<SimpleGrantedAuthority> authorities = new ArrayList<>(); // tu poaptrzyc czy inaczej sie nie da
-                    stream(roles).forEach(role -> authorities.add(new SimpleGrantedAuthority(role)));
-                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, null, authorities);
+                    DecodedJWT decodedJWT = JWTUtils.verifyToken(authorizationHeader);
+                    UserDetails userDetails = JWTUtils.getUserFromToken(decodedJWT);
+                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                    //tu będzie sprawdzanie perfimsionów
                     filterChain.doFilter(request,response);
                 }catch(Exception e){
                     response.setHeader("error", e.getMessage());
