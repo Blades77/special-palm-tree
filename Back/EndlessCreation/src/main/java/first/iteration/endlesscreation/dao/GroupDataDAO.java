@@ -7,6 +7,8 @@ import first.iteration.endlesscreation.exception.ResourceNotFoundException;
 import first.iteration.endlesscreation.repository.GroupDataRepository;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class GroupDataDAO {
     private final GroupDataRepository groupDataRepository;
@@ -24,5 +26,9 @@ public class GroupDataDAO {
         return groupDataRepository.getGroupDataEntityByTiles(tileEntity)
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot find specified group"));
 
+    }
+
+    public List<GroupDataEntity> getGroups(){
+        return groupDataRepository.findAll();
     }
 }

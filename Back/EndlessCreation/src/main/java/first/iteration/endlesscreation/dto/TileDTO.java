@@ -2,6 +2,7 @@ package first.iteration.endlesscreation.dto;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 public class TileDTO {
     private Long tileId;
@@ -10,20 +11,20 @@ public class TileDTO {
     private Long ownerUserId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private GroupDataDTO groupDataDTO;
-    private List<TagDTO> tagDTOList;
+    private Long groupId;
+    private Map<String, String> tags;
 
     public TileDTO(){}
 
-    public TileDTO(Long tileId, String tileTitle, String tileData, Long ownerUserId, LocalDateTime createdAt, LocalDateTime updatedAt, GroupDataDTO groupDataDTO, List<TagDTO> tagDTOList){
+    public TileDTO(Long tileId, String tileTitle, String tileData, Long ownerUserId, LocalDateTime createdAt, LocalDateTime updatedAt, Long groupId,Map<String, String> tags ){
         this.tileId = tileId;
         this.tileTitle = tileTitle;
         this.tileData = tileData;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.ownerUserId = ownerUserId;
-        this.groupDataDTO = groupDataDTO;
-        this.tagDTOList = tagDTOList;
+        this.groupId = groupId;
+        this.tags = tags;
 
     }
 
@@ -75,19 +76,19 @@ public class TileDTO {
         this.updatedAt = updatedAt;
     }
 
-    public GroupDataDTO getGroupDataDTO() {
-        return groupDataDTO;
+    public Long getGroupId() {
+        return groupId;
     }
 
-    public void setGroupDataDTO(GroupDataDTO groupDataDTO) {
-        this.groupDataDTO = groupDataDTO;
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
     }
 
-    public List<TagDTO> getTagDTOList() {
-        return tagDTOList;
+    public Map<String, String> getTags() {
+        return tags;
     }
 
-    public void setTagDTOList(List<TagDTO> tagDTOList) {
-        this.tagDTOList = tagDTOList;
+    public void setTags(Map<String, String> tags) {
+        this.tags = tags;
     }
 }

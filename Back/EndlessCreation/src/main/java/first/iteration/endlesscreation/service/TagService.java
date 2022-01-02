@@ -15,7 +15,9 @@ import first.iteration.endlesscreation.repository.TagRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -85,6 +87,15 @@ public class TagService {
 
         }
         return tagDTOList;
+    }
+
+    public Map<String,String> getTagsMapForTile(TileEntity tileEntity){
+        List<TagEntity> tagEntityList = getTagEntityListByTile(tileEntity);
+        Map<String, String> tags = new HashMap<>();
+        for(TagEntity tagEntity : tagEntityList){
+            tags.put(tagEntity.getTagName(),tagEntity.getColorEntity().getColorValueHex()+"@"+tagEntity.getColorEntity().getColorDesc());
+        }
+        return  tags;
     }
 
 //

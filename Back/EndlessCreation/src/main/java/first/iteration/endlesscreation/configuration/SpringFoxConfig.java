@@ -40,7 +40,7 @@ public class SpringFoxConfig {
                 .build()
                 .apiInfo(createApiInfo())
                 .tags(new Tag(tile, ""), new Tag(tag, ""), new Tag(groupData, ""), new Tag(color, ""), new Tag(comment, ""),
-                        new Tag(book, ""), new Tag(bookPage, ""), new Tag(bookReview, ""), new Tag(user, ""))
+                        new Tag(book, ""), new Tag(bookPage, ""), new Tag(bookReview, ""), new Tag(user, ""), new Tag(groupData, ""))
                 .ignoredParameterTypes(UserDetailsImpl.class, RequestHeader.class)
                 .securityContexts(singletonList(createContext()))
                 .securitySchemes(singletonList(createSchema()));

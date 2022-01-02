@@ -1,18 +1,10 @@
 package first.iteration.endlesscreation.service;
 
-import first.iteration.endlesscreation.Model.CommentEntity;
-import first.iteration.endlesscreation.Model.GroupDataEntity;
-import first.iteration.endlesscreation.Model.TagEntity;
-import first.iteration.endlesscreation.Model.TileEntity;
+import first.iteration.endlesscreation.Model.*;
 import first.iteration.endlesscreation.dao.TagDAO;
 import first.iteration.endlesscreation.dao.TileDAO;
-import first.iteration.endlesscreation.dto.CommentDTO;
-import first.iteration.endlesscreation.dto.GroupDataDTO;
-import first.iteration.endlesscreation.dto.TagDTO;
-import first.iteration.endlesscreation.dto.TileDTO;
-import first.iteration.endlesscreation.dto.Update.CommentUpdateDTO;
+import first.iteration.endlesscreation.dto.*;
 import first.iteration.endlesscreation.dto.Update.TileUpdateDTO;
-import first.iteration.endlesscreation.dto.create.CommentCreateDTO;
 import first.iteration.endlesscreation.dto.create.TagCreateDTO;
 import first.iteration.endlesscreation.dto.create.TileCreateDTO;
 import first.iteration.endlesscreation.exception.InvalidPathVariableExpection;
@@ -21,14 +13,13 @@ import first.iteration.endlesscreation.repository.CommentRepository;
 import first.iteration.endlesscreation.repository.TagRepository;
 import first.iteration.endlesscreation.repository.TileRepository;
 import first.iteration.endlesscreation.repository.GroupDataRepository;
-import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 
-import javax.transaction.Transactional;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class TileService {
@@ -61,8 +52,8 @@ public class TileService {
     public TileDTO getFullTileById(Long id){
         TileEntity tileEntity = tileDAO.getTileEntity(id);
         GroupDataDTO groupDataDTO = groupDataService.getGroupDataDTOByTileEntity(tileEntity);
-        List<TagDTO> tagDTOList = getTagsForTile(tileEntity.getTileId());
-        return TileMapper.mapToTileDTO(tileEntity, groupDataDTO ,tagDTOList);
+        Map<String, String> tags = tagService.getTagsMapForTile(tileEntity);
+        return TileMapper.mapToTileDTO(tileEntity, groupDataDTO.getGroupId() ,tags);
     }
 
     public List<TileDTO> getTiles() { //tu będzie paginacja raczej
@@ -95,6 +86,29 @@ public class TileService {
         List<TileEntity> tileEntityList = tileDAO.searchTileTitleByParam(tileTitleSearch);
         return mapToTileDTOList(tileEntityList);
     }
+
+
+    public List<TileDTO> getTiles(Long groupId,String order) {
+        List<TileEntity> tileEntityList = new ArrayList<>();
+        GroupDataEntity groupDataEntity = new GroupDataEntity();
+        String sortOrder = "";
+        if (order.equals("asc")) {
+            sortOrder = "ASC";
+        } else if (order.equals("desc")) {
+            sortOrder = "DESC";
+        } else {
+            throw new InvalidPathVariableExpection("Invalid search type, should be \"asc\" or \"desc\".");
+        }
+        if (groupId > 0) {
+            groupDataEntity = groupDataService.findById(groupId);
+            tileEntityList = tileDAO.getTilesByGroupDataEnityWithSort(groupDataEntity, Sort.by(Sort.Direction.valueOf(sortOrder), "createdAt"));
+        } else {
+            tileEntityList = tileDAO.getTilesWithSort(Sort.by(Sort.Direction.valueOf(sortOrder), "createdAt"));
+        }
+        return mapToTileDTOList(tileEntityList);
+    }
+
+
 
     public void createTile(TileCreateDTO tileCreateDTO){
         GroupDataEntity groupDataEntity = groupDataService.findById(tileCreateDTO.getGroupId());
@@ -129,6 +143,11 @@ public class TileService {
         return tagService.getTagsForTile(tileEntity);
     }
 
+    public List<TagEntity> getTagEntitiesForTile(Long id){
+        TileEntity tileEntity = tileDAO.getTileEntity(id);
+        return tagService.getTagEntityListByTile(tileEntity);
+    }
+
     public void addTagToTile(Long tileId, TagCreateDTO tagCreateDTO){
         TileEntity tileEntity = tileDAO.getTileEntity(tileId);
         TagEntity tagEntity = tagService.findOrCreateTag(tagCreateDTO);
@@ -148,8 +167,8 @@ public class TileService {
         List<TileDTO> tileDTOList = new ArrayList<>();
         for(TileEntity tileEntity : tileEntityList){
             GroupDataDTO groupDataDTO = groupDataService.getGroupDataDTOByTileEntity(tileEntity);
-            List<TagDTO> tagDTOList = getTagsForTile(tileEntity.getTileId());
-            tileDTOList.add(TileMapper.mapToTileDTO(tileEntity, groupDataDTO,tagDTOList));
+            Map<String, String> tags = tagService.getTagsMapForTile(tileEntity);
+            tileDTOList.add(TileMapper.mapToTileDTO(tileEntity, groupDataDTO.getGroupId(),tags));
         }
         return tileDTOList;
     }

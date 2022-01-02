@@ -10,6 +10,9 @@ import first.iteration.endlesscreation.repository.GroupDataRepository;
 import org.springframework.stereotype.Service;
 import first.iteration.endlesscreation.Model.GroupDataEntity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class GroupDataService {
 
@@ -31,6 +34,15 @@ public class GroupDataService {
     public GroupDataDTO getGroupDataDTOByTileEntity(TileEntity tileEntity){
         GroupDataEntity groupDataEntity = groupDataDAO.findByTileEntity(tileEntity);
         return GroupDataMapper.mapToGroupDataDTO(groupDataEntity);
+    }
+
+    public List<GroupDataDTO> getGroups(){
+         List<GroupDataEntity> groupDataEntityList = groupDataDAO.getGroups();
+         List<GroupDataDTO> groupDataDTOList = new ArrayList<>();
+         for(GroupDataEntity groupDataEntity : groupDataEntityList){
+             groupDataDTOList.add(GroupDataMapper.mapToGroupDataDTO(groupDataEntity));
+         }
+         return groupDataDTOList;
     }
 
 }

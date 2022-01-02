@@ -1,11 +1,11 @@
 package first.iteration.endlesscreation.dao;
 
-import first.iteration.endlesscreation.Model.CommentEntity;
 import first.iteration.endlesscreation.Model.GroupDataEntity;
 import first.iteration.endlesscreation.Model.TileEntity;
 import first.iteration.endlesscreation.exception.ResourceNotFoundException;
 import first.iteration.endlesscreation.repository.TileRepository;
 import first.iteration.endlesscreation.repository.CommentRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -44,6 +44,14 @@ public class TileDAO {
     public List<TileEntity> searchTileTitleByParam(String tileTitleSearch){
         return  tileRepository.searchTileTitleByParam(tileTitleSearch)
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot find  any tile with matching param in title"));
+    }
+
+    public List<TileEntity> getTilesWithSort(Sort sort){
+        return tileRepository.findAll(sort);
+    }
+    public List<TileEntity> getTilesByGroupDataEnityWithSort(GroupDataEntity groupDataEntity,Sort sort){
+        return tileRepository.getTileEntityByGroupDataEntity(groupDataEntity,sort)
+                .orElseThrow(() -> new ResourceNotFoundException("Cannot find  any tile in provided group"));
     }
 
 

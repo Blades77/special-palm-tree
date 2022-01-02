@@ -1,0 +1,22 @@
+<p>dashboard works!</p>
+<div *ngIf="tiles">
+<a *ngFor="let tile of tiles"
+  routerLink="/tile-detail/{{tile.tileId}}">
+  <ul>
+    <li>  {{tile.tileTitle}} <span> {{tile.tileId}}</span></li>
+  </ul>
+</a>
+</div>
+<div>---------------------------------------------------------------</div>
+<div *ngIf="groups">
+  <a *ngFor="let group of groups"
+    routerLink="/group/{{group.groupId}}">
+    <ul>
+      <li>  {{group.groupName}} <span> {{group.groupId}}</span></li>
+    </ul>
+  </a>
+  </div>
+
+
+
+

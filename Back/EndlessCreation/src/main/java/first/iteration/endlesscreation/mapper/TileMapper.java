@@ -10,6 +10,7 @@ import first.iteration.endlesscreation.dto.create.TileCreateDTO;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 public class TileMapper {
 
@@ -33,7 +34,7 @@ public class TileMapper {
 
 
 
-    public static TileDTO mapToTileDTO(TileEntity tileEntity, GroupDataDTO groupDataDTO, List<TagDTO> tagDTOList){
+    public static TileDTO mapToTileDTO(TileEntity tileEntity, Long groupDataId, Map<String, String> tags){
         TileDTO tileDTO = new TileDTO();
         tileDTO.setTileId(tileEntity.getTileId());
         tileDTO.setTileTitle(tileEntity.getTileTitle());
@@ -41,8 +42,8 @@ public class TileMapper {
         tileDTO.setOwnerUserId(tileEntity.getOwnerUserId());
         tileDTO.setCreatedAt(tileEntity.getCreatedAt());
         tileDTO.setUpdatedAt(tileEntity.getUpdatedAt());
-        tileDTO.setGroupDataDTO(groupDataDTO);
-        tileDTO.setTagDTOList(tagDTOList);
+        tileDTO.setGroupId(groupDataId);
+        tileDTO.setTags(tags);
         return tileDTO;
     }
 

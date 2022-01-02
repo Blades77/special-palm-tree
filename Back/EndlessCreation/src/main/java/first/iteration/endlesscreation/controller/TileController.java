@@ -1,5 +1,6 @@
 package first.iteration.endlesscreation.controller;
 
+import first.iteration.endlesscreation.dto.BookReviewDTO;
 import first.iteration.endlesscreation.dto.TagDTO;
 import first.iteration.endlesscreation.dto.Update.TileUpdateDTO;
 import first.iteration.endlesscreation.dto.create.TagCreateDTO;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 @Api(tags = {SpringFoxConfig.tile})
 public class TileController {
 
@@ -51,6 +53,15 @@ public class TileController {
                                               @ApiParam(value = "List of ids of tags", example = "1034,1035", required = true) @PathVariable List<Long> tagIdList,
                                               @ApiParam(value = "List of id of group to search, if id = 0 search will be in every group user is part of", example = "1", required = true) @PathVariable Long groupId) {
         return tileService.getTilesIncludingAllTagIdList(searchType,tagIdList,groupId);
+    }
+
+    @ApiOperation(value="Returns list of tiles ordered by date")
+    @GetMapping("/tiles/group/{groupId}/{order}")
+    private List<TileDTO> getTilesOrderedByDate(
+            @ApiParam(value = "Id of an group", example = "1", required = true) @PathVariable Long groupId,
+            @ApiParam(value = "order : asc returns reviews in ascending order, order : desc return reviews in descending orderd", example = "asc", required = true) @PathVariable String order)
+    {
+        return tileService.getTiles(groupId,order);
     }
 
     @ApiOperation(value="Returns list of tiles containing parameter in title")

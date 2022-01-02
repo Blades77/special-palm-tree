@@ -38,7 +38,7 @@ public class BookReviewService {
 
     public List<BookReviewDTO> getBookReviewsByBookIdOrderByDate(String order, Long bookId){
         BookEntity bookEntity = bookService.getBookEntityById(bookId);
-        List<BookReviewEntity> bookReviewEntityList  = new ArrayList<>();
+        List<BookReviewEntity> bookReviewEntityList;
         if(order.equals("asc")) {
             bookReviewEntityList  = bookReviewDAO.getBookReviewEntityByBookEntitySort(bookEntity,Sort.by(Sort.Direction.ASC, "createdAt"));
         }

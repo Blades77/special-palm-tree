@@ -1,0 +1,10 @@
+<p>group works!</p>
+<div *ngIf="tiles">
+    <a *ngFor="let tile of tiles"
+      routerLink="/tile-detail/{{tile.tileId}}">
+      <ul>
+        <li>  {{tile.tileTitle}} <span> {{tile.tileId}}</span></li>
+      </ul>
+    </a>
+    </div>
+
