@@ -15,7 +15,6 @@ public class TileEntity {
     private Long tileId;
     private String tileTitle;
     private String tileData;
-    private Long ownerUserId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -32,6 +31,10 @@ public class TileEntity {
 
     @OneToMany(mappedBy = "tileEntity", cascade = CascadeType.ALL)
     private Set<CommentEntity> tileComments = new HashSet<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="owner_user_id")
+    private UserEntity userEntity;
 
     public Long getTileId() {
         return tileId;
@@ -57,12 +60,12 @@ public class TileEntity {
         this.tileData = tile_data;
     }
 
-    public Long getOwnerUserId() {
-        return ownerUserId;
+    public UserEntity getUserEntity() {
+        return userEntity;
     }
 
-    public void setOwnerUserId(Long ownerUserId) {
-        this.ownerUserId = ownerUserId;
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
     }
 
     public LocalDateTime getCreatedAt() {

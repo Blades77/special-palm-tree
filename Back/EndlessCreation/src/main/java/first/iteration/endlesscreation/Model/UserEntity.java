@@ -25,6 +25,16 @@ public class UserEntity {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<RoleEntity> roles = new HashSet<>();
 
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "user_group",
+            joinColumns = @JoinColumn(name = "app_user_id"),
+            inverseJoinColumns = @JoinColumn(name = "group_id"))
+    private Set<GroupDataEntity> groups = new HashSet<>();
+
+    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL)
+    private Set<TileEntity> tiles = new HashSet<>();
+
     public Long getAppUserId() {
         return appUserId;
     }
@@ -57,6 +67,22 @@ public class UserEntity {
         this.appUserEmail = appUserEmail;
     }
 
+    public Set<TileEntity> getTiles() {
+        return tiles;
+    }
+
+    public void setTiles(Set<TileEntity> tiles) {
+        this.tiles = tiles;
+    }
+
+    public Set<GroupDataEntity> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(Set<GroupDataEntity> groups) {
+        this.groups = groups;
+    }
+
     public void addRole(RoleEntity role) {
         this.roles.add(role);
         role.getUsers().add(this);
@@ -65,6 +91,16 @@ public class UserEntity {
     public void removeRole(RoleEntity role) {
         this.roles.remove(role);
         role.getUsers().remove(this);
+    }
+
+    public void addGroup(GroupDataEntity group) {
+        this.groups.add(group);
+        group.getUsers().add(this);
+    }
+
+    public void removeGroup(GroupDataEntity group) {
+        this.groups.remove(group);
+        group.getUsers().remove(this);
     }
 
     public Set<RoleEntity> getRoles() {

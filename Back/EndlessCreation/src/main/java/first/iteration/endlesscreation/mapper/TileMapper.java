@@ -2,6 +2,7 @@ package first.iteration.endlesscreation.mapper;
 
 import first.iteration.endlesscreation.Model.GroupDataEntity;
 import first.iteration.endlesscreation.Model.TileEntity;
+import first.iteration.endlesscreation.Model.UserEntity;
 import first.iteration.endlesscreation.dto.GroupDataDTO;
 import first.iteration.endlesscreation.dto.TagDTO;
 import first.iteration.endlesscreation.dto.TileDTO;
@@ -14,13 +15,13 @@ import java.util.Map;
 
 public class TileMapper {
 
-    public static TileEntity mapCreateToTileEntity(TileCreateDTO tileCreateDTO , GroupDataEntity groupDataEntity){
+    public static TileEntity mapCreateToTileEntity(TileCreateDTO tileCreateDTO , GroupDataEntity groupDataEntity, UserEntity userEntity){
         TileEntity tileEntity = new TileEntity();
         tileEntity.setTileTitle(tileCreateDTO.getTileTitle());
         tileEntity.setTileData(tileCreateDTO.getTileData());
         tileEntity.setCreatedAt(LocalDateTime.now());
         tileEntity.setUpdatedAt(LocalDateTime.now());
-        tileEntity.setOwnerUserId(tileCreateDTO.getOwnerUserId());
+        tileEntity.setUserEntity(userEntity);
         tileEntity.setGroupDataEntity(groupDataEntity);
         return tileEntity;
     }
@@ -39,7 +40,7 @@ public class TileMapper {
         tileDTO.setTileId(tileEntity.getTileId());
         tileDTO.setTileTitle(tileEntity.getTileTitle());
         tileDTO.setTileData(tileEntity.getTileData());
-        tileDTO.setOwnerUserId(tileEntity.getOwnerUserId());
+        tileDTO.setOwnerUserId(tileEntity.getUserEntity().getAppUserId());
         tileDTO.setCreatedAt(tileEntity.getCreatedAt());
         tileDTO.setUpdatedAt(tileEntity.getUpdatedAt());
         tileDTO.setGroupId(groupDataId);

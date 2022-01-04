@@ -18,6 +18,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -91,6 +92,7 @@ public class UserService {
     public UserEntity getUserEntityByName (String name){
         return userDAO.getUserEntityByUserName(name);
     }
+    public UserEntity getUserEntityById (Long id){ return  userDAO.getUserEntityById(id);}
 
 
 
@@ -110,7 +112,10 @@ public class UserService {
         userRepository.save(userEntity);
     }
 
-
+    public void logoutUser(String token) {
+//        addTokenToBlockList(token);
+        SecurityContextHolder.clearContext();
+    }
 
 
 }

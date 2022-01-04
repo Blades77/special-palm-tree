@@ -77,4 +77,10 @@ public class UserController {
     private void createUser(@RequestBody UserDTO userDTO) {
         userService.saveUser(userDTO);
     }
+
+
+    @CrossOrigin("**")
+    @PostMapping(value = "/logout")
+    public void logout() {
+    }
 }

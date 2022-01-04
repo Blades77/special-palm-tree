@@ -29,11 +29,12 @@ public class TileService {
     private final GroupDataRepository groupDataRepository;
     private final CommentRepository commentRepository;
     private final GroupDataService groupDataService;
+    private final UserService userService;
     private final TagService tagService;
     private final TileDAO tileDAO;
     private final TagDAO tagDAO;
 
-    public TileService(TileRepository tileRepository, GroupDataRepository groupDataRepository, GroupDataService groupDataService, TagRepository tagRepository, TileDAO tileDAO, TagDAO tagDAO,TagService tagService, CommentRepository commentRepository) {
+    public TileService(TileRepository tileRepository, GroupDataRepository groupDataRepository, GroupDataService groupDataService, TagRepository tagRepository, TileDAO tileDAO, TagDAO tagDAO,TagService tagService, CommentRepository commentRepository,UserService userService) {
         this.tileRepository = tileRepository;
         this.groupDataRepository = groupDataRepository;
         this.commentRepository = commentRepository;
@@ -42,6 +43,7 @@ public class TileService {
         this.tagService = tagService;
         this.tileDAO = tileDAO;
         this.tagDAO = tagDAO;
+        this.userService = userService;
 
     }
 
@@ -112,7 +114,8 @@ public class TileService {
 
     public void createTile(TileCreateDTO tileCreateDTO){
         GroupDataEntity groupDataEntity = groupDataService.findById(tileCreateDTO.getGroupId());
-        TileEntity tileEntity = TileMapper.mapCreateToTileEntity(tileCreateDTO, groupDataEntity);
+        UserEntity userEntity = userService.getUserEntityById(tileCreateDTO.getOwnerUserId());
+        TileEntity tileEntity = TileMapper.mapCreateToTileEntity(tileCreateDTO, groupDataEntity, userEntity);
         List<TagEntity> tagEntityList = tagService.getTagsEntityListByTagCreateDTOList(tileCreateDTO.getTagCreateDTOList());
         for(TagEntity tagEntity : tagEntityList){
             tileEntity.addTag(tagEntity);

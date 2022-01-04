@@ -40,4 +40,8 @@ public class UserDAO {
         return roleRepository.getRoleEntityByUsers(userEntity)
                 .orElseThrow(() -> new ResourceNotFoundException("User has no roles!"));
     }
+
+    public UserEntity getUserEntityById(Long id){
+        return userRepository.getById(id);
+    }
 }

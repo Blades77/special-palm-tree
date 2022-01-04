@@ -2,6 +2,7 @@ package first.iteration.endlesscreation.service;
 
 
 import first.iteration.endlesscreation.Model.TileEntity;
+import first.iteration.endlesscreation.Model.UserEntity;
 import first.iteration.endlesscreation.dao.GroupDataDAO;
 import first.iteration.endlesscreation.dto.GroupDataDTO;
 import first.iteration.endlesscreation.exception.ResourceNotFoundException;
@@ -31,10 +32,19 @@ public class GroupDataService {
 
     }
 
+    public List<GroupDataEntity> findByUserEntity(UserEntity userEntity){
+        return groupDataDAO.findByUserEntity(userEntity);
+    }
+
+    public GroupDataEntity findByTileEntity(TileEntity tileEntity){
+        return groupDataDAO.findByTileEntity(tileEntity);
+    }
+
     public GroupDataDTO getGroupDataDTOByTileEntity(TileEntity tileEntity){
         GroupDataEntity groupDataEntity = groupDataDAO.findByTileEntity(tileEntity);
         return GroupDataMapper.mapToGroupDataDTO(groupDataEntity);
     }
+
 
     public List<GroupDataDTO> getGroups(){
          List<GroupDataEntity> groupDataEntityList = groupDataDAO.getGroups();

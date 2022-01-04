@@ -18,6 +18,8 @@ public class GroupDataEntity {
     @OneToMany(mappedBy = "groupDataEntity", fetch = FetchType.LAZY)
     private Set<TileEntity> tiles = new HashSet<>();
 
+    @ManyToMany(mappedBy = "groups")
+    private Set<UserEntity> users = new HashSet<>();
 
     public Long getGroupId() {
         return groupId;
@@ -41,5 +43,21 @@ public class GroupDataEntity {
 
     public void setGroupType(String group_type) {
         this.groupType = group_type;
+    }
+
+    public Set<TileEntity> getTiles() {
+        return tiles;
+    }
+
+    public void setTiles(Set<TileEntity> tiles) {
+        this.tiles = tiles;
+    }
+
+    public Set<UserEntity> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<UserEntity> users) {
+        this.users = users;
     }
 }
