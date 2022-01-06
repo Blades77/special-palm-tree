@@ -2,8 +2,10 @@ package first.iteration.endlesscreation.mapper;
 
 import first.iteration.endlesscreation.Model.CommentEntity;
 import first.iteration.endlesscreation.Model.TileEntity;
+import first.iteration.endlesscreation.Model.UserEntity;
 import first.iteration.endlesscreation.dto.CommentDTO;
 import first.iteration.endlesscreation.dto.create.CommentCreateDTO;
+import org.springframework.security.core.userdetails.User;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -26,16 +28,16 @@ public class CommentMapper {
         commentDTO.setCommentId(commentEntity.getCommentId());
         commentDTO.setAboveCommentId(commentEntity.getParentCommentId());
         commentDTO.setCommentContent(commentEntity.getCommentContent());
-        commentDTO.setAuthor(commentEntity.getAuthor());
+        commentDTO.setAuthor(commentEntity.getUserEntity().getAppUserId());
         commentDTO.setTileId(commentEntity.getTileEntity().getTileId());
         commentDTO.setUpdated_at(commentEntity.getUpdated_at());
         commentDTO.setCreatedAt(commentEntity.getCreated_at());
         return commentDTO;
     }
 
-    public static CommentEntity mapToCommentEntity(CommentCreateDTO commentCreateDTO, TileEntity tileEntity){
+    public static CommentEntity mapToCommentEntity(CommentCreateDTO commentCreateDTO, TileEntity tileEntity, UserEntity userEntity){
         CommentEntity commentEntity = new CommentEntity();
-        commentEntity.setAuthor(commentCreateDTO.getAuthor());
+        commentEntity.setUserEntity(userEntity);
         commentEntity.setCreated_at(LocalDateTime.now());
         commentEntity.setUpdated_at(LocalDateTime.now());
         commentEntity.setCommentContent(commentCreateDTO.getCommentContent());

@@ -37,4 +37,8 @@ public class GroupDataDAO {
     public List<GroupDataEntity> getGroups(){
         return groupDataRepository.findAll();
     }
+
+    public Boolean checkIfUserCanOperateTile(Long userId,Long groupId){
+        return groupDataRepository.checkIfUserCanOperateTile(userId,groupId);
+    }
 }

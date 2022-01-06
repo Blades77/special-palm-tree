@@ -31,11 +31,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
     private final ObjectMapper objectMapper;
     private final CustomLogoutHandler customLogoutHandler;
+    private final CustomAuthorizationFilter customAuthorizationFilter;
 
-    public SecurityConfig(UserDetailsService userDetailsService,ObjectMapper objectMapper,CustomLogoutHandler customLogoutHandler) {
+    public SecurityConfig(UserDetailsService userDetailsService,ObjectMapper objectMapper,CustomLogoutHandler customLogoutHandler,CustomAuthorizationFilter customAuthorizationFilter) {
         this.userDetailsService = userDetailsService;
         this.objectMapper = objectMapper;
         this.customLogoutHandler = customLogoutHandler;
+        this.customAuthorizationFilter = customAuthorizationFilter;
     }
 
     @Override
@@ -59,13 +61,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                     .antMatchers("/login/**","user/refresh?**").permitAll()
                     .antMatchers("/swagger-ui/#/**").permitAll()
-                    .antMatchers("/tile/**").authenticated()
+//                    .antMatchers("/tile/**").authenticated()
                     .antMatchers(GET,"/book/**").hasAnyAuthority("ADMIN")
                 .anyRequest().permitAll()
                 .and()
                 .sessionManagement().sessionCreationPolicy(STATELESS)
                 .and()
-                .addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(customAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
                 .formLogin().disable()
                 .logout()
                 .logoutUrl("/logout")

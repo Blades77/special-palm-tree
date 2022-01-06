@@ -13,13 +13,16 @@ public class CommentEntity {
     private Long commentId;
     private String commentContent;
     private Long parentCommentId;
-    private Long author;
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="tile_id")
     private TileEntity tileEntity;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="owner_user_id")
+    private UserEntity userEntity;
 
 //    @ManyToOne(cascade = CascadeType.ALL)
 //    private CommentEntity parentCommentEntity;
@@ -59,12 +62,13 @@ public class CommentEntity {
         this.tileEntity = tileEntity;
     }
 
-    public Long getAuthor() {
-        return author;
+
+    public UserEntity getUserEntity() {
+        return userEntity;
     }
 
-    public void setAuthor(Long author) {
-        this.author = author;
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
     }
 
     public LocalDateTime getCreated_at() {

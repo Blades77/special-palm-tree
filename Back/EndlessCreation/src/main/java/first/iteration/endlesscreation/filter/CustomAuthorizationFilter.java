@@ -6,13 +6,17 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import first.iteration.endlesscreation.configuration.JWTUtils;
-import first.iteration.endlesscreation.service.GroupDataService;
-import first.iteration.endlesscreation.service.TileService;
-import first.iteration.endlesscreation.service.UserService;
+import first.iteration.endlesscreation.configuration.LoggedUserGetter;
+import first.iteration.endlesscreation.dao.GroupDataDAO;
+import first.iteration.endlesscreation.exception.ResourceNotFoundException;
+import first.iteration.endlesscreation.repository.GroupDataRepository;
+import first.iteration.endlesscreation.service.*;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.security.core.userdetails.UserDetails;
 import javax.servlet.FilterChain;
@@ -24,8 +28,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
-
+import first.iteration.endlesscreation.service.GroupDataService;
+import first.iteration.endlesscreation.service.TileService;
+import first.iteration.endlesscreation.service.UserService;
 
 
 import static java.util.Arrays.stream;
@@ -35,31 +42,29 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 
 @Slf4j
+@Component
+@RequiredArgsConstructor
 public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
+    UserDetails userDetails;
+    private final AuthHelper authHelper;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authorizationHeader = request.getHeader(AUTHORIZATION);
         String path = request.getServletPath();
-        if(path.equals("/login/**") || path.equals("user/refresh?**")){
-            filterChain.doFilter(request,response);
-        } else{
-            if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")){
+        if(authorizationHeader != null){
+            if(authorizationHeader.startsWith("Bearer ")){
                 try{
 
                     DecodedJWT decodedJWT = JWTUtils.verifyToken(authorizationHeader);
-                    UserDetails userDetails = JWTUtils.getUserFromToken(decodedJWT);
+                    userDetails = JWTUtils.getUserFromToken(decodedJWT);
                     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+//
+                    logger.info("O kurła"+authHelper.test());
 
 
-                    if(path.equals("/tile/**")){
-                        String tileId = path.substring(path.lastIndexOf("/")+1);
-                        logger.info("Loguje odpowiednie id: "+tileId);
-
-                    }
-                    //-----------------------------
                     filterChain.doFilter(request,response);
                 }catch(Exception e){
                     response.setHeader("error", e.getMessage());
@@ -70,9 +75,23 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                     new ObjectMapper().writeValue(response.getOutputStream(), error);
                 }
 
+
+
             } else{
                 filterChain.doFilter(request,response);
             }
+        }else{
+            if(path.equals("/login") || path.equals("user/refresh")){
+                filterChain.doFilter(request,response);
+            }
+            else if(authHelper.notLoggedAccessCheck(path)){
+                logger.info("jestem po autoryzacji");
+                filterChain.doFilter(request,response);
+            }else{
+                throw new ResourceNotFoundException("Rzuca errorem Byq");
+            }
         }
+
+
     }
 }

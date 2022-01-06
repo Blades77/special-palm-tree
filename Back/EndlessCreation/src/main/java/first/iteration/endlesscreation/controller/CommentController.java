@@ -24,13 +24,13 @@ public class CommentController {
     }
 
     @ApiOperation(value = "Gets comments by tile id")
-    @GetMapping("/comment/{id}")
+    @GetMapping("/comments/{id}")
     private List<CommentDTO> getCommentsForTile(@ApiParam(value = "Id of comment", example = "1", required = true) @PathVariable Long id){
         return commentService.getCommentsForTile(id);
     }
 
         @ApiOperation(value = "Gets comments by parentComment id")
-    @GetMapping("/comment/parrent/{id}")
+    @GetMapping("/comments/parrent/{id}")
     private List<CommentDTO> getCommentsByParentCommentId(@ApiParam(value = "Id of parent comment", example = "1", required = true) @PathVariable Long id){
         return commentService.getCommentsByParentCommentId(id);
     }

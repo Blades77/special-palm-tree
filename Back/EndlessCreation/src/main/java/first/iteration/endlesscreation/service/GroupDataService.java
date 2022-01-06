@@ -45,6 +45,12 @@ public class GroupDataService {
         return GroupDataMapper.mapToGroupDataDTO(groupDataEntity);
     }
 
+    public Boolean checkIfUserCanOperateTile(Long userId,Long groupId){
+        return groupDataDAO.checkIfUserCanOperateTile(userId,groupId);
+    }
+
+
+
 
     public List<GroupDataDTO> getGroups(){
          List<GroupDataEntity> groupDataEntityList = groupDataDAO.getGroups();

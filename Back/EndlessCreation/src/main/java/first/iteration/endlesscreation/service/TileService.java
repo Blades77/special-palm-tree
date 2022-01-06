@@ -84,7 +84,7 @@ public class TileService {
         return mapToTileDTOList(tileEntityList);
         }
 
-    public List<TileDTO> getTilesBySearchTileTitle(String tileTitleSearch){
+    public List<TileDTO> getTilesBySearchTileTitle(Long groupId,String tileTitleSearch){
         List<TileEntity> tileEntityList = tileDAO.searchTileTitleByParam(tileTitleSearch);
         return mapToTileDTOList(tileEntityList);
     }
@@ -112,8 +112,8 @@ public class TileService {
 
 
 
-    public void createTile(TileCreateDTO tileCreateDTO){
-        GroupDataEntity groupDataEntity = groupDataService.findById(tileCreateDTO.getGroupId());
+    public void createTile(TileCreateDTO tileCreateDTO,Long groupId){
+        GroupDataEntity groupDataEntity = groupDataService.findById(groupId);
         UserEntity userEntity = userService.getUserEntityById(tileCreateDTO.getOwnerUserId());
         TileEntity tileEntity = TileMapper.mapCreateToTileEntity(tileCreateDTO, groupDataEntity, userEntity);
         List<TagEntity> tagEntityList = tagService.getTagsEntityListByTagCreateDTOList(tileCreateDTO.getTagCreateDTOList());

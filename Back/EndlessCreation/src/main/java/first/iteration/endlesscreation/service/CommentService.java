@@ -3,6 +3,7 @@ package first.iteration.endlesscreation.service;
 
 import first.iteration.endlesscreation.Model.CommentEntity;
 import first.iteration.endlesscreation.Model.TileEntity;
+import first.iteration.endlesscreation.Model.UserEntity;
 import first.iteration.endlesscreation.dao.CommentDAO;
 import first.iteration.endlesscreation.dto.CommentDTO;
 import first.iteration.endlesscreation.dto.Update.CommentUpdateDTO;
@@ -11,6 +12,7 @@ import first.iteration.endlesscreation.mapper.CommentMapper;
 import first.iteration.endlesscreation.repository.CommentRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
+import first.iteration.endlesscreation.configuration.LoggedUserGetter;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -21,11 +23,14 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final TileService tileService;
     private final CommentDAO commentDAO;
+    private final UserService userService;
 
-    public CommentService(CommentRepository commentRepository, TileService tileService,CommentDAO commentDAO) {
+
+    public CommentService(CommentRepository commentRepository, TileService tileService,CommentDAO commentDAO,UserService userService) {
         this.commentDAO = commentDAO;
         this.commentRepository = commentRepository;
         this.tileService = tileService;
+        this.userService = userService;
     }
 
     public CommentEntity getCommentByEntityId(Long commentId){
@@ -47,7 +52,8 @@ public class CommentService {
 
     public void createComment (CommentCreateDTO commentCreateDTO){
         TileEntity tileEntity = tileService.getTileEntityById(commentCreateDTO.getTileId());
-        commentRepository.save(CommentMapper.mapToCommentEntity(commentCreateDTO,tileEntity));
+        UserEntity userEntity = userService.getUserEntityByName(LoggedUserGetter.getUsser());
+        commentRepository.save(CommentMapper.mapToCommentEntity(commentCreateDTO,tileEntity,userEntity));
     }
 
     public void editCommentTile (CommentUpdateDTO commentUpdateDTO){

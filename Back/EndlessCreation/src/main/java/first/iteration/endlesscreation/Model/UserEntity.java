@@ -35,6 +35,17 @@ public class UserEntity {
     @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL)
     private Set<TileEntity> tiles = new HashSet<>();
 
+    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL)
+    private Set<CommentEntity> tileComments = new HashSet<>();
+
+    public Set<CommentEntity> getTileComments() {
+        return tileComments;
+    }
+
+    public void setTileComments(Set<CommentEntity> tileComments) {
+        this.tileComments = tileComments;
+    }
+
     public Long getAppUserId() {
         return appUserId;
     }
