@@ -1,0 +1,44 @@
+<div class="toolbar">
+    <div class="left dropdown">
+    <div class="row">
+        <div class="col">
+          <div ngbDropdown class="d-inline-block">
+            <button class="btn btn-primary" id="dropdownBasic1" ngbDropdownToggle>Toggle dropdown</button>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+              <button ngbDropdownItem>Action - 1</button>
+              <button ngbDropdownItem>Another Action</button>
+              <button ngbDropdownItem>Something else is here</button>
+            </div>
+          </div>
+        </div>
+        </div>
+    </div>
+        <div class="spacer"></div>
+        <div class="right-dropdown">
+            <ng-container *ngIf="!isLogged">
+                <button class="btn btn-primary" routerLink="/login">Login</button>
+            </ng-container>
+            <ng-container *ngIf="isLogged">
+                <button class="btn btn-primary btn-right disabled-button">{{loggedUser}}</button>
+              </ng-container>
+
+            <div class="row">
+                <div class="col">
+                    
+                  <div ngbDropdown class="d-inline-block">
+                    <button class="btn btn-primary btn-right" id="dropdownBasic1" ngbDropdownToggle>Drop downo</button>
+                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                      <button ngbDropdownItem>Action - 1</button>
+                      <button ngbDropdownItem>Another Action</button>
+                      <button ngbDropdownItem (click)="logoutUser()">Something else is here</button>
+                      <ng-container *ngIf="isLogged">
+                        <button ngbDropdownItem (click)="logoutUser()">Logout</button>
+                      </ng-container>
+
+                    </div>
+                  </div>
+                </div>
+                </div>
+</div>
+
+

@@ -30,15 +30,16 @@ public class AuthHelper {
     public boolean loggedAccessCheck(String path){
         String[] pathArr = path.split("/");
         if(Pattern.matches("/tile/[0-9]+",path)){
-            return tileLoggedIn(Long.valueOf(pathArr[1]));
+            Long tileId = Long.valueOf(pathArr[1]);
+            return authDAO.isTileInPublicGroup(tileId) || authDAO.isUserOwnerOfTile(tileId,LoggedUserGetter.getUsser()) || authDAO.isUserInTileGroup(tileId,LoggedUserGetter.getUsser());
         }else if(Pattern.matches("/tile/create/group/[0-9]+",path) || Pattern.matches("/tile/edit/group/[0-9]+",path)){
-            return tileOperation(Long.valueOf(pathArr[3]));
+            return authDAO.isUserInGroup(Long.valueOf(pathArr[3]),LoggedUserGetter.getUsser());
         }else if(Pattern.matches("/tile/delete/group/[0-9]+/[0-9]+",path)){
-            return tileOperation(Long.valueOf(pathArr[3]));
-        }else if(Pattern.matches("/tile/tag/[0-9]+",path)){
-            return tileOperation(Long.valueOf(pathArr[2]));
-        }else if(Pattern.matches("/tile/tag/[0-9]+/[0-9]+",path)){
-            return tileOperation(Long.valueOf(pathArr[2]));
+            Long tileId = Long.valueOf(pathArr[3]);
+            return  authDAO.isUserOwnerOfTile(tileId,LoggedUserGetter.getUsser()) || authDAO.isUserOwnerOfGroupTile(tileId,LoggedUserGetter.getUsser());
+        }else if(Pattern.matches("/tile/tag/[0-9]+",path) || Pattern.matches("/tile/tag/[0-9]+/[0-9]+",path)){
+            Long tileId = Long.valueOf(pathArr[2]);
+            return  authDAO.isUserOwnerOfTile(tileId,LoggedUserGetter.getUsser()) || authDAO.isUserOwnerOfGroupTile(tileId,LoggedUserGetter.getUsser());
         }else{
             return  true;
         }
@@ -49,11 +50,14 @@ public class AuthHelper {
 
       if(Pattern.matches("/tiles/group/[0-9]+/.*",path) || Pattern.matches("/tiles/group/[0-9]+/",path) || Pattern.matches("/tile/group/[0-9]+/search=.*",path)){
           String[] pathArr = path.split("/");
-          System.out.println("0: "+pathArr[0]+"-1: "+pathArr[1]+"-2: "+pathArr[2]+"-3: "+pathArr[3]);
-          return authDAO.isGroupPublic(Long.valueOf(pathArr[3]));
+          Long groupId = Long.valueOf(pathArr[3]);
+          if(groupId == 0){
+              return true;
+          }else {
+              return authDAO.isGroupPublic(groupId);
+          }
       }else if(Pattern.matches("/tile/[0-9]+",path)){
           String[] pathArr = path.split("/");
-          System.out.println("0: "+pathArr[0]+"-1: "+pathArr[1]+"-2: "+pathArr[2]);
           return authDAO.isTileInPublicGroup(Long.valueOf(pathArr[2]));
       }else{
           return true;

@@ -1,6 +1,7 @@
 package first.iteration.endlesscreation.service;
 
 import first.iteration.endlesscreation.Model.*;
+import first.iteration.endlesscreation.configuration.LoggedUserGetter;
 import first.iteration.endlesscreation.dao.TagDAO;
 import first.iteration.endlesscreation.dao.TileDAO;
 import first.iteration.endlesscreation.dto.*;
@@ -8,11 +9,14 @@ import first.iteration.endlesscreation.dto.Update.TileUpdateDTO;
 import first.iteration.endlesscreation.dto.create.TagCreateDTO;
 import first.iteration.endlesscreation.dto.create.TileCreateDTO;
 import first.iteration.endlesscreation.exception.InvalidPathVariableExpection;
+import first.iteration.endlesscreation.exception.ResourceNotFoundException;
 import first.iteration.endlesscreation.mapper.TileMapper;
 import first.iteration.endlesscreation.repository.CommentRepository;
 import first.iteration.endlesscreation.repository.TagRepository;
 import first.iteration.endlesscreation.repository.TileRepository;
 import first.iteration.endlesscreation.repository.GroupDataRepository;
+import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Service
 public class TileService {
 
@@ -47,18 +52,43 @@ public class TileService {
 
     }
 
+    public Integer getLikesForTile(Long tileId){
+        return tileDAO.getLikesForTile(tileId);
+    }
+
+    public void deleteLikeForTile(Long tileId){
+        String userName = LoggedUserGetter.getUsser();
+        if(userName.equals("anonymousUser")){
+            throw new ResourceNotFoundException("Nie masz permisionów");
+        }
+        tileDAO.deleteLikeFromTile(tileId,userName);
+    }
+
+    public void addLikeToTile(Long tileId){
+        String userName = LoggedUserGetter.getUsser();
+        if(userName.equals("anonymousUser")){
+            throw new ResourceNotFoundException("Nie masz permisionów");
+        }
+        tileDAO.addLikeToTile(tileId,userName);
+    }
+
+
+
     public TileEntity getTileEntityById(Long id){
        return tileDAO.getTileEntity(id);
     }
 
     public TileDTO getFullTileById(Long id){
         TileEntity tileEntity = tileDAO.getTileEntity(id);
+        String userName = LoggedUserGetter.getUsser();
         GroupDataDTO groupDataDTO = groupDataService.getGroupDataDTOByTileEntity(tileEntity);
         Map<String, String> tags = tagService.getTagsMapForTile(tileEntity);
-        return TileMapper.mapToTileDTO(tileEntity, groupDataDTO.getGroupId() ,tags);
+        Integer likesCount = getLikesForTile(tileEntity.getTileId());
+        Boolean isUserLikedTile = tileDAO.isUserLikedTile(tileEntity.getTileId(),userName);
+        return TileMapper.mapToTileDTO(tileEntity, groupDataDTO.getGroupId() ,tags, likesCount,isUserLikedTile);
     }
 
-    public List<TileDTO> getTiles() { //tu będzie paginacja raczej
+    public List<TileDTO> getTilesByGroupId() { //tu będzie paginacja raczej
         List<TileEntity> tileEntityList = tileRepository.findAll();
         return mapToTileDTOList(tileEntityList);
     }
@@ -69,28 +99,57 @@ public class TileService {
         return mapToTileDTOList(tileEntityList);
     }
 
-    public List<TileDTO> getTilesIncludingAllTagIdList(String searchType,List<Long> tagIdList,Long groupId){
+    public List<TileDTO> getTilesIncludingAllTagIdList(Long groupId,String searchType,String order,List<Long> tagIdList){
         List<TileEntity> tileEntityList = new ArrayList<>();
-        if(searchType.equals("all")) {
-            int listLength = tagIdList.size();
-            tileEntityList = tileDAO.getTileEntityByTagIdList(tagIdList, listLength,groupId);
+        String sortOrder = "";
+        if (order.equals("asc")) {
+            sortOrder = "ASC";
+        } else if (order.equals("desc")) {
+            sortOrder = "DESC";
+        } else {
+            throw new InvalidPathVariableExpection("Invalid search type, should be \"asc\" or \"desc\".");
         }
-        else if(searchType.equals("one")){
-            tileEntityList = tileDAO.getTileEntityByAtLeastOneTagIdList(tagIdList, groupId);
+        if(groupId > 0){
+            if(searchType.equals("all")) {
+                int listLength = tagIdList.size();
+                tileEntityList = tileDAO.getTileEntityByTagIdList(tagIdList, listLength,Sort.by(Sort.Direction.valueOf(sortOrder), "createdAt"),groupId);
             }
-        else{
-            throw new InvalidPathVariableExpection("Invalid search type, should be \"all\" or \"one\".");
+            else if(searchType.equals("one")){
+                tileEntityList = tileDAO.getTileEntityByAtLeastOneTagIdList(tagIdList,Sort.by(Sort.Direction.valueOf(sortOrder), "createdAt"),groupId);
+            }
+            else{
+                throw new InvalidPathVariableExpection("Invalid search type, should be \"all\" or \"one\".");
+            }
+        }else{
+            List<Long> groupIdList = accesChecker();
+            if(searchType.equals("all")) {
+                int listLength = tagIdList.size();
+                tileEntityList = tileDAO.getTileEntityByTagIdListAndGroupIdList(tagIdList, listLength,Sort.by(Sort.Direction.valueOf(sortOrder), "createdAt"),groupIdList);
+            }
+            else if(searchType.equals("one")){
+                tileEntityList = tileDAO.getTileEntityByAtLeastOneTagIdListAndGroupIdList(tagIdList,Sort.by(Sort.Direction.valueOf(sortOrder), "createdAt"),groupIdList);
+            }
+            else{
+                throw new InvalidPathVariableExpection("Invalid search type, should be \"all\" or \"one\".");
+            }
         }
+
         return mapToTileDTOList(tileEntityList);
         }
 
     public List<TileDTO> getTilesBySearchTileTitle(Long groupId,String tileTitleSearch){
-        List<TileEntity> tileEntityList = tileDAO.searchTileTitleByParam(tileTitleSearch);
+        List<TileEntity> tileEntityList = new ArrayList<>();
+        if(groupId > 0){
+            tileEntityList = tileDAO.searchTileEntitiesByGroupDataId(tileTitleSearch,groupId);
+        }else{
+            List<Long> groupIdList = accesChecker();
+            tileEntityList = tileDAO.searchTileTitleByParam(tileTitleSearch,groupIdList);
+        }
         return mapToTileDTOList(tileEntityList);
     }
 
 
-    public List<TileDTO> getTiles(Long groupId,String order) {
+    public List<TileDTO> getTilesByGroupId(Long groupId, String order) {
         List<TileEntity> tileEntityList = new ArrayList<>();
         GroupDataEntity groupDataEntity = new GroupDataEntity();
         String sortOrder = "";
@@ -105,12 +164,24 @@ public class TileService {
             groupDataEntity = groupDataService.findById(groupId);
             tileEntityList = tileDAO.getTilesByGroupDataEnityWithSort(groupDataEntity, Sort.by(Sort.Direction.valueOf(sortOrder), "createdAt"));
         } else {
-            tileEntityList = tileDAO.getTilesWithSort(Sort.by(Sort.Direction.valueOf(sortOrder), "createdAt"));
+
+            List<Long> groupIdList = accesChecker();
+
+            tileEntityList = tileDAO.getTileEntitiesByGroupDataIdList(groupIdList);
         }
         return mapToTileDTOList(tileEntityList);
     }
 
-
+    private List<Long> accesChecker(){
+        String userName = LoggedUserGetter.getUsser();
+        List<Long> groupIdList = new ArrayList<>();
+        if(userName.equals("anonymousUser")){
+            groupIdList = groupDataService.getPublicGroupsIdList();
+        }else{
+            groupIdList = groupDataService.getPublicAndUserGroupsIdList(userName);
+        }
+        return groupIdList;
+    }
 
     public void createTile(TileCreateDTO tileCreateDTO,Long groupId){
         GroupDataEntity groupDataEntity = groupDataService.findById(groupId);
@@ -168,10 +239,13 @@ public class TileService {
 
     private List<TileDTO> mapToTileDTOList(List<TileEntity> tileEntityList){
         List<TileDTO> tileDTOList = new ArrayList<>();
+        String userName = LoggedUserGetter.getUsser();
         for(TileEntity tileEntity : tileEntityList){
             GroupDataDTO groupDataDTO = groupDataService.getGroupDataDTOByTileEntity(tileEntity);
             Map<String, String> tags = tagService.getTagsMapForTile(tileEntity);
-            tileDTOList.add(TileMapper.mapToTileDTO(tileEntity, groupDataDTO.getGroupId(),tags));
+            Integer likesCount = getLikesForTile(tileEntity.getTileId());
+            Boolean isUserLikedTile = tileDAO.isUserLikedTile(tileEntity.getTileId(),userName);
+            tileDTOList.add(TileMapper.mapToTileDTO(tileEntity, groupDataDTO.getGroupId(),tags,likesCount,isUserLikedTile));
         }
         return tileDTOList;
     }

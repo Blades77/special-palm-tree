@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from 'src/app/service/authentication-service/authentication.service';
 
 @Component({
@@ -7,14 +8,34 @@ import { AuthenticationService } from 'src/app/service/authentication-service/au
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+  loginForm!: FormGroup;
+  constructor(private authService: AuthenticationService, private readonly fb: FormBuilder) {
+    this.loginForm = this.fb.group({
+      username: ['',[Validators.required]],
+      password: ['',[Validators.required]]
+    });
 
-  constructor(private authService: AuthenticationService) { }
+   }
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
+
+  submitForm() {
+    if (this.loginForm.valid) {
+        console.log(this.loginForm.get('username')?.value);
+    } else {
+        console.log('There is a problem with the form');
+    }
   }
 
+
+
+
+
+
   onSubmit(){
-    this.authService.login({password: "1234", username: "string4"}).subscribe(
+    const passwordValue = this.loginForm.get('password')?.value;
+    const usernameValue = this.loginForm.get('username')?.value;
+    this.authService.login({password: passwordValue, username: usernameValue}).subscribe(
       (response) => {
         console.log("udało się!!!");
       },
@@ -25,6 +46,8 @@ export class LoginComponent implements OnInit {
     
 
   }
+
+  
 
   logoutUser(): void {
     this.authService.logout().subscribe();

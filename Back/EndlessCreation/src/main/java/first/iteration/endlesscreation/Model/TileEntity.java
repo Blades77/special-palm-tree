@@ -1,5 +1,7 @@
 package first.iteration.endlesscreation.Model;
 
+import org.springframework.security.core.userdetails.User;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -24,6 +26,14 @@ public class TileEntity {
             joinColumns = @JoinColumn(name = "tile_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private Set<TagEntity> tags = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "tile_like",
+            joinColumns = @JoinColumn(name = "tile_id"),
+            inverseJoinColumns = @JoinColumn(name = "app_user_id"))
+    private Set<UserEntity> users = new HashSet<>();
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="group_id")
@@ -108,6 +118,24 @@ public class TileEntity {
     public void removeTag(TagEntity tag) {
         this.tags.remove(tag);
         tag.getTiles().remove(this);
+    }
+
+    public void addUser(UserEntity user) {
+        this.users.add(user);
+        user.getLikedTiles().add(this);
+    }
+
+    public void removeUser(UserEntity user) {
+        this.users.remove(user);
+        user.getLikedTiles().remove(this);
+    }
+
+    public Set<UserEntity> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<UserEntity> users) {
+        this.users = users;
     }
 
     public Set<TagEntity> getTags() {

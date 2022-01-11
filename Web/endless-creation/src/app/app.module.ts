@@ -9,6 +9,10 @@ import { NoPageComponent } from './pages/no-page/no-page.component';
 import { TileDetailsComponent } from './pages/tile-details/tile-details.component';
 import { LoginComponent } from './pages/login/login.component';
 import { JwtInterceptor } from './helpers/jwt.interceptor';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ReactiveFormsModule } from '@angular/forms';
+import { ToolbarComponent } from './pages/toolbar/toolbar.component';
+
 
 
 @NgModule({
@@ -19,11 +23,14 @@ import { JwtInterceptor } from './helpers/jwt.interceptor';
     GroupComponent,
     NoPageComponent,
     LoginComponent,
+    ToolbarComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    ReactiveFormsModule,
     HttpClientModule,
+    NgbModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

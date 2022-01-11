@@ -1,7 +1,5 @@
 package first.iteration.endlesscreation.controller;
 
-import first.iteration.endlesscreation.dto.BookReviewDTO;
-import first.iteration.endlesscreation.dto.TagDTO;
 import first.iteration.endlesscreation.dto.Update.TileUpdateDTO;
 import first.iteration.endlesscreation.dto.create.TagCreateDTO;
 import first.iteration.endlesscreation.service.TileService;
@@ -47,11 +45,12 @@ public class TileController {
 //    }
 
     @ApiOperation(value="Returns list of tiles containing  tags")
-    @GetMapping("/tiles/group/{groupId}/{order}/{tagIdList}/")
-    private List<TileDTO> getTilesByAllTagsId(@ApiParam(value = "Search type: all returns Tiles with all tags included, one returns Tiles with at least one tile included", example = "all", required = true) @PathVariable String order,
+    @GetMapping("/tiles/group/{groupId}/{searchType}/{order}/{tagIdList}/")
+    private List<TileDTO> getTilesByAllTagsId(@ApiParam(value = "Search type: all returns Tiles with all tags included, one returns Tiles with at least one tile included", example = "all", required = true) @PathVariable String searchType,
+                                              @ApiParam(value = "Order", example = "asc", required = true) @PathVariable String order,
                                               @ApiParam(value = "List of ids of tags", example = "1034,1035", required = true) @PathVariable List<Long> tagIdList,
                                               @ApiParam(value = "Current Group Id or 0 for all group search", example = "1", required = true) @PathVariable Long groupId) {
-        return tileService.getTilesIncludingAllTagIdList(order,tagIdList,groupId);
+        return tileService.getTilesIncludingAllTagIdList(groupId,searchType,order,tagIdList);
     }
 
     @ApiOperation(value="Returns list of tiles ordered by date")
@@ -60,7 +59,7 @@ public class TileController {
             @ApiParam(value = "Id of an group 0 search everywhere", example = "1", required = true) @PathVariable Long groupId,
             @ApiParam(value = "order : asc returns reviews in ascending order, order : desc return reviews in descending order", example = "asc", required = true) @PathVariable String order)
     {
-        return tileService.getTiles(groupId,order);
+        return tileService.getTilesByGroupId(groupId,order);
     }
 
     @ApiOperation(value="Returns list of tiles containing parameter in title")
@@ -70,6 +69,8 @@ public class TileController {
         return tileService.getTilesBySearchTileTitle(groupId,searchParameter);
     }
 
+
+
     @ApiOperation(value = "Creates Tile")
     @PostMapping("/tile/create/group/{groupId}")
     private void createTile(@ApiParam(value = "groupId", example = "1", required = true) @PathVariable Long groupId,
@@ -77,17 +78,30 @@ public class TileController {
         tileService.createTile(tileCreateDTO,groupId);
     }
 
+
+    @ApiOperation(value = "Adds like to tile")
+    @PostMapping("/tile/like/{tileId}")
+    private void addLikeToTile(@ApiParam(value = "tileId", example = "1", required = true) @PathVariable Long tileId){
+        tileService.addLikeToTile(tileId);
+    }
+
+    @ApiOperation(value = "Delete tile")
+    @DeleteMapping("/tile/like/{tileId}")
+    private void deleteLikeFromTile(@ApiParam(value = "tileId", example = "1", required = true) @PathVariable Long tileId){
+        tileService.deleteLikeForTile(tileId);
+    }
+
     @ApiOperation(value = "Edit specific tile")
     @PutMapping("/tile/edit/group/{groupId}")
     private void editTile(@ApiParam(value = "groupId", example = "1", required = true) @PathVariable Long groupId,
                           @RequestBody TileUpdateDTO tileUpdateDTO){
         tileService.editTile(tileUpdateDTO);
-        }
+    }
 
 
     @ApiOperation(value = "Delete tile")
     @DeleteMapping("/tile/delete/group/{groupId}/{tileId}")
-    private void deleTile(@ApiParam(value = "groupId", example = "1", required = true) @PathVariable Long groupId,
+    private void deleteTile(@ApiParam(value = "groupId", example = "1", required = true) @PathVariable Long groupId,
                           @ApiParam(value = "tileId", example = "1", required = true) @PathVariable Long tileId){
         tileService.deleteTile(tileId);
     }

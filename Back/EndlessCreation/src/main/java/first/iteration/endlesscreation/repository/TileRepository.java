@@ -4,9 +4,11 @@ import first.iteration.endlesscreation.Model.*;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,14 +19,42 @@ public interface TileRepository extends JpaRepository<TileEntity, Long> {
     Optional<List<TileEntity>> getTileEntityByGroupDataEntity(GroupDataEntity groupDataEntity,Sort sort);
 
 
+    @Query(value="SELECT * FROM tile WHERE group_id IN :groupIdList ORDER BY created_at ASC",nativeQuery = true)
+    Optional<List<TileEntity>> getTileEntitiesByGroupDataIdList(@Param("groupIdList") List<Long> groupIdList);
+
     @Query(value="SELECT * FROM tile WHERE group_id = :groupId AND tile_id IN ( SELECT tile_id FROM tile_tag WHERE tag_id IN :tagIdList\n" +
             " GROUP BY tile_id HAVING COUNT(tile_id) = :listLength)",nativeQuery = true)
     Optional<List<TileEntity>> getTileEntityByTagIdList(@Param("tagIdList") List<Long> tagIdList, @Param("listLength") int listLength, @Param("groupId") Long groupId);
 
     @Query(value="SELECT DISTINCT t.* FROM tile t JOIN tile_tag g ON t.tile_id = g.tile_id WHERE t.group_id = :groupId AND g.tag_id IN :tagIdList" ,nativeQuery = true)
-    Optional<List<TileEntity>> getTileEntityByAtLeastOneTagIdList(@Param("tagIdList") List<Long> tagIdList,@Param("groupId") Long groupId);
+    Optional<List<TileEntity>> getTileEntityByAtLeastOneTagIdList(@Param("tagIdList") List<Long> tagIdList ,@Param("groupId") Long groupId);
 
-    @Query(value ="SELECT * FROM tile WHERE tile_title LIKE %:string%",nativeQuery = true)
-    Optional<List<TileEntity>> searchTileTitleByParam(@Param("string") String search);
+    @Query(value="SELECT * FROM tile WHERE group_id IN :groupIdList AND tile_id IN ( SELECT tile_id FROM tile_tag WHERE tag_id IN :tagIdList\n" +
+            " GROUP BY tile_id HAVING COUNT(tile_id) = :listLength)",nativeQuery = true)
+    Optional<List<TileEntity>> getTileEntityByTagIdListAndGroupIdList(@Param("tagIdList") List<Long> tagIdList, @Param("listLength") int listLength, @Param("groupIdList") List<Long> groupIdList);
 
+    @Query(value="SELECT DISTINCT t.* FROM tile t JOIN tile_tag g ON t.tile_id = g.tile_id WHERE t.group_id = :groupIdList AND g.tag_id IN :tagIdList" ,nativeQuery = true)
+    Optional<List<TileEntity>> getTileEntityByAtLeastOneTagIdListAndGroupIdList(@Param("tagIdList") List<Long> tagIdList ,@Param("groupIdList")  List<Long> groupIdList);
+
+    @Query(value ="SELECT * FROM tile WHERE tile_title LIKE %:string% AND group_id IN :groupIdList",nativeQuery = true)
+    Optional<List<TileEntity>> searchTileTitleByParam(@Param("string") String search, @Param("groupIdList") List<Long> groupIdList);
+
+    @Query(value="SELECT * FROM tile WHERE tile_title LIKE %:string% AND group_id = :groupId",nativeQuery = true)
+    Optional<List<TileEntity>> getTileEntitiesByGroupDataId(@Param("string") String search,@Param("groupId") Long groupId);
+
+    @Query(value="SELECT COUNT(*) FROM tile_like WHERE tile_id = :tileId", nativeQuery = true)
+    Optional<Integer>getLikesForTile(@Param("tileId") Long tileId);
+
+    @Query(value ="SELECT ISNULL((SELECT 1 FROM tile_like WHERE tile_id = :tileId AND app_user_id IN (SELECT app_user_id FROM app_user WHERE app_user_name = :userName)),0)",nativeQuery = true)
+    int isUserLikedTile(@Param("tileId") Long tileId,@Param("userName") String userName);
+
+    @Modifying
+    @Query(value ="DELETE FROM tile_like WHERE tile_id = :tileId AND app_user_id IN (SELECT app_user_id FROM app_user WHERE app_user_name = :userName)",nativeQuery = true)
+    @Transactional
+    void deleteLikeFromTile(@Param("tileId")Long tileId,@Param("userName") String userName);
+
+    @Modifying
+    @Query(value="INSERT INTO tile_like  (app_user_id,tile_id) VALUES ((SELECT app_user_id FROM app_user WHERE app_user_name = :userName),:tileId)", nativeQuery = true)
+    @Transactional
+    void addLikeToTile(@Param("tileId")Long tileId,@Param("userName") String userName);
 }

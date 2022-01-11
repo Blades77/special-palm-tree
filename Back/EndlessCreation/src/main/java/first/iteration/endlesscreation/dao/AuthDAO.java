@@ -23,11 +23,11 @@ public class AuthDAO {
     }
 
     public boolean isUserOwnerOfTile(Long tileId,String userName){
-        return authRepository.isUserOwnerOfTile(tileId,userName);
+        return authRepository.isUserOwnerOfTile(tileId,userName) == 1;
     }
 
     public boolean isUserInTileGroup(Long tileId, String userName){
-        return  authRepository.isUserInTileGroup(tileId,userName);
+        return  authRepository.isUserInTileGroup(tileId,userName) == 1;
     }
 
     public boolean isGroupPublic(Long groupId){
@@ -35,15 +35,15 @@ public class AuthDAO {
     }
 
     public boolean isUserInGroup(Long groupId,String userName){
-        return  authRepository.isUserInGroup(groupId,userName);
+        return  authRepository.isUserInGroup(groupId,userName) == 1;
     }
 
     public boolean isUserOwnerOfGroupTile(Long tileId,String userName){
-        return authRepository.isUserOwnerOfGroupTile(tileId,userName);
+        return authRepository.isUserOwnerOfGroupTile(tileId,userName) == 1;
     }
 
     public boolean isUserInCommentGroupAndHavePermission(Long comment_id,String userName){
-        return authRepository.isUserInCommentGroupAndHavePermission(comment_id,userName);
+        return authRepository.isUserInCommentGroupAndHavePermission(comment_id,userName) == 1;
     }
 
 }

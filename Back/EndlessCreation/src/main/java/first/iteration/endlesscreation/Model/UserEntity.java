@@ -32,8 +32,11 @@ public class UserEntity {
             inverseJoinColumns = @JoinColumn(name = "group_id"))
     private Set<GroupDataEntity> groups = new HashSet<>();
 
-    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "users")
     private Set<TileEntity> tiles = new HashSet<>();
+
+    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL)
+    private Set<TileEntity> likedTiles = new HashSet<>();
 
     @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL)
     private Set<CommentEntity> tileComments = new HashSet<>();
@@ -44,6 +47,14 @@ public class UserEntity {
 
     public void setTileComments(Set<CommentEntity> tileComments) {
         this.tileComments = tileComments;
+    }
+
+    public Set<TileEntity> getLikedTiles() {
+        return likedTiles;
+    }
+
+    public void setLikedTiles(Set<TileEntity> likedTiles) {
+        this.likedTiles = likedTiles;
     }
 
     public Long getAppUserId() {

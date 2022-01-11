@@ -14,6 +14,7 @@ const routes: Routes = [
   { path: 'tile-detail/:id', component: TileDetailsComponent },
   { path: 'login', component: LoginComponent},
   { path: '404', component: NoPageComponent},
+  { path: 'login', component: LoginComponent},
   { path: '**', redirectTo: '/404'},
 
 

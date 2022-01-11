@@ -41,4 +41,13 @@ public class GroupDataDAO {
     public Boolean checkIfUserCanOperateTile(Long userId,Long groupId){
         return groupDataRepository.checkIfUserCanOperateTile(userId,groupId);
     }
+
+    public List<Long> getPublicGroupsIdList(){
+        return groupDataRepository.getPublicGroupsId();
+    }
+
+    public List<Long> getPublicAndUserGroupsIdList(String userName){
+        return groupDataRepository.getPublicAndUserGroupsId(userName);
+    }
+
 }

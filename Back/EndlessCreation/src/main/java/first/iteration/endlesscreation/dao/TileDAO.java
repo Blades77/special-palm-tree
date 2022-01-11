@@ -31,29 +31,62 @@ public class TileDAO {
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot find tile by specific group"));
     }
 
-    public List<TileEntity> getTileEntityByTagIdList(List<Long> tagIdList, int listLength,Long groupId){
+    public List<TileEntity> getTileEntityByTagIdList(List<Long> tagIdList, int listLength,Sort sort,Long groupId){
         return  tileRepository.getTileEntityByTagIdList(tagIdList,listLength,groupId)
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot find tile by provided tags"));
     }
 
-    public List<TileEntity> getTileEntityByAtLeastOneTagIdList(List<Long> tagIdList,Long groupId){
+    public List<TileEntity> getTileEntityByAtLeastOneTagIdList(List<Long> tagIdList,Sort sort,Long groupId){
         return  tileRepository.getTileEntityByAtLeastOneTagIdList(tagIdList,groupId)
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot find tile by provided tags"));
     }
 
-    public List<TileEntity> searchTileTitleByParam(String tileTitleSearch){
-        return  tileRepository.searchTileTitleByParam(tileTitleSearch)
+
+    public List<TileEntity> getTileEntityByTagIdListAndGroupIdList(List<Long> tagIdList, int listLength,Sort sort,List<Long> groupIdList){
+        return  tileRepository.getTileEntityByTagIdListAndGroupIdList(tagIdList,listLength,groupIdList)
+                .orElseThrow(() -> new ResourceNotFoundException("Cannot find tile by provided tags"));
+    }
+
+    public List<TileEntity> getTileEntityByAtLeastOneTagIdListAndGroupIdList(List<Long> tagIdList,Sort sort,List<Long> groupIdList){
+        return  tileRepository.getTileEntityByAtLeastOneTagIdListAndGroupIdList(tagIdList,groupIdList)
+                .orElseThrow(() -> new ResourceNotFoundException("Cannot find tile by provided tags"));
+    }
+
+    public List<TileEntity> searchTileTitleByParam(String tileTitleSearch,List<Long> groupIdList){
+        return  tileRepository.searchTileTitleByParam(tileTitleSearch, groupIdList)
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot find  any tile with matching param in title"));
     }
 
-    public List<TileEntity> getTilesWithSort(Sort sort){
-        return tileRepository.findAll(sort);
+    public List<TileEntity> searchTileEntitiesByGroupDataId(String tileTitleSearch, Long groupId){
+        return tileRepository.getTileEntitiesByGroupDataId(tileTitleSearch,groupId)
+                .orElseThrow(() -> new ResourceNotFoundException("Cannot find  any tile with matching param in title"));
+    }
+
+    public List<TileEntity> getTileEntitiesByGroupDataIdList(List<Long> groupIdList){
+        return tileRepository.getTileEntitiesByGroupDataIdList(groupIdList)
+                .orElseThrow(() -> new ResourceNotFoundException("Something went wrong"));
     }
     public List<TileEntity> getTilesByGroupDataEnityWithSort(GroupDataEntity groupDataEntity,Sort sort){
         return tileRepository.getTileEntityByGroupDataEntity(groupDataEntity,sort)
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot find  any tile in provided group"));
     }
 
+    public Integer getLikesForTile(Long tileId){
+        return tileRepository.getLikesForTile(tileId)
+                .orElseThrow(() -> new ResourceNotFoundException("Cannot find  any tile with matching param in title"));
+    }
+
+    public void deleteLikeFromTile(Long tileId,String userName){
+        tileRepository.deleteLikeFromTile(tileId,userName);
+    }
+
+    public void addLikeToTile(Long tileId,String userName){
+        tileRepository.addLikeToTile(tileId,userName);
+    }
+
+    public boolean isUserLikedTile(Long tileId,String userName){
+        return tileRepository.isUserLikedTile(tileId,userName) == 1;
+    }
 
 
 

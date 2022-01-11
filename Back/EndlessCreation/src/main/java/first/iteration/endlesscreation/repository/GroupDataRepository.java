@@ -20,4 +20,12 @@ public interface GroupDataRepository extends JpaRepository<GroupDataEntity, Long
 
     @Query(value="SELECT app_user_id FROM user_group WHERE app_user_id = :userId AND group_id = :groupId AND (position =  'MEMBER' OR  position = 'MOD');" ,nativeQuery = true)
     Boolean checkIfUserCanOperateTile(@Param("userId") Long userId, @Param("groupId") Long groupId);
+
+    @Query(value="SELECT group_id FROM group_data WHERE group_type = 'Public'" ,nativeQuery = true)
+    List<Long> getPublicGroupsId();
+
+    @Query(value="SELECT group_id FROM group_data WHERE group_type = 'Public'\n" +
+            "UNION \n" +
+            "SELECT group_id FROM user_group WHERE app_user_id  IN (SELECT app_user_id FROM app_user WHERE app_user_name = :userName )" ,nativeQuery = true)
+    List<Long> getPublicAndUserGroupsId(@Param("userName") String userName);
 }

@@ -13,10 +13,12 @@ public class TileDTO {
     private LocalDateTime updatedAt;
     private Long groupId;
     private Map<String, String> tags;
+    private Integer likesCount;
+    private boolean isTileLikedByTheUser;
 
     public TileDTO(){}
 
-    public TileDTO(Long tileId, String tileTitle, String tileData, Long ownerUserId, LocalDateTime createdAt, LocalDateTime updatedAt, Long groupId,Map<String, String> tags ){
+    public TileDTO(Long tileId, String tileTitle, String tileData, Long ownerUserId, LocalDateTime createdAt, LocalDateTime updatedAt, Long groupId,Map<String, String> tags,Integer likesCount, boolean isTileLikedByTheUser ){
         this.tileId = tileId;
         this.tileTitle = tileTitle;
         this.tileData = tileData;
@@ -25,7 +27,24 @@ public class TileDTO {
         this.ownerUserId = ownerUserId;
         this.groupId = groupId;
         this.tags = tags;
+        this.likesCount = likesCount;
+        this.isTileLikedByTheUser = isTileLikedByTheUser;
+    }
 
+    public Integer getLikesCount() {
+        return likesCount;
+    }
+
+    public void setLikesCount(Integer likesCount) {
+        this.likesCount = likesCount;
+    }
+
+    public boolean isTileLikedByTheUser() {
+        return isTileLikedByTheUser;
+    }
+
+    public void setTileLikedByTheUser(boolean tileLikedByTheUser) {
+        isTileLikedByTheUser = tileLikedByTheUser;
     }
 
     public Long getTileId() {

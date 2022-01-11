@@ -6,6 +6,7 @@ import { tap } from 'rxjs/operators';
 import { User } from 'src/app/model/user-view';
 import { TokenVIEW } from 'src/app/model/token-view';
 import { environment } from 'src/environments/environment';
+import { UserStatus } from 'src/app/model/user-status';
 
 
 @Injectable({
@@ -18,6 +19,9 @@ export class AuthenticationService {
   private REFRESH_TOKEN="REFRESH_TOKEN";
 
   isLoginSubject = new BehaviorSubject<boolean>(this.hasToken());
+  user = new BehaviorSubject<String>("");
+
+  
   constructor(
     private router: Router,
     private http: HttpClient
@@ -32,6 +36,7 @@ login(credentials: any): Observable<any> {
       console.log('jestem po d koniec')
       localStorage.setItem(this.AUTH_TOKEN, token.accessToken);
       localStorage.setItem(this.REFRESH_TOKEN, token.refreshToken);
+      this.user.next(credentials.username);
       this.isLoginSubject.next(true);
       }));
 }
@@ -44,6 +49,7 @@ logout(): Observable<any> {
 removeTokenAndSetLayout(): void {
   localStorage.removeItem(this.AUTH_TOKEN);
   localStorage.removeItem(this.REFRESH_TOKEN);
+  this.user.next("");
   this.isLoginSubject.next(false);
 }
 
@@ -51,8 +57,13 @@ hasToken(): boolean{
   return !!localStorage.getItem(this.AUTH_TOKEN);
 }
 
+
 isLoggedIn(): Observable<boolean> {
   return this.isLoginSubject.asObservable();
+}
+
+loggedUser(): Observable<String> {
+  return this.user.asObservable();
 }
 
 getAccessToken(): string {
