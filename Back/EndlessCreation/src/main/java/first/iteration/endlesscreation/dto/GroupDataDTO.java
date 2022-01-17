@@ -5,11 +5,13 @@ public class GroupDataDTO {
     private Long groupId;
     private String groupName;
     private String groupType;
+    private String imageLink;
 
-    public GroupDataDTO(Long groupId, String groupName, String groupType){
+    public GroupDataDTO(Long groupId, String groupName, String groupType,String imageLink){
         this.groupId = groupId;
         this.groupName = groupName;
         this.groupType = groupType;
+        this.imageLink = imageLink;
     }
 
     public GroupDataDTO(){}
@@ -36,5 +38,13 @@ public class GroupDataDTO {
 
     public void setGroupType(String groupType) {
         this.groupType = groupType;
+    }
+
+    public String getImageLink() {
+        return imageLink;
+    }
+
+    public void setImageLink(String imageLink) {
+        this.imageLink = imageLink;
     }
 }

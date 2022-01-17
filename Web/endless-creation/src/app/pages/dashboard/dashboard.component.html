@@ -18,12 +18,35 @@
   </div>
  -->
 
- <div class="container-box">
-  <header class="header"></header>
-  <main class="main">
-    <section class="menu">asdasd1111111111</section>
-    <section class="feed">asdasdasd2222222222</section>
-    <section class="event">asdasdasd33333333</section>
-  </main>
-  <aside class="aside">asasda44444444444</aside>
+
+ <div class="container">
+  <div class="right-area"></div>
+  <div class="main-area">
+    <div class="main-area-top"></div>
+    <div class="main-area-bottom">
+      <div *ngFor ="let tile of tiles" class="tile">
+        
+        <div class="tile-container">
+          <div class="owner-user">
+            <span>Posted by</span>
+            <span>{{tile.ownerUserName}}</span>
+            <span>{{tile.createdAt | datePassed}}</span>
+            <div class="header-right">
+              <span>
+                <a  routerLink="/group/{{tile.groupId}}">
+                {{tile.groupName}}
+                </a>
+              </span>
+              <button class="btn btn-primary join-button">Join</button>
+            </div>
+          </div>
+          <div class="title">{{tile.tileTitle}}</div>
+          <div class="content">
+          </div>
+          <div class="utiles"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
 </div>

@@ -4,6 +4,7 @@ import { GroupService } from '../../service/group-service/group.service';
 import { GroupVIEW } from '../../model/group-view';
 import { ErrorHandlerService } from 'src/app/service/error-handler-service/error-handler.service';
 import { TileVIEW } from 'src/app/model/tile-view';
+import { AuthenticationService } from 'src/app/service/authentication-service/authentication.service';
 
 
 @Component({
@@ -15,19 +16,25 @@ export class DashboardComponent implements OnInit {
 
   tiles!: TileVIEW[];
   groups!: GroupVIEW[];
+  isLogged!: boolean;
+
 
   constructor(
     private tileService: TileService,
     private groupService: GroupService,
-    private errorHandler: ErrorHandlerService){}
+    private errorHandler: ErrorHandlerService,
+    private authService: AuthenticationService){}
 
   ngOnInit(): void {
+    this.authService.isLoggedIn().subscribe(isLogged => this.isLogged = isLogged);
     this.getTiles();
     this.getGroups();
   }
 
+
   getTiles(){
-    this.tileService.getOrderedTilesFromApi("0","desc")
+    if(!this.isLogged){
+      this.tileService.getOrderedTilesFromApi("0","desc")
     .subscribe(
       (response: any) => {
         this.tiles = response;
@@ -36,9 +43,8 @@ export class DashboardComponent implements OnInit {
       },
       (error) =>{;
         this.errorHandler.handleError(error);
-        
-      }
-    )
+      })
+    }
   }
 
   getGroups(){

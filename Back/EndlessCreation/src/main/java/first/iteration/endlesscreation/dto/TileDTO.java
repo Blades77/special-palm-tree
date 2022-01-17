@@ -15,10 +15,12 @@ public class TileDTO {
     private Map<String, String> tags;
     private Integer likesCount;
     private boolean isTileLikedByTheUser;
+    private String ownerUserName;
+    private String groupName;
 
     public TileDTO(){}
 
-    public TileDTO(Long tileId, String tileTitle, String tileData, Long ownerUserId, LocalDateTime createdAt, LocalDateTime updatedAt, Long groupId,Map<String, String> tags,Integer likesCount, boolean isTileLikedByTheUser ){
+    public TileDTO(Long tileId, String tileTitle, String tileData, Long ownerUserId, LocalDateTime createdAt, LocalDateTime updatedAt, Long groupId,Map<String, String> tags,Integer likesCount, boolean isTileLikedByTheUser, String ownerUserName, String groupName ){
         this.tileId = tileId;
         this.tileTitle = tileTitle;
         this.tileData = tileData;
@@ -29,6 +31,8 @@ public class TileDTO {
         this.tags = tags;
         this.likesCount = likesCount;
         this.isTileLikedByTheUser = isTileLikedByTheUser;
+        this.ownerUserName = ownerUserName;
+        this.groupName = groupName;
     }
 
     public Integer getLikesCount() {
@@ -75,6 +79,14 @@ public class TileDTO {
         return ownerUserId;
     }
 
+    public String getOwnerUserName() {
+        return ownerUserName;
+    }
+
+    public void setOwnerUserName(String ownerUserName) {
+        this.ownerUserName = ownerUserName;
+    }
+
     public void setOwnerUserId(Long ownerUserId) {
         this.ownerUserId = ownerUserId;
     }
@@ -109,5 +121,13 @@ public class TileDTO {
 
     public void setTags(Map<String, String> tags) {
         this.tags = tags;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
     }
 }

@@ -17,6 +17,7 @@ public class UserEntity {
     private String appUserName;
     private String appUserPassword;
     private String appUserEmail;
+    private String imageLink;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
@@ -55,6 +56,14 @@ public class UserEntity {
 
     public void setLikedTiles(Set<TileEntity> likedTiles) {
         this.likedTiles = likedTiles;
+    }
+
+    public String getImageLink() {
+        return imageLink;
+    }
+
+    public void setImageLink(String imageLink) {
+        this.imageLink = imageLink;
     }
 
     public Long getAppUserId() {

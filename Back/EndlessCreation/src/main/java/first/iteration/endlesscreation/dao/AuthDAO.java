@@ -46,4 +46,10 @@ public class AuthDAO {
         return authRepository.isUserInCommentGroupAndHavePermission(comment_id,userName) == 1;
     }
 
+    public boolean isUserOwneOfGroup(Long groupId,String userName){
+        return authRepository.isUserOwnerOfGroup(groupId,userName) == 1;
+    }
+
+
+
 }

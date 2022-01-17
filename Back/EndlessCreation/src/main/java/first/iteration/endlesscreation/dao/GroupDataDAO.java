@@ -23,6 +23,10 @@ public class GroupDataDAO {
 
     }
 
+    public void saveGroupDataEntity(GroupDataEntity groupDataEntity){
+        groupDataRepository.save(groupDataEntity);
+    }
+
     public GroupDataEntity findByTileEntity(TileEntity tileEntity){
         return groupDataRepository.getGroupDataEntityByTiles(tileEntity)
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot find specified group"));

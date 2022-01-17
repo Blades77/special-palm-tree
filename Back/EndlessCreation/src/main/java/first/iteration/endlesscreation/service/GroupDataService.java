@@ -8,6 +8,7 @@ import first.iteration.endlesscreation.dto.GroupDataDTO;
 import first.iteration.endlesscreation.exception.ResourceNotFoundException;
 import first.iteration.endlesscreation.mapper.GroupDataMapper;
 import first.iteration.endlesscreation.repository.GroupDataRepository;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import first.iteration.endlesscreation.Model.GroupDataEntity;
 
@@ -19,12 +20,14 @@ public class GroupDataService {
 
     private final GroupDataRepository groupDataRepository;
     private final GroupDataDAO groupDataDAO;
+    private final Environment environment;
 
 
-    public GroupDataService(GroupDataRepository groupDataRepository, GroupDataDAO groupDataDAO) {
+    public GroupDataService(GroupDataRepository groupDataRepository, GroupDataDAO groupDataDAO,Environment environment) {
 
         this.groupDataRepository = groupDataRepository;
         this.groupDataDAO = groupDataDAO;
+        this.environment = environment;
     }
 
     public GroupDataEntity findById(Long id){
@@ -42,7 +45,8 @@ public class GroupDataService {
 
     public GroupDataDTO getGroupDataDTOByTileEntity(TileEntity tileEntity){
         GroupDataEntity groupDataEntity = groupDataDAO.findByTileEntity(tileEntity);
-        return GroupDataMapper.mapToGroupDataDTO(groupDataEntity);
+        String imageLink = generateImageLink(groupDataEntity.getImageLink());
+        return GroupDataMapper.mapToGroupDataDTO(groupDataEntity,imageLink);
     }
 
     public Boolean checkIfUserCanOperateTile(Long userId,Long groupId){
@@ -58,13 +62,26 @@ public class GroupDataService {
         return groupDataDAO.getPublicAndUserGroupsIdList(userName);
     }
 
+    public void saveGroupDataEntity(GroupDataEntity groupDataEntity){
+        groupDataDAO.saveGroupDataEntity(groupDataEntity);
+    }
 
+    private String generateImageLink(String imageLink){
+        if(imageLink != null){
+            String bucketName = environment.getRequiredProperty("FIREBASE_BUCKET_NAME");
+            return "https://firebasestorage.googleapis.com/v0/b/" + bucketName + "/o/" + imageLink + "?alt=media";
+        }else {
+            return "";
+        }
+
+    }
 
     public List<GroupDataDTO> getGroups(){
          List<GroupDataEntity> groupDataEntityList = groupDataDAO.getGroups();
          List<GroupDataDTO> groupDataDTOList = new ArrayList<>();
          for(GroupDataEntity groupDataEntity : groupDataEntityList){
-             groupDataDTOList.add(GroupDataMapper.mapToGroupDataDTO(groupDataEntity));
+             String imageLink = generateImageLink(groupDataEntity.getImageLink());
+             groupDataDTOList.add(GroupDataMapper.mapToGroupDataDTO(groupDataEntity,imageLink));
          }
          return groupDataDTOList;
     }

@@ -245,6 +245,7 @@ public class TileService {
             Map<String, String> tags = tagService.getTagsMapForTile(tileEntity);
             Integer likesCount = getLikesForTile(tileEntity.getTileId());
             Boolean isUserLikedTile = tileDAO.isUserLikedTile(tileEntity.getTileId(),userName);
+
             tileDTOList.add(TileMapper.mapToTileDTO(tileEntity, groupDataDTO.getGroupId(),tags,likesCount,isUserLikedTile));
         }
         return tileDTOList;

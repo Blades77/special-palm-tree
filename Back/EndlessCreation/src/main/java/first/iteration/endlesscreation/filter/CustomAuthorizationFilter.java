@@ -63,9 +63,14 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 //
                     logger.info("O kurła"+authHelper.test());
+                    if(authHelper.loggedAccessCheck(path)){
+                        filterChain.doFilter(request,response);
+                    }else {
+                        throw new ResourceNotFoundException("Rzuca errorem Byq z autoryzacji");
+                    }
 
 
-                    filterChain.doFilter(request,response);
+//                    filterChain.doFilter(request,response);
                 }catch(Exception e){
                     response.setHeader("error", e.getMessage());
                     response.setStatus(FORBIDDEN.value());

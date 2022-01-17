@@ -1,47 +1,87 @@
-
-.container-box {
-  width: 100%;
-  height: 100%;
-  display: grid;
-  grid-template-columns: auto 200px;
-  grid-template-rows: 40px 1fr;
+.container {  display: grid;
+  width: 60.375em;
+  grid-template-columns: 40em 19.375em;
+  grid-template-rows: 1fr;
+  gap: 0em 1em;
+  grid-auto-flow: row;
+  margin-top: 3em;
+  padding-left: auto;
+  padding-right: auto;
   grid-template-areas:
-    'header header'
-    'main aside'
-    'footer footer'
-  ;
+    "main-area right-area";
 }
 
-.header {
-  grid-area: header;
-  background: #3b5998;
+.right-area { grid-area: right-area;
+  background-color: lightblue;
+  height: 1000px; }
+
+.main-area {  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 5em 0.9fr;
+  gap: 1em 0px;
+  grid-auto-flow: row;
+  grid-template-areas:
+    "main-area-top"
+    "main-area-bottom";
+  grid-area: main-area;
+  background-color: lightblue;
+  height: 1000px;
 }
 
-.main {
-  grid-area: main;
-  display: grid;
-  grid-template-columns: 150px minmax(100px,1fr) 200px;
-  grid-template-rows: auto;
-  grid-template-areas: 'menu feed event';
-  grid-gap: 10px;
-  padding: 10px 40px;
+.main-area-top { grid-area: main-area-top;
+background-color: coral;
+height:5em ; }
+
+.main-area-bottom { grid-area: main-area-bottom;
+  background-color: lightcoral;
+height: 900px; }
+
+.tile{
+  width: 100%;
+  height: 28em;
+  background-color: lightslategray;
+  margin-bottom: 1em;
 }
 
-.aside {
-  grid-area: aside;
-  border-left: 2px solid #ccc;
+.tile-container {  display: grid;
+  padding: 0.3em;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1.5em 2.5em 21em 2.5em;
+  gap: 0px 0px;
+  grid-auto-flow: row;
+  grid-template-areas:
+    "owner-user"
+    "title"
+    "content"
+    "utiles";
 }
 
-.menu {
-  grid-area: menu;
+.title { grid-area: title; }
+
+.owner-user{
+  grid-area: owner-user;
+
+  & span:nth-child(1){
+    margin-right: 0.3em;
+  }
 }
 
-.feed {
-  grid-area: feed;
-  background: #fff;
+.content { grid-area: content; }
+
+.utiles { grid-area: utiles; }
+
+.header-right{
+  float: right;
 }
 
-.event {
-  grid-area: event;
-  background: #fff;
+.header-right a{
+  color:black;
 }
+.join-button{
+  border-radius: 2em;
+  width: 5em;
+  height: 2em;
+  padding: 0px;
+  text-align: center;
+}
+

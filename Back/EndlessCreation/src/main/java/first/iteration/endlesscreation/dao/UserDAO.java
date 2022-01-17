@@ -21,7 +21,9 @@ public class UserDAO {
         this.roleRepository = roleRepository;
     }
 
-
+    public void saveUserEntity(UserEntity userEntity){
+        userRepository.save(userEntity);
+    }
     public UserEntity getUserEntityByUserName(String name){
         return userRepository.findByAppUserName(name)
                 .orElseThrow(() -> new UsernameNotFoundException("Cannot find user"));

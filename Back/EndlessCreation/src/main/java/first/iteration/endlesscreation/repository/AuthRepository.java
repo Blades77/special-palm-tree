@@ -33,8 +33,7 @@ public interface AuthRepository extends JpaRepository<UserEntity, Long> {
     @Query(value ="SELECT ISNULL((SELECT 1 FROM user_group WHERE group_id = :groupId AND app_user_id IN(SELECT app_user_id FROM app_user WHERE app_user_name= :userName),0)",nativeQuery = true)
     int isUserInGroup(@Param("groupId") Long groupId,@Param("userName") String userName);
 
-    @Query(value ="is user mod or is user owner\n" +
-            "SELECT ISNULL((SELECT 1 FROM user_group WHERE app_user_id IN(\n" +
+    @Query(value = "SELECT ISNULL((SELECT 1 FROM user_group WHERE app_user_id IN(\n" +
             "    SELECT app_user_id FROM app_user WHERE app_user_name = :userName)\n" +
             "    AND group_id IN(\n" +
             "    SELECT group_id FROM tile WHERE tile_id= :tileId)\n" +
@@ -48,6 +47,11 @@ public interface AuthRepository extends JpaRepository<UserEntity, Long> {
             "        SELECT tile_id FROM comment_tile WHERE comment_id = :commentId))\n" +
             "    AND (position = 'MOD' OR position = 'OWNER'),0);",nativeQuery = true)
     int isUserInCommentGroupAndHavePermission(@Param("commentId") Long commentId,@Param("userName") String userName);
+
+    @Query(value="SELECT ISNULL((SELECT 1 FROM user_group WHERE group_id = :groupId \n" +
+            "  AND app_user_id IN(SELECT app_user_id FROM app_user WHERE app_user_name = :userName \n" +
+            "  AND (position = 'MOD' OR position = 'OWNER' )),0)",nativeQuery = true)
+    int isUserOwnerOfGroup(@Param("groupId") Long groupId,@Param("userName") String userName);
 
 
 

@@ -45,6 +45,10 @@ public class UserService {
         this.authenticationManager = authenticationManager;
     }
 
+    public void saveUserEntity(UserEntity userEntity){
+        userDAO.saveUserEntity(userEntity);
+    }
+
     public JWTokenDTO authenticateAndGetToken(UserLoginDTO userLoginDTO){
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 userLoginDTO.getUsername(), userLoginDTO.getPassword()

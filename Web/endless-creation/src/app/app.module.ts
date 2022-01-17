@@ -12,6 +12,7 @@ import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ToolbarComponent } from './pages/toolbar/toolbar.component';
+import { TimeaPassedPipe } from './helpers/timePassed.pipe';
 
 
 
@@ -24,6 +25,7 @@ import { ToolbarComponent } from './pages/toolbar/toolbar.component';
     NoPageComponent,
     LoginComponent,
     ToolbarComponent,
+    TimeaPassedPipe,
   ],
   imports: [
     BrowserModule,

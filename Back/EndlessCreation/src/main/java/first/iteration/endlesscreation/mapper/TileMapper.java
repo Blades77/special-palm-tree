@@ -47,6 +47,8 @@ public class TileMapper {
         tileDTO.setTags(tags);
         tileDTO.setLikesCount(likesCount);
         tileDTO.setTileLikedByTheUser(isUserLikedTile);
+        tileDTO.setOwnerUserName(tileEntity.getUserEntity().getAppUserName());
+        tileDTO.setGroupName(tileEntity.getGroupDataEntity().getGroupName());
         return tileDTO;
     }
 

@@ -14,6 +14,7 @@ public class GroupDataEntity {
     private Long groupId;
     private String groupName;
     private String groupType;
+    private String imageLink;
 
     @OneToMany(mappedBy = "groupDataEntity", fetch = FetchType.LAZY)
     private Set<TileEntity> tiles = new HashSet<>();
@@ -47,6 +48,14 @@ public class GroupDataEntity {
 
     public Set<TileEntity> getTiles() {
         return tiles;
+    }
+
+    public String getImageLink() {
+        return imageLink;
+    }
+
+    public void setImageLink(String imageLink) {
+        this.imageLink = imageLink;
     }
 
     public void setTiles(Set<TileEntity> tiles) {
