@@ -14,6 +14,7 @@ import { AuthenticationService } from 'src/app/service/authentication-service/au
 })
 export class DashboardComponent implements OnInit {
 
+  public isCollapsed = false;
   tiles!: TileVIEW[];
   groups!: GroupVIEW[];
   isLogged!: boolean;
@@ -60,5 +61,10 @@ export class DashboardComponent implements OnInit {
       }
     )
   }
+
+  getDimensionsByFind(id: number){
+    return
+  }
+
 
 }

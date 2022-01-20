@@ -1,5 +1,6 @@
 export interface GroupVIEW{
     groupId: number;
-    groupName: String;
-    groupType: String;
+    groupName: string;
+    groupType: string;
+    imageLink: string;
 }

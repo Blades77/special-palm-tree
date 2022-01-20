@@ -18,7 +18,6 @@
   </div>
  -->
 
-
  <div class="container">
   <div class="right-area"></div>
   <div class="main-area">
@@ -29,21 +28,34 @@
         <div class="tile-container">
           <div class="owner-user">
             <span>Posted by</span>
-            <span>{{tile.ownerUserName}}</span>
-            <span>{{tile.createdAt | datePassed}}</span>
+            <span class="userName">{{tile.ownerUserName}}</span>
+            <span class="date">{{tile.createdAt | datePassed}}</span>
             <div class="header-right">
+              
+              <img src="{{tile.groupImageLink}}">
               <span>
                 <a  routerLink="/group/{{tile.groupId}}">
                 {{tile.groupName}}
                 </a>
               </span>
-              <button class="btn btn-primary join-button">Join</button>
+              <!-- <button class="btn btn-primary join-button">Join</button> -->
+            </div>
+          </div>
+          <div class="tags" *ngIf="tile.tagsNotEmpty === false" >
+            <div class="tag" *ngFor="let recipient of tile.tags | keyvalue" [ngStyle]="{'background-color':recipient.value}"> 
+                  {{recipient.key}}
             </div>
           </div>
           <div class="title">{{tile.tileTitle}}</div>
+          <div class="image-space"></div>
           <div class="content">
+            {{tile.tileData}}
           </div>
-          <div class="utiles"></div>
+          <div class="utiles">
+            <div class="utile"><img src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/comment.svg?alt=media&token=afa54a04-bb36-471b-9fcc-a3ce1bf83bac">Comment</div>
+            <div class="utile"><img src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/share.svg?alt=media&token=2bb1e60d-c1c5-48c9-836a-6986afd19263">Share</div>
+            <div class="utile"><img src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/bookmark.svg?alt=media&token=98664fc0-6ac5-42ea-8bdc-30e1d844aad7">Save</div>
+          </div>
         </div>
 
       </div>

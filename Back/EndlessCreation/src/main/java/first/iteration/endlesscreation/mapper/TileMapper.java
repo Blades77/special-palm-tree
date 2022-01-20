@@ -35,7 +35,7 @@ public class TileMapper {
 
 
 
-    public static TileDTO mapToTileDTO(TileEntity tileEntity, Long groupDataId, Map<String, String> tags,Integer likesCount,Boolean isUserLikedTile){
+    public static TileDTO mapToTileDTO(TileEntity tileEntity, Long groupDataId, Map<String, String> tags,Integer likesCount,Boolean isUserLikedTile,GroupDataDTO groupDataDTO, Boolean isTagsNotEmpty){
         TileDTO tileDTO = new TileDTO();
         tileDTO.setTileId(tileEntity.getTileId());
         tileDTO.setTileTitle(tileEntity.getTileTitle());
@@ -48,7 +48,9 @@ public class TileMapper {
         tileDTO.setLikesCount(likesCount);
         tileDTO.setTileLikedByTheUser(isUserLikedTile);
         tileDTO.setOwnerUserName(tileEntity.getUserEntity().getAppUserName());
-        tileDTO.setGroupName(tileEntity.getGroupDataEntity().getGroupName());
+        tileDTO.setGroupName(groupDataDTO.getGroupName());
+        tileDTO.setGroupImageLink(groupDataDTO.getImageLink());
+        tileDTO.setTagsNotEmpty(isTagsNotEmpty);
         return tileDTO;
     }
 

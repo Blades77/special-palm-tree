@@ -50,7 +50,7 @@ public interface AuthRepository extends JpaRepository<UserEntity, Long> {
 
     @Query(value="SELECT ISNULL((SELECT 1 FROM user_group WHERE group_id = :groupId \n" +
             "  AND app_user_id IN(SELECT app_user_id FROM app_user WHERE app_user_name = :userName \n" +
-            "  AND (position = 'MOD' OR position = 'OWNER' )),0)",nativeQuery = true)
+            "  AND (position = 'MOD' OR position = 'OWNER' ))),0)",nativeQuery = true)
     int isUserOwnerOfGroup(@Param("groupId") Long groupId,@Param("userName") String userName);
 
 

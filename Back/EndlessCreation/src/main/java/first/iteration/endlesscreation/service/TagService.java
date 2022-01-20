@@ -93,7 +93,7 @@ public class TagService {
         List<TagEntity> tagEntityList = getTagEntityListByTile(tileEntity);
         Map<String, String> tags = new HashMap<>();
         for(TagEntity tagEntity : tagEntityList){
-            tags.put(tagEntity.getTagName(),tagEntity.getColorEntity().getColorValueHex()+"@"+tagEntity.getColorEntity().getColorDesc());
+            tags.put(tagEntity.getTagName(),tagEntity.getColorEntity().getColorValueHex());
         }
         return  tags;
     }

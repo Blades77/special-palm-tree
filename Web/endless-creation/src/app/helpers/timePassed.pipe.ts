@@ -26,7 +26,13 @@ export class TimeaPassedPipe implements PipeTransform{
             return this.compositor(hours,"hour");
          }
      }else{
-         return this.compositor(days,"day");
+         if(days > 31){
+             const months = Math.floor(days/31);
+             return this.compositor(months,"month")
+         }else{
+            return this.compositor(days,"day");
+         }
+
      }
 
     }

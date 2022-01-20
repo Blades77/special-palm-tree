@@ -83,9 +83,10 @@ public class TileService {
         String userName = LoggedUserGetter.getUsser();
         GroupDataDTO groupDataDTO = groupDataService.getGroupDataDTOByTileEntity(tileEntity);
         Map<String, String> tags = tagService.getTagsMapForTile(tileEntity);
+        Boolean isTagsNotEmpty = tags.isEmpty();
         Integer likesCount = getLikesForTile(tileEntity.getTileId());
         Boolean isUserLikedTile = tileDAO.isUserLikedTile(tileEntity.getTileId(),userName);
-        return TileMapper.mapToTileDTO(tileEntity, groupDataDTO.getGroupId() ,tags, likesCount,isUserLikedTile);
+        return TileMapper.mapToTileDTO(tileEntity, groupDataDTO.getGroupId() ,tags, likesCount,isUserLikedTile,groupDataDTO,isTagsNotEmpty);
     }
 
     public List<TileDTO> getTilesByGroupId() { //tu będzie paginacja raczej
@@ -243,10 +244,11 @@ public class TileService {
         for(TileEntity tileEntity : tileEntityList){
             GroupDataDTO groupDataDTO = groupDataService.getGroupDataDTOByTileEntity(tileEntity);
             Map<String, String> tags = tagService.getTagsMapForTile(tileEntity);
+            Boolean isTagsNotEmpty = tags.isEmpty();
             Integer likesCount = getLikesForTile(tileEntity.getTileId());
             Boolean isUserLikedTile = tileDAO.isUserLikedTile(tileEntity.getTileId(),userName);
 
-            tileDTOList.add(TileMapper.mapToTileDTO(tileEntity, groupDataDTO.getGroupId(),tags,likesCount,isUserLikedTile));
+            tileDTOList.add(TileMapper.mapToTileDTO(tileEntity, groupDataDTO.getGroupId(),tags,likesCount,isUserLikedTile,groupDataDTO,isTagsNotEmpty));
         }
         return tileDTOList;
     }
