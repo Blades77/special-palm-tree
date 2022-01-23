@@ -34,7 +34,7 @@ export class DashboardComponent implements OnInit {
 
 
   getTiles(){
-    if(!this.isLogged){
+    // if(!this.isLogged){
       this.tileService.getOrderedTilesFromApi("0","desc")
     .subscribe(
       (response: any) => {
@@ -45,7 +45,7 @@ export class DashboardComponent implements OnInit {
       (error) =>{;
         this.errorHandler.handleError(error);
       })
-    }
+    // }
   }
 
   getGroups(){
@@ -64,6 +64,18 @@ export class DashboardComponent implements OnInit {
 
   getDimensionsByFind(id: number){
     return
+  }
+
+  doLike(tileId: number){
+    this.tileService.doLike(tileId)
+    .subscribe(
+      (response: any) => {
+        console.log("Pisze resposne"+response)
+        
+      },
+      (error) =>{;
+        this.errorHandler.handleError(error);
+      })
   }
 
 

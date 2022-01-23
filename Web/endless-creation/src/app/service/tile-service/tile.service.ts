@@ -21,4 +21,9 @@ export class TileService {
   getOrderedTilesFromApi(groupId :string,order :string): Observable<TileVIEW[]>{
     return this.http.get<TileVIEW[]>(this.baseUrl+'tiles/group/'+groupId+'/'+order);
   }
+
+  doLike(tileId: number){
+    console.log("jestem tu")
+    return this.http.post(this.baseUrl+'tile/like/'+tileId,null);
+  }
 }

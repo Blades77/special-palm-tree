@@ -23,8 +23,8 @@
   <div class="main-area">
     <div class="main-area-top"></div>
     <div class="main-area-bottom">
-      <div *ngFor ="let tile of tiles" class="tile">
-        
+      <div *ngFor ="let tile of tiles" class="tile" >
+        <!-- routerLink="/tile-detail/{{tile.tileId}} -->
         <div class="tile-container">
           <div class="owner-user">
             <span>Posted by</span>
@@ -32,7 +32,7 @@
             <span class="date">{{tile.createdAt | datePassed}}</span>
             <div class="header-right">
               
-              <img src="{{tile.groupImageLink}}">
+              <img *ngIf ="tile.groupImageLink" src="{{tile.groupImageLink}}">
               <span>
                 <a  routerLink="/group/{{tile.groupId}}">
                 {{tile.groupName}}
@@ -46,17 +46,23 @@
                   {{recipient.key}}
             </div>
           </div>
-          <div class="title">{{tile.tileTitle}}</div>
+          <div *ngIf="tile.tileTitle" class="title">{{tile.tileTitle}}</div>
           <div class="image-space"></div>
-          <div class="content">
-            {{tile.tileData}}
+          <div class="content" [innerHTML]="tile.tileData | linky">
           </div>
           <div class="utiles">
+            <div class="utile" (click)="doLike(tile.tileId)">
+              <img *ngIf="tile.tileLikedByTheUser; else elseImage" src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/like-green.svg?alt=media&token=bec11aa2-1dd0-4a61-814c-48ac2fd4fb27">
+              <ng-template #elseImage>
+                <img src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/like.svg?alt=media&token=022c1ee1-1373-4053-906a-19e228517624">
+              </ng-template>
+              Like</div>
             <div class="utile"><img src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/comment.svg?alt=media&token=afa54a04-bb36-471b-9fcc-a3ce1bf83bac">Comment</div>
             <div class="utile"><img src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/share.svg?alt=media&token=2bb1e60d-c1c5-48c9-836a-6986afd19263">Share</div>
             <div class="utile"><img src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/bookmark.svg?alt=media&token=98664fc0-6ac5-42ea-8bdc-30e1d844aad7">Save</div>
           </div>
         </div>
+
 
       </div>
     </div>

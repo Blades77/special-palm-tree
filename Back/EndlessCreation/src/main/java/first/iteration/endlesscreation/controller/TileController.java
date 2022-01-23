@@ -7,6 +7,7 @@ import first.iteration.endlesscreation.dto.TileDTO;
 import first.iteration.endlesscreation.dto.create.TileCreateDTO;
 import first.iteration.endlesscreation.configuration.SpringFoxConfig;
 import io.swagger.annotations.ApiParam;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import io.swagger.annotations.Api;
@@ -81,15 +82,15 @@ public class TileController {
 
     @ApiOperation(value = "Adds like to tile")
     @PostMapping("/tile/like/{tileId}")
-    private void addLikeToTile(@ApiParam(value = "tileId", example = "1", required = true) @PathVariable Long tileId){
-        tileService.addLikeToTile(tileId);
+    private ResponseEntity<String> doLikeTile(@ApiParam(value = "tileId", example = "1", required = true) @PathVariable Long tileId){
+       return tileService.doLike(tileId);
     }
 
-    @ApiOperation(value = "Delete tile")
-    @DeleteMapping("/tile/like/{tileId}")
-    private void deleteLikeFromTile(@ApiParam(value = "tileId", example = "1", required = true) @PathVariable Long tileId){
-        tileService.deleteLikeForTile(tileId);
-    }
+//    @ApiOperation(value = "Delete tile")
+//    @DeleteMapping("/tile/like/{tileId}")
+//    private void deleteLikeFromTile(@ApiParam(value = "tileId", example = "1", required = true) @PathVariable Long tileId){
+//        tileService.deleteLikeForTile(tileId);
+//    }
 
     @ApiOperation(value = "Edit specific tile")
     @PutMapping("/tile/edit/group/{groupId}")

@@ -8,7 +8,7 @@ export interface TileVIEW{
     groupId: number;
     tags: Map<string, string>;
     likesCount: number;
-    isTileLikedByTheUser: boolean;
+    tileLikedByTheUser: boolean;
     ownerUserName: string;
     groupName: string;
     groupImageLink: string;

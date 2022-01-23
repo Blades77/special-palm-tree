@@ -13,8 +13,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ToolbarComponent } from './pages/toolbar/toolbar.component';
 import { TimeaPassedPipe } from './helpers/timePassed.pipe';
-
-
+import { LinkyModule } from 'ngx-linky';
 
 @NgModule({
   declarations: [
@@ -33,6 +32,8 @@ import { TimeaPassedPipe } from './helpers/timePassed.pipe';
     ReactiveFormsModule,
     HttpClientModule,
     NgbModule,
+    LinkyModule,
+    
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

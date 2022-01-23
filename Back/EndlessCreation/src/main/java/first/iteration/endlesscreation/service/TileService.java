@@ -15,9 +15,10 @@ import first.iteration.endlesscreation.repository.CommentRepository;
 import first.iteration.endlesscreation.repository.TagRepository;
 import first.iteration.endlesscreation.repository.TileRepository;
 import first.iteration.endlesscreation.repository.GroupDataRepository;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 
@@ -70,6 +71,25 @@ public class TileService {
             throw new ResourceNotFoundException("Nie masz permisionów");
         }
         tileDAO.addLikeToTile(tileId,userName);
+    }
+
+    public ResponseEntity<String> doLike(Long tileId){
+        String userName = LoggedUserGetter.getUsser();
+        if(userName.equals("anonymousUser")){
+            throw new ResourceNotFoundException("Nie masz permisionów");
+        }
+        if(tileDAO.isUserLikedTile(tileId,userName)){
+            tileDAO.deleteLikeFromTile(tileId,userName);
+            return new ResponseEntity<>(
+                    "Deleted like",
+                    HttpStatus.FOUND);
+        }else {
+            tileDAO.addLikeToTile(tileId,userName);
+            return new ResponseEntity<>(
+                    "Added Like",
+                    HttpStatus.CREATED);
+        }
+
     }
 
 
