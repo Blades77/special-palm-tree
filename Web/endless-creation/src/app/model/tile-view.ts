@@ -13,4 +13,6 @@ export interface TileVIEW{
     groupName: string;
     groupImageLink: string;
     tagsNotEmpty: boolean;
+    commentsCount: number;
+    userSavedTile: boolean;
 }

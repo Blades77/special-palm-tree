@@ -56,10 +56,16 @@
               <ng-template #elseImage>
                 <img src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/like.svg?alt=media&token=022c1ee1-1373-4053-906a-19e228517624">
               </ng-template>
+              {{tile.likesCount}}
               Like</div>
-            <div class="utile"><img src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/comment.svg?alt=media&token=afa54a04-bb36-471b-9fcc-a3ce1bf83bac">Comment</div>
-            <div class="utile"><img src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/share.svg?alt=media&token=2bb1e60d-c1c5-48c9-836a-6986afd19263">Share</div>
-            <div class="utile"><img src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/bookmark.svg?alt=media&token=98664fc0-6ac5-42ea-8bdc-30e1d844aad7">Save</div>
+            <div class="utile"><img src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/comment.svg?alt=media&token=afa54a04-bb36-471b-9fcc-a3ce1bf83bac">{{tile.commentsCount}}Comments</div>
+            <div class="utile"><img src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/share.svg?alt=media&token=2bb1e60d-c1c5-48c9-836a-6986afd19263">/tile-detail/{{tile.tileId}}Share</div>
+            <div class="utile" (click)="doSave(tile.tileId)">
+              <img *ngIf="tile.userSavedTile; else elseBookmarked" src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/bookmark.svg?alt=media&token=98664fc0-6ac5-42ea-8bdc-30e1d844aad7">
+              <ng-template #elseBookmarked>
+                <img src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/bookmarked.svg?alt=media&token=8d0182aa-5b88-4ad4-bc09-badae666f2c8">
+              </ng-template>
+              Save</div>
           </div>
         </div>
 

@@ -57,6 +57,25 @@ public class TileService {
         return tileDAO.getLikesForTile(tileId);
     }
 
+    public Integer getCommentsCountForTile(Long tileId){
+        return tileDAO.getCommentsCountForTile(tileId);
+    }
+
+    public boolean doSaveTile(Long tileId){
+        String userName = LoggedUserGetter.getUsser();
+        if(userName.equals("anonymousUser")){
+            throw new ResourceNotFoundException("Nie masz permisionów");
+        }
+        if(tileDAO.isUserSavedTile(tileId,userName)){
+            tileDAO.unsaveTileFromTileSave(tileId,userName);
+            return true;
+        }else {
+            tileDAO.saveTileToTileSave(tileId,userName);
+            return true;
+        }
+
+    }
+
     public void deleteLikeForTile(Long tileId){
         String userName = LoggedUserGetter.getUsser();
         if(userName.equals("anonymousUser")){
@@ -73,26 +92,20 @@ public class TileService {
         tileDAO.addLikeToTile(tileId,userName);
     }
 
-    public ResponseEntity<String> doLike(Long tileId){
+    public boolean doLike(Long tileId){
         String userName = LoggedUserGetter.getUsser();
         if(userName.equals("anonymousUser")){
             throw new ResourceNotFoundException("Nie masz permisionów");
         }
         if(tileDAO.isUserLikedTile(tileId,userName)){
             tileDAO.deleteLikeFromTile(tileId,userName);
-            return new ResponseEntity<>(
-                    "Deleted like",
-                    HttpStatus.FOUND);
+            return true;
         }else {
             tileDAO.addLikeToTile(tileId,userName);
-            return new ResponseEntity<>(
-                    "Added Like",
-                    HttpStatus.CREATED);
+            return true;
         }
 
     }
-
-
 
     public TileEntity getTileEntityById(Long id){
        return tileDAO.getTileEntity(id);
@@ -106,7 +119,9 @@ public class TileService {
         Boolean isTagsNotEmpty = tags.isEmpty();
         Integer likesCount = getLikesForTile(tileEntity.getTileId());
         Boolean isUserLikedTile = tileDAO.isUserLikedTile(tileEntity.getTileId(),userName);
-        return TileMapper.mapToTileDTO(tileEntity, groupDataDTO.getGroupId() ,tags, likesCount,isUserLikedTile,groupDataDTO,isTagsNotEmpty);
+        Integer commentsCount = getCommentsCountForTile(tileEntity.getTileId());
+        Boolean savedTile = tileDAO.isUserSavedTile(tileEntity.getTileId(),userName);
+        return TileMapper.mapToTileDTO(tileEntity, groupDataDTO.getGroupId() ,tags, likesCount,isUserLikedTile,groupDataDTO,isTagsNotEmpty,commentsCount,savedTile);
     }
 
     public List<TileDTO> getTilesByGroupId() { //tu będzie paginacja raczej
@@ -267,8 +282,10 @@ public class TileService {
             Boolean isTagsNotEmpty = tags.isEmpty();
             Integer likesCount = getLikesForTile(tileEntity.getTileId());
             Boolean isUserLikedTile = tileDAO.isUserLikedTile(tileEntity.getTileId(),userName);
+            Integer commentsCount = getCommentsCountForTile(tileEntity.getTileId());
+            Boolean savedTile = tileDAO.isUserSavedTile(tileEntity.getTileId(),userName);
 
-            tileDTOList.add(TileMapper.mapToTileDTO(tileEntity, groupDataDTO.getGroupId(),tags,likesCount,isUserLikedTile,groupDataDTO,isTagsNotEmpty));
+            tileDTOList.add(TileMapper.mapToTileDTO(tileEntity, groupDataDTO.getGroupId(),tags,likesCount,isUserLikedTile,groupDataDTO,isTagsNotEmpty,commentsCount,savedTile));
         }
         return tileDTOList;
     }

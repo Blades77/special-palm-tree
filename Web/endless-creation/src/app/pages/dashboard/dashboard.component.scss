@@ -27,7 +27,7 @@
     "main-area-top"
     "main-area-bottom";
   grid-area: main-area;
-  background-color: lightblue;
+  // background-color: lightblue;
   height: 1000px;
 }
 
@@ -36,12 +36,13 @@ background-color: coral;
 height:5em ; }
 
 .main-area-bottom { grid-area: main-area-bottom;
-  background-color: lightcoral;
+  // background-color: lightcoral;
 height: 900px; }
 
 .tile{
   width: 100%;
-  background-color: lightslategray;
+  // background-color: lightslategray;
+  background-color: #eef0ed;
   margin-bottom: 1em;
   border-radius: 5px; 
   border: 2px solid gray;
@@ -135,7 +136,7 @@ height: 900px; }
     pointer-events: none;
     left:0;
     top:0;
-    background:linear-gradient(transparent 220px, white);
+    background:linear-gradient(transparent 220px, #eef0ed);
 }
 .join-button{
   border-radius: 2em;

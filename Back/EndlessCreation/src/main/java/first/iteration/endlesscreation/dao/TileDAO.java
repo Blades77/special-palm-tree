@@ -88,6 +88,22 @@ public class TileDAO {
         return tileRepository.isUserLikedTile(tileId,userName) == 1;
     }
 
+    public Integer getCommentsCountForTile(Long tileId){
+        return tileRepository.getCommentsCountForTile(tileId)
+                .orElseThrow(() -> new ResourceNotFoundException("Cannot find  any tile with matching param in title"));
+    }
+
+    public void unsaveTileFromTileSave(Long tileId,String userName){
+        tileRepository.unsaveTileForSaveTile(tileId,userName);
+    }
+
+    public void saveTileToTileSave(Long tileId,String userName){
+        tileRepository.saveTileToSaveTile(tileId,userName);
+    }
+
+    public boolean isUserSavedTile(Long tileId,String userName){
+        return tileRepository.isUserSavedTile(tileId,userName) == 1;
+    }
 
 
 

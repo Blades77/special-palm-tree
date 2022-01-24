@@ -45,6 +45,9 @@ public interface TileRepository extends JpaRepository<TileEntity, Long> {
     @Query(value="SELECT COUNT(*) FROM tile_like WHERE tile_id = :tileId", nativeQuery = true)
     Optional<Integer>getLikesForTile(@Param("tileId") Long tileId);
 
+    @Query(value="SELECT COUNT(*) FROM comment_tile WHERE tile_id = :tileId", nativeQuery = true)
+    Optional<Integer>getCommentsCountForTile(@Param("tileId") Long tileId);
+
     @Query(value ="SELECT ISNULL((SELECT 1 FROM tile_like WHERE tile_id = :tileId AND app_user_id IN (SELECT app_user_id FROM app_user WHERE app_user_name = :userName)),0)",nativeQuery = true)
     int isUserLikedTile(@Param("tileId") Long tileId,@Param("userName") String userName);
 
@@ -57,4 +60,17 @@ public interface TileRepository extends JpaRepository<TileEntity, Long> {
     @Query(value="INSERT INTO tile_like  (app_user_id,tile_id) VALUES ((SELECT app_user_id FROM app_user WHERE app_user_name = :userName),:tileId)", nativeQuery = true)
     @Transactional
     void addLikeToTile(@Param("tileId")Long tileId,@Param("userName") String userName);
+
+    @Query(value ="SELECT ISNULL((SELECT 1 FROM save_tile WHERE tile_id = :tileId AND app_user_id IN (SELECT app_user_id FROM app_user WHERE app_user_name = :userName)),0)",nativeQuery = true)
+    int isUserSavedTile(@Param("tileId") Long tileId,@Param("userName") String userName);
+
+    @Modifying
+    @Query(value ="DELETE FROM save_tile WHERE tile_id = :tileId AND app_user_id IN (SELECT app_user_id FROM app_user WHERE app_user_name = :userName)",nativeQuery = true)
+    @Transactional
+    void unsaveTileForSaveTile(@Param("tileId")Long tileId,@Param("userName") String userName);
+
+    @Modifying
+    @Query(value="INSERT INTO save_tile  (app_user_id,tile_id) VALUES ((SELECT app_user_id FROM app_user WHERE app_user_name = :userName),:tileId)", nativeQuery = true)
+    @Transactional
+    void saveTileToSaveTile(@Param("tileId")Long tileId,@Param("userName") String userName);
 }

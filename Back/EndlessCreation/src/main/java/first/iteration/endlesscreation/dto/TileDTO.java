@@ -19,10 +19,12 @@ public class TileDTO {
     private String groupName;
     private String groupImageLink;
     private boolean isTagsNotEmpty;
+    private Integer commentsCount;
+    private boolean isUserSavedTile;
 
     public TileDTO(){}
 
-    public TileDTO(Long tileId, String tileTitle, String tileData, Long ownerUserId, LocalDateTime createdAt, LocalDateTime updatedAt, Long groupId,Map<String, String> tags,Integer likesCount, boolean isTileLikedByTheUser, String ownerUserName, String groupName, String groupImageLink, boolean isTagsNotEmpty ){
+    public TileDTO(Long tileId, String tileTitle, String tileData, Long ownerUserId, LocalDateTime createdAt, LocalDateTime updatedAt, Long groupId,Map<String, String> tags,Integer likesCount, boolean isTileLikedByTheUser, String ownerUserName, String groupName, String groupImageLink, boolean isTagsNotEmpty, Integer commentsCount, boolean isUserSavedTile ){
         this.tileId = tileId;
         this.tileTitle = tileTitle;
         this.tileData = tileData;
@@ -37,6 +39,8 @@ public class TileDTO {
         this.groupName = groupName;
         this.groupImageLink = groupImageLink;
         this.isTagsNotEmpty = isTagsNotEmpty;
+        this.commentsCount = commentsCount;
+        this.isUserSavedTile = isUserSavedTile;
     }
 
     public boolean isTagsNotEmpty() {
@@ -149,5 +153,21 @@ public class TileDTO {
 
     public void setGroupImageLink(String groupImageLink) {
         this.groupImageLink = groupImageLink;
+    }
+
+    public Integer getCommentsCount() {
+        return commentsCount;
+    }
+
+    public void setCommentsCount(Integer commentsCount) {
+        this.commentsCount = commentsCount;
+    }
+
+    public boolean isUserSavedTile() {
+        return isUserSavedTile;
+    }
+
+    public void setUserSavedTile(boolean userSavedTile) {
+        isUserSavedTile = userSavedTile;
     }
 }

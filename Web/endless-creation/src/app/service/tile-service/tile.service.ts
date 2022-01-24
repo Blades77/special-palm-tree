@@ -26,4 +26,9 @@ export class TileService {
     console.log("jestem tu")
     return this.http.post(this.baseUrl+'tile/like/'+tileId,null);
   }
+
+  doSave(tileId: number){
+    console.log("jestem tu")
+    return this.http.post(this.baseUrl+'tile/bookmark/'+tileId,null);
+  }
 }

@@ -82,8 +82,14 @@ public class TileController {
 
     @ApiOperation(value = "Adds like to tile")
     @PostMapping("/tile/like/{tileId}")
-    private ResponseEntity<String> doLikeTile(@ApiParam(value = "tileId", example = "1", required = true) @PathVariable Long tileId){
+    private boolean doLikeTile(@ApiParam(value = "tileId", example = "1", required = true) @PathVariable Long tileId){
        return tileService.doLike(tileId);
+    }
+
+    @ApiOperation(value = "Bookmarks tile")
+    @PostMapping("/tile/bookmark/{tileId}")
+    private boolean doSaveTile(@ApiParam(value = "tileId", example = "1", required = true) @PathVariable Long tileId){
+        return tileService.doSaveTile(tileId);
     }
 
 //    @ApiOperation(value = "Delete tile")
