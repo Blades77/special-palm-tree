@@ -31,4 +31,7 @@ export class TileService {
     console.log("jestem tu")
     return this.http.post(this.baseUrl+'tile/bookmark/'+tileId,null);
   }
+  getTilesTest(page: number){
+    return this.http.get<TileVIEW[]>(this.baseUrl+'tiles/group/'+0+'/'+'asc'+'/'+page);
+  }
 }

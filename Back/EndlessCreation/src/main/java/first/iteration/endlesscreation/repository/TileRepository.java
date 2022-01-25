@@ -2,6 +2,7 @@ package first.iteration.endlesscreation.repository;
 
 import first.iteration.endlesscreation.Model.*;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -20,7 +21,7 @@ public interface TileRepository extends JpaRepository<TileEntity, Long> {
 
 
     @Query(value="SELECT * FROM tile WHERE group_id IN :groupIdList ORDER BY created_at ASC",nativeQuery = true)
-    Optional<List<TileEntity>> getTileEntitiesByGroupDataIdList(@Param("groupIdList") List<Long> groupIdList);
+    Optional<List<TileEntity>> getTileEntitiesByGroupDataIdList(@Param("groupIdList") List<Long> groupIdList, Pageable pageable);
 
     @Query(value="SELECT * FROM tile WHERE group_id = :groupId AND tile_id IN ( SELECT tile_id FROM tile_tag WHERE tag_id IN :tagIdList\n" +
             " GROUP BY tile_id HAVING COUNT(tile_id) = :listLength)",nativeQuery = true)

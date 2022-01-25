@@ -16,6 +16,7 @@ import first.iteration.endlesscreation.repository.TagRepository;
 import first.iteration.endlesscreation.repository.TileRepository;
 import first.iteration.endlesscreation.repository.GroupDataRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -185,7 +186,7 @@ public class TileService {
     }
 
 
-    public List<TileDTO> getTilesByGroupId(Long groupId, String order) {
+    public List<TileDTO> getTilesByGroupId(Long groupId, String order, Integer page) {
         List<TileEntity> tileEntityList = new ArrayList<>();
         GroupDataEntity groupDataEntity = new GroupDataEntity();
         String sortOrder = "";
@@ -203,7 +204,7 @@ public class TileService {
 
             List<Long> groupIdList = accesChecker();
 
-            tileEntityList = tileDAO.getTileEntitiesByGroupDataIdList(groupIdList);
+            tileEntityList = tileDAO.getTileEntitiesByGroupDataIdList(groupIdList, PageRequest.of(page, 3));
         }
         return mapToTileDTOList(tileEntityList);
     }

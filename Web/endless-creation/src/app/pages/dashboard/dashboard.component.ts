@@ -6,6 +6,8 @@ import { ErrorHandlerService } from 'src/app/service/error-handler-service/error
 import { TileVIEW } from 'src/app/model/tile-view';
 import { AuthenticationService } from 'src/app/service/authentication-service/authentication.service';
 import { Router } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
+import * as _ from 'lodash'
 
 
 @Component({
@@ -16,11 +18,13 @@ import { Router } from '@angular/router';
 export class DashboardComponent implements OnInit {
 
   public isCollapsed = false;
-  tiles!: TileVIEW[];
+  tiles = new BehaviorSubject<TileVIEW[]>([]);
+  newTiles!: TileVIEW[];
   groups!: GroupVIEW[];
   isLogged!: boolean;
   currentRoute!: string;
 
+  pages=0;
 
   constructor(
     private tileService: TileService,
@@ -31,11 +35,37 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.authService.isLoggedIn().subscribe(isLogged => this.isLogged = isLogged);
-    this.getTiles();
-    this.getGroups();
+
+    // this.getTiles();
+    // this.getGroups();
     this.setCurrentRoute();
+    this.getTilesTest();
   }
 
+
+  onScroll() {
+    console.log('scrolled')
+    this.getTilesTest();
+  }
+
+  private getTilesTest(){
+    this.pages+=1
+    this.tileService.getTilesTest(this.pages)
+
+    .subscribe(
+      (response: any) => {
+        this.newTiles = response;
+        console.log("Nowe tile"+this.newTiles);
+        const currentTiles  = this.tiles.getValue()
+      this.tiles.next(_.concat(currentTiles,this.newTiles))
+    
+      },
+      (error) =>{;
+        this.errorHandler.handleError(error);
+      }
+      
+    )
+  }
 
   getTiles(){
     // if(!this.isLogged){
@@ -74,44 +104,45 @@ export class DashboardComponent implements OnInit {
     this.currentRoute = this.router.url;
   }
 
-  doSave(tileId: number){
-    this.tileService.doSave(tileId)
-    .subscribe(
-      (response: any) => {
-        if(response === true){
-          console.log("Wbijam do ifa tilllllesave");
-          const isSaved = this.tiles.find(x => x.tileId === tileId)?.userSavedTile
-          this.tiles.find(x => x.tileId === tileId).userSavedTile = !isSaved;
-        }
+  // doSave(tileId: number){
+  //   this.tileService.doSave(tileId)
+  //   .subscribe(
+  //     (response: any) => {
+  //       if(response === true){
+  //         console.log("Wbijam do ifa tilllllesave");
+  //         const isSaved = this.tiles.find(x => x.tileId === tileId)?.userSavedTile
+  //         this.tiles.find(x => x.tileId === tileId).userSavedTile = !isSaved;
+  //       }
         
-      },
-      (error) =>{;
-        this.errorHandler.handleError(error);
-      })
-  }
+  //     },
+  //     (error) =>{;
+  //       this.errorHandler.handleError(error);
+  //     })
+  // }
 
 
 
-  doLike(tileId: number){
-    this.tileService.doLike(tileId)
-    .subscribe(
-      (response: any) => {
-        if(response === true){
-          console.log("Wbijam do ifa");
-          const isLiked = this.tiles.find(x => x.tileId === tileId)?.tileLikedByTheUser
-          this.tiles.find(x => x.tileId === tileId).tileLikedByTheUser = !isLiked;
-          if(!isLiked){
-            this.tiles.find(x => x.tileId === tileId).likesCount+=1
-          }else{
-            this.tiles.find(x => x.tileId === tileId).likesCount-=1
-          }
-        }
+//   doLike(tileId: number){
+//     this.tileService.doLike(tileId)
+//     .subscribe(
+//       (response: any) => {
+//         if(response === true){
+//           console.log("Wbijam do ifa");
+//           const isLiked = this.tiles.find(x => x.tileId === tileId)?.tileLikedByTheUser
+//           this.tiles.find(x => x.tileId === tileId).tileLikedByTheUser = !isLiked;
+//           if(!isLiked){
+//             this.tiles.find(x => x.tileId === tileId).likesCount+=1
+//           }else{
+//             this.tiles.find(x => x.tileId === tileId).likesCount-=1
+//           }
+//         }
         
-      },
-      (error) =>{;
-        this.errorHandler.handleError(error);
-      })
-  }
+//       },
+//       (error) =>{;
+//         this.errorHandler.handleError(error);
+//       })
+//   }
 
 
+// }
 }

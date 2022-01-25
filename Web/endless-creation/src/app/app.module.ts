@@ -14,6 +14,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ToolbarComponent } from './pages/toolbar/toolbar.component';
 import { TimeaPassedPipe } from './helpers/timePassed.pipe';
 import { LinkyModule } from 'ngx-linky';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { LinkyModule } from 'ngx-linky';
     HttpClientModule,
     NgbModule,
     LinkyModule,
+    InfiniteScrollModule,
     
   ],
   providers: [

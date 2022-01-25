@@ -23,7 +23,15 @@
   <div class="main-area">
     <div class="main-area-top"></div>
     <div class="main-area-bottom">
-      <div *ngFor ="let tile of tiles" class="tile" >
+      <div
+      infiniteScroll
+      [infiniteScrollDistance]="2"
+      [infiniteScrollThrottle]="1000"
+      (scrolled)="onScroll()"
+      >
+
+      </div>
+      <div *ngFor ="let tile of tiles | async" class="tile" >
         <!-- routerLink="/tile-detail/{{tile.tileId}} -->
         <div class="tile-container">
           <div class="owner-user">
@@ -51,7 +59,7 @@
           <div class="content" [innerHTML]="tile.tileData | linky">
           </div>
           <div class="utiles">
-            <div class="utile" (click)="doLike(tile.tileId)">
+            <div class="utile">
               <img *ngIf="tile.tileLikedByTheUser; else elseImage" src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/like-green.svg?alt=media&token=bec11aa2-1dd0-4a61-814c-48ac2fd4fb27">
               <ng-template #elseImage>
                 <img src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/like.svg?alt=media&token=022c1ee1-1373-4053-906a-19e228517624">
@@ -60,7 +68,7 @@
               Like</div>
             <div class="utile"><img src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/comment.svg?alt=media&token=afa54a04-bb36-471b-9fcc-a3ce1bf83bac">{{tile.commentsCount}}Comments</div>
             <div class="utile"><img src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/share.svg?alt=media&token=2bb1e60d-c1c5-48c9-836a-6986afd19263">/tile-detail/{{tile.tileId}}Share</div>
-            <div class="utile" (click)="doSave(tile.tileId)">
+            <div class="utile">
               <img *ngIf="tile.userSavedTile; else elseBookmarked" src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/bookmark.svg?alt=media&token=98664fc0-6ac5-42ea-8bdc-30e1d844aad7">
               <ng-template #elseBookmarked>
                 <img src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/bookmarked.svg?alt=media&token=8d0182aa-5b88-4ad4-bc09-badae666f2c8">

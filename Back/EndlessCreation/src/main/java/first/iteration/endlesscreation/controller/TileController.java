@@ -55,12 +55,13 @@ public class TileController {
     }
 
     @ApiOperation(value="Returns list of tiles ordered by date")
-    @GetMapping("/tiles/group/{groupId}/{order}")
+    @GetMapping("/tiles/group/{groupId}/{order}/{page}")
     private List<TileDTO> getTilesOrderedByDate(
             @ApiParam(value = "Id of an group 0 search everywhere", example = "1", required = true) @PathVariable Long groupId,
-            @ApiParam(value = "order : asc returns reviews in ascending order, order : desc return reviews in descending order", example = "asc", required = true) @PathVariable String order)
+            @ApiParam(value = "order : asc returns reviews in ascending order, order : desc return reviews in descending order", example = "asc", required = true) @PathVariable String order,
+            @ApiParam(value = "Page number", example = "1", required = true) @PathVariable Integer page)
     {
-        return tileService.getTilesByGroupId(groupId,order);
+        return tileService.getTilesByGroupId(groupId,order,page);
     }
 
     @ApiOperation(value="Returns list of tiles containing parameter in title")

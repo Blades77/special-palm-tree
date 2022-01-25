@@ -5,6 +5,7 @@ import first.iteration.endlesscreation.Model.TileEntity;
 import first.iteration.endlesscreation.exception.ResourceNotFoundException;
 import first.iteration.endlesscreation.repository.TileRepository;
 import first.iteration.endlesscreation.repository.CommentRepository;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
@@ -62,8 +63,8 @@ public class TileDAO {
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot find  any tile with matching param in title"));
     }
 
-    public List<TileEntity> getTileEntitiesByGroupDataIdList(List<Long> groupIdList){
-        return tileRepository.getTileEntitiesByGroupDataIdList(groupIdList)
+    public List<TileEntity> getTileEntitiesByGroupDataIdList(List<Long> groupIdList, Pageable pageable){
+        return tileRepository.getTileEntitiesByGroupDataIdList(groupIdList, pageable)
                 .orElseThrow(() -> new ResourceNotFoundException("Something went wrong"));
     }
     public List<TileEntity> getTilesByGroupDataEnityWithSort(GroupDataEntity groupDataEntity,Sort sort){
