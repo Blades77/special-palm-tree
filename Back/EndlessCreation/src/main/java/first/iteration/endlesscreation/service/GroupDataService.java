@@ -58,6 +58,7 @@ public class GroupDataService {
         return groupDataDAO.getPublicGroupsIdList();
     }
 
+    public List<Long> getUserGroupsIdList(String userName){ return  groupDataDAO.getUserGroupsId(userName);}
     public List<Long> getPublicAndUserGroupsIdList(String userName){
         return groupDataDAO.getPublicAndUserGroupsIdList(userName);
     }

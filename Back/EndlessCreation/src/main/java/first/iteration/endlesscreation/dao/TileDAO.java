@@ -67,8 +67,8 @@ public class TileDAO {
         return tileRepository.getTileEntitiesByGroupDataIdList(groupIdList, pageable)
                 .orElseThrow(() -> new ResourceNotFoundException("Something went wrong"));
     }
-    public List<TileEntity> getTilesByGroupDataEnityWithSort(GroupDataEntity groupDataEntity,Sort sort){
-        return tileRepository.getTileEntityByGroupDataEntity(groupDataEntity,sort)
+    public List<TileEntity> getTilesByGroupDataEnityWithSort(GroupDataEntity groupDataEntity,Pageable pageable){
+        return tileRepository.getTileEntityByGroupDataEntity(groupDataEntity,pageable)
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot find  any tile in provided group"));
     }
 
@@ -104,6 +104,16 @@ public class TileDAO {
 
     public boolean isUserSavedTile(Long tileId,String userName){
         return tileRepository.isUserSavedTile(tileId,userName) == 1;
+    }
+
+    public List<TileEntity> getTileEntitiesByGroupIdListSortByLikeDESC(List<Long> groupIdList,Pageable pageable){
+        return tileRepository.getTileEntitiesByGroupIdListSortByLikeDESC(groupIdList,pageable)
+                .orElseThrow(() -> new ResourceNotFoundException("Cannot find  any tile in provided group"));
+    }
+
+    public List<TileEntity> getTileEntitiesByGroupIdListSortByLikeASC(List<Long> groupIdList,Pageable pageable){
+        return tileRepository.getTileEntitiesByGroupIdListSortByLikeASC(groupIdList,pageable)
+                .orElseThrow(() -> new ResourceNotFoundException("Cannot find  any tile in provided group"));
     }
 
 

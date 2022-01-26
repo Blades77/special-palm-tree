@@ -54,4 +54,8 @@ public class GroupDataDAO {
         return groupDataRepository.getPublicAndUserGroupsId(userName);
     }
 
+    public List<Long> getUserGroupsId(String userName){
+        return groupDataRepository.getUserGroupsId(userName);
+    }
+
 }

@@ -185,29 +185,144 @@ public class TileService {
         return mapToTileDTOList(tileEntityList);
     }
 
+//    public List<TileDTO> getTilesByGroupId(Long groupId, String order, Integer page,String sortBy) {
+//        List<TileEntity> tileEntityList = new ArrayList<>();
+//        GroupDataEntity groupDataEntity = new GroupDataEntity();
+//        if(sortBy.equals("likes")){
+//        }
+//        Sort sortDirection;
+//        String sortDirectionString;
+//        if (order.equals("asc")) {
+//            sortDirectionString = "ASC";
+//            sortDirection = Sort.by("createdAt").ascending();
+//        } else if (order.equals("desc")) {
+//            sortDirectionString = "DESC";
+//            sortDirection = Sort.by("createdAt").descending();
+//        } else {
+//            throw new InvalidPathVariableExpection("Invalid search type, should be \"asc\" or \"desc\".");
+//        }
+//        if (groupId > 0) {
+//            groupDataEntity = groupDataService.findById(groupId);
+//            tileEntityList = tileDAO.getTilesByGroupDataEnityWithSort(groupDataEntity, PageRequest.of(page, 3,sortDirection));
+//        } else {
+//
+//            List<Long> groupIdList = accesChecker();
+//
+//            tileEntityList = tileDAO.getTileEntitiesByGroupDataIdList(groupIdList, PageRequest.of(page, 3,sortDirection));
+//        }
+//        return mapToTileDTOList(tileEntityList);
+//    }
 
-    public List<TileDTO> getTilesByGroupId(Long groupId, String order, Integer page) {
+    public List<TileDTO> getTilesByGroupId(Long groupId, String order, Integer page,String sortBy) {
         List<TileEntity> tileEntityList = new ArrayList<>();
         GroupDataEntity groupDataEntity = new GroupDataEntity();
-        String sortOrder = "";
+        Sort sortDirection;
         if (order.equals("asc")) {
-            sortOrder = "ASC";
+            sortDirection = Sort.by("createdAt").ascending();
         } else if (order.equals("desc")) {
-            sortOrder = "DESC";
+            sortDirection = Sort.by("createdAt").descending();
         } else {
             throw new InvalidPathVariableExpection("Invalid search type, should be \"asc\" or \"desc\".");
         }
-        if (groupId > 0) {
-            groupDataEntity = groupDataService.findById(groupId);
-            tileEntityList = tileDAO.getTilesByGroupDataEnityWithSort(groupDataEntity, Sort.by(Sort.Direction.valueOf(sortOrder), "createdAt"));
-        } else {
-
+        if(groupId > 0){
+            if(sortBy.equals("createdAt")){
+                groupDataEntity = groupDataService.findById(groupId);
+                tileEntityList = tileDAO.getTilesByGroupDataEnityWithSort(groupDataEntity, PageRequest.of(page, 3,sortDirection));
+            }else if(sortBy.equals("likes")){
+                List<Long> groupIdList = new ArrayList<>();
+                groupIdList.add(groupId);
+                if(order.equals("asc")){
+                    tileEntityList = tileDAO.getTileEntitiesByGroupIdListSortByLikeASC(groupIdList,PageRequest.of(page, 3));
+                }else if(order.equals("desc")){
+                    tileEntityList = tileDAO.getTileEntitiesByGroupIdListSortByLikeDESC(groupIdList,PageRequest.of(page, 3));
+                }              // tu mamy mechanizm dla likeów dal jendej grupy
+            }
+        }else{
             List<Long> groupIdList = accesChecker();
-
-            tileEntityList = tileDAO.getTileEntitiesByGroupDataIdList(groupIdList, PageRequest.of(page, 3));
+            if(sortBy.equals("createdAt")){
+                tileEntityList = tileDAO.getTileEntitiesByGroupDataIdList(groupIdList, PageRequest.of(page, 3,sortDirection));
+            }else if(sortBy.equals("likes")){
+                if(order.equals("asc")){
+                    tileEntityList = tileDAO.getTileEntitiesByGroupIdListSortByLikeASC(groupIdList,PageRequest.of(page, 3));
+                }else if(order.equals("desc")){
+                    tileEntityList = tileDAO.getTileEntitiesByGroupIdListSortByLikeDESC(groupIdList,PageRequest.of(page, 3));
+                }
+            }
         }
         return mapToTileDTOList(tileEntityList);
     }
+
+    private Sort checkSorting(String order,boolean isjpa){
+        Sort sortDirection;
+        String sorting = "";
+        if(isjpa){sorting = "createdAt";}
+        else{sorting = "created_at";}
+        if (order.equals("asc")) {
+            sortDirection = Sort.by(sorting).ascending();
+        } else if (order.equals("desc")) {
+            sortDirection = Sort.by(sorting).descending();
+        } else {
+            throw new InvalidPathVariableExpection("Invalid search type, should be \"asc\" or \"desc\".");
+        }
+        return sortDirection;
+    }
+
+
+    public List<TileDTO> dashBoardLoggedIn(String order, Integer page,String sortBy,Boolean onlyUser){
+        List<Long> groupIdList = new ArrayList<>();
+        String userName = LoggedUserGetter.getUsser();
+        if(onlyUser){
+            groupIdList = groupDataService.getUserGroupsIdList(userName);
+        }else{
+            groupIdList = groupDataService.getPublicAndUserGroupsIdList(userName);
+        }
+        return doSearchDashboard(order,page,sortBy,groupIdList);
+
+    }
+
+    public List<TileDTO> dashBoardNotLoggedIn(String order, Integer page,String sortBy){
+        List<Long> groupIdList = groupDataService.getPublicGroupsIdList();
+        return doSearchDashboard(order,page,sortBy,groupIdList);
+    }
+
+    public List<TileDTO> doSearchDashboard(String order,Integer page, String sortBy,List<Long> groupIdList){
+        Sort sortDirection = checkSorting(order,false);
+        List<TileEntity> tileEntityList = new ArrayList<>();
+        if(sortBy.equals("createdAt")){
+            tileEntityList = tileDAO.getTileEntitiesByGroupDataIdList(groupIdList, PageRequest.of(page, 3,sortDirection));
+        }else if(sortBy.equals("likes")){
+            if(order.equals("asc")){
+                tileEntityList = tileDAO.getTileEntitiesByGroupIdListSortByLikeASC(groupIdList,PageRequest.of(page, 3));
+            }else if(order.equals("desc")){
+                tileEntityList = tileDAO.getTileEntitiesByGroupIdListSortByLikeDESC(groupIdList,PageRequest.of(page, 3));
+            }
+        }else{
+            throw new InvalidPathVariableExpection("Invalid search type, should be \"likes\" or \"createdAt\".");
+        }
+        return mapToTileDTOList(tileEntityList);
+    }
+
+
+    public List<TileDTO> doSearchGroup(String order, Integer page,String sortBy,Long groupId){
+        Sort sortDirection = checkSorting(order,true);
+        List<TileEntity> tileEntityList = new ArrayList<>();
+        if(sortBy.equals("createdAt")) {
+            GroupDataEntity groupDataEntity = groupDataService.findById(groupId);
+            tileEntityList = tileDAO.getTilesByGroupDataEnityWithSort(groupDataEntity, PageRequest.of(page, 3, sortDirection));
+        }else if(sortBy.equals("likes")){
+            List<Long> groupIdList = new ArrayList<>();
+            groupIdList.add(groupId);
+            if(order.equals("asc")){
+                tileEntityList = tileDAO.getTileEntitiesByGroupIdListSortByLikeASC(groupIdList,PageRequest.of(page, 3));
+            }else if(order.equals("desc")) {
+                tileEntityList = tileDAO.getTileEntitiesByGroupIdListSortByLikeDESC(groupIdList, PageRequest.of(page, 3));
+            }else {
+                throw new InvalidPathVariableExpection("Invalid search type, should be \"likes\" or \"createdAt\".");
+            }
+        }
+        return mapToTileDTOList(tileEntityList);
+    }
+
 
     private List<Long> accesChecker(){
         String userName = LoggedUserGetter.getUsser();

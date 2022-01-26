@@ -55,13 +55,14 @@ public class TileController {
     }
 
     @ApiOperation(value="Returns list of tiles ordered by date")
-    @GetMapping("/tiles/group/{groupId}/{order}/{page}")
+    @GetMapping("/tiles/group/{groupId}/{order}/{page}/{sortBy}")
     private List<TileDTO> getTilesOrderedByDate(
             @ApiParam(value = "Id of an group 0 search everywhere", example = "1", required = true) @PathVariable Long groupId,
             @ApiParam(value = "order : asc returns reviews in ascending order, order : desc return reviews in descending order", example = "asc", required = true) @PathVariable String order,
-            @ApiParam(value = "Page number", example = "1", required = true) @PathVariable Integer page)
+            @ApiParam(value = "Page number", example = "1", required = true) @PathVariable Integer page,
+            @ApiParam(value = "Page number", example = "createdAt", required = true) @PathVariable String sortBy)
     {
-        return tileService.getTilesByGroupId(groupId,order,page);
+        return tileService.getTilesByGroupId(groupId,order,page,sortBy);
     }
 
     @ApiOperation(value="Returns list of tiles containing parameter in title")
@@ -131,6 +132,34 @@ public class TileController {
     private void removeTagFromTile(@ApiParam(value = "Id of tile", example = "1", required = true) @PathVariable Long tileId,
                                    @ApiParam(value = "Id of tag", example = "1", required = true) @PathVariable Long tagId) {
         tileService.deleteTagFromTile(tileId,tagId);
+    }
+
+
+    @ApiOperation(value="Return list of dashboard tiles for logged user")
+    @GetMapping("/tile/dashboard/l/{order}/{page}/{sortBy}/{onlyUser}")
+    private List<TileDTO> dashBoardLoggedIn(@ApiParam(value = "order : asc returns reviews in ascending order, order : desc return reviews in descending order", example = "asc", required = true) @PathVariable String order,
+                                            @ApiParam(value = "Page number", example = "1", required = true) @PathVariable Integer page,
+                                            @ApiParam(value = "sorting by: likes : createdAt", example = "createdAt", required = true) @PathVariable String sortBy,
+                                            @ApiParam(value = "Is user want all tils he can access or only he is in group with", example = "true", required = true) @PathVariable Boolean onlyUser) {
+        return tileService.dashBoardLoggedIn(order,page,sortBy,onlyUser);
+    }
+
+    @ApiOperation(value="Return list of dashboard tiles for logged user")
+    @GetMapping("/tile/dashboard/nl/{order}/{page}/{sortBy}")
+    private List<TileDTO> dashBoardNotLoggedIn(@ApiParam(value = "order : asc returns reviews in ascending order, order : desc return reviews in descending order", example = "asc", required = true) @PathVariable String order,
+                                            @ApiParam(value = "Page number", example = "1", required = true) @PathVariable Integer page,
+                                            @ApiParam(value = "sorting by: likes : createdAt", example = "createdAt", required = true) @PathVariable String sortBy){
+        return tileService.dashBoardNotLoggedIn(order,page,sortBy);
+    }
+
+
+    @ApiOperation(value="Return list of dashboard tiles for logged user")
+    @GetMapping("/tile/group/ll/{order}/{page}/{sortBy}/{groupId}")
+    private List<TileDTO> doSearchGroup(@ApiParam(value = "order : asc returns reviews in ascending order, order : desc return reviews in descending order", example = "asc", required = true) @PathVariable String order,
+                                               @ApiParam(value = "Page number", example = "1", required = true) @PathVariable Integer page,
+                                               @ApiParam(value = "sorting by: likes : createdAt", example = "createdAt", required = true) @PathVariable String sortBy,
+                                               @ApiParam(value = "groupId", example = "1", required = true) @PathVariable Long groupId){
+        return tileService.doSearchGroup(order,page,sortBy,groupId);
     }
 
 }
