@@ -15,6 +15,7 @@ import { ToolbarComponent } from './pages/toolbar/toolbar.component';
 import { TimeaPassedPipe } from './helpers/timePassed.pipe';
 import { LinkyModule } from 'ngx-linky';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { DotsComponent } from './components/dots/dots.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
     LoginComponent,
     ToolbarComponent,
     TimeaPassedPipe,
+    DotsComponent,
   ],
   imports: [
     BrowserModule,

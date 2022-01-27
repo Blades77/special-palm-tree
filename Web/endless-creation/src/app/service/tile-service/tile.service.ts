@@ -34,4 +34,11 @@ export class TileService {
   getTilesTest(page: number){
     return this.http.get<TileVIEW[]>(this.baseUrl+'tiles/group/'+0+'/'+'asc'+'/'+page);
   }
+
+  getLoggedDashboardTiles(order: string, page: number,sortBy: string,onlyUser: boolean){
+    return this.http.get<TileVIEW[]>(this.baseUrl+"tile/dashboard/l/"+order+"/"+page+"/"+sortBy+"/"+onlyUser);
+  }
+  getNotLoggedDashboardTiles(order: string, page: number,sortBy: string){
+    return this.http.get<TileVIEW[]>(this.baseUrl+"tile/dashboard/nl/"+order+"/"+page+"/"+sortBy);
+  }
 }

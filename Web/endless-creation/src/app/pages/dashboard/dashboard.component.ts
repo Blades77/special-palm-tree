@@ -23,7 +23,10 @@ export class DashboardComponent implements OnInit {
   groups!: GroupVIEW[];
   isLogged!: boolean;
   currentRoute!: string;
-
+  isNotEndOFData = true;
+  oldTile!: TileVIEW;
+  
+  currentActiveEndpoint = 0;
   pages=0;
 
   constructor(
@@ -39,13 +42,77 @@ export class DashboardComponent implements OnInit {
     // this.getTiles();
     // this.getGroups();
     this.setCurrentRoute();
-    this.getTilesTest();
+    this.loginBasedFunction();
+  }
+
+  
+
+  private loginBasedFunction(){
+    if(this.isLogged){
+        this.getDashboardLoggedTiles("asc","createdAt",true);
+    }else{
+      this.getDashboardNotLoggedTiles("asc","createdAt");
+    }
+  }
+
+
+
+  getDashboardLoggedTiles(order: string,sortBy: string,onlyUser: boolean){
+    this.pages+=1
+    this.tileService.getLoggedDashboardTiles(order,this.pages,sortBy,onlyUser)
+    .subscribe(
+      (response: any) => {
+        this.concatTiles(response);
+        this.currentActiveEndpoint = 1;
+    
+      },
+      (error) =>{;
+        this.errorHandler.handleError(error);
+      }
+    )
+  }
+
+  getDashboardNotLoggedTiles(order: string,sortBy: string){
+    this.pages+=1
+    this.tileService.getNotLoggedDashboardTiles(order,this.pages,sortBy)
+    .subscribe(
+      (response: any) => {
+        this.concatTiles(response);
+        this.currentActiveEndpoint = 2;
+      },
+      (error) =>{;
+        this.errorHandler.handleError(error);
+      }
+    )
+  }
+
+  private concatTiles(response: any){
+    this.newTiles = response;
+        const currentTiles  = this.tiles.getValue()
+        const newLastTile = currentTiles[currentTiles.length-1];
+        this.oldTile = newLastTile;
+        if(this.oldTile === newLastTile){
+          this.isNotEndOFData = false;
+        }
+        this.tiles.next(_.concat(currentTiles,this.newTiles))
   }
 
 
   onScroll() {
     console.log('scrolled')
-    this.getTilesTest();
+    switch (this.currentActiveEndpoint) {
+      case 0:
+          console.log("Nothing");
+          break;
+      case 1:
+          console.log("Dla logged");
+          this.getDashboardLoggedTiles("asc","createdAt",true);
+          break;
+      case 2:
+          console.log("Dla not logged");
+          this.getDashboardNotLoggedTiles("asc","createdAt");
+          break;
+    }
   }
 
   private getTilesTest(){

@@ -25,8 +25,8 @@
     <div class="main-area-bottom">
       <div
       infiniteScroll
-      [infiniteScrollDistance]="2"
-      [infiniteScrollThrottle]="1000"
+      [infiniteScrollDistance]="1"
+      [infiniteScrollThrottle]="500"
       (scrolled)="onScroll()"
       >
 
@@ -77,6 +77,14 @@
           </div>
         </div>
 
+      </div>
+      <div class="ending-loading">
+        <ng-template *ngIf="isNotEndOFData else endOfData">
+          <app-dots></app-dots>
+        </ng-template>
+        <ng-template #endOfData>
+          <div class="end-of-data">End Of Data</div> 
+        </ng-template>
 
       </div>
     </div>
