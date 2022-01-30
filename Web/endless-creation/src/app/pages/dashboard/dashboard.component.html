@@ -3,25 +3,27 @@
   <div class="right-area"></div>
   <div class="main-area">
     <div class="main-area-top">
-      <div class="top-utile">
+      <div class="top-utile top-left-utile" [ngClass]="{'top-utile-active':searchParams.newest}" (click)="markSearchParam(0)">
         <img src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/star.svg?alt=media&token=005fbe94-6fd5-45fc-98f3-9302f0635a34">Newest
       </div>
-      <div class="top-utile">
+      <div class="top-utile" [ngClass]="{'top-utile-active':searchParams.oldest}" (click)="markSearchParam(1)">
         <img src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/time.svg?alt=media&token=407ae589-5144-46c2-93c3-9b75b5ad1509">Oldest
       </div>
-      <div class="top-utile">
+      <div class="top-utile"[ngClass]="{'top-utile-active':searchParams.likes}" (click)="markSearchParam(2)">
         <img src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/likes_zakladka.svg?alt=media&token=daed0473-4593-464f-83e2-7ac191d4945e">Likes
       </div>
       <div class="top-utile top-utile-scope">
         <ul class="navbar-nav ml-auto dropdown-li-style">
           <li class="nav-item" ngbDropdown display="dynamic" placement="bottom-left">
             <a class="nav-link" tabindex="0" ngbDropdownToggle id="navbarDropdown3" role="button">
-              Dynamic
+              {{activeTerm}}
             </a>
             <div ngbDropdownMenu aria-labelledby="navbarDropdown3" class="dropdown-menu">
-              <a ngbDropdownItem href="#" (click)="$event.preventDefault()">Action</a>
-              <a ngbDropdownItem href="#" (click)="$event.preventDefault()">Another action</a>
-              <a ngbDropdownItem href="#" (click)="$event.preventDefault()">Something else here</a>
+              <div ngbDropdownItem  (click)="markTerm(0)" [ngClass]="{'top-utile-active':term.allTime}">All time</div>
+              <div ngbDropdownItem  (click)="markTerm(1)" [ngClass]="{'top-utile-active':term.today}">Today</div>
+              <div ngbDropdownItem  (click)="markTerm(2)" [ngClass]="{'top-utile-active':term.week}">This week</div>
+              <div ngbDropdownItem  (click)="markTerm(3)" [ngClass]="{'top-utile-active':term.month}">This month</div>
+              <div ngbDropdownItem  (click)="markTerm(4)" [ngClass]="{'top-utile-active':term.year}">This year</div>
             </div>
           </li>
         </ul>

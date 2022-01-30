@@ -25,6 +25,22 @@ export class DashboardComponent implements OnInit {
   currentRoute!: string;
   isNotEndOFData = true;
   oldTile!: TileVIEW;
+  activeTerm = "All Time";
+
+  searchParams = {
+    newest: true,
+    oldest: false,
+    likes: false
+  };
+
+  term = {
+    allTime: true,
+    today: false,
+    week: false,
+    month: false,
+    year: false
+  };
+
   
   currentActiveEndpoint = 0;
   pages=0;
@@ -113,6 +129,64 @@ export class DashboardComponent implements OnInit {
           this.getDashboardNotLoggedTiles("asc","createdAt");
           break;
     }
+  }
+
+
+
+
+  markSearchParam(serachNumber: number){
+    this.clearSearchParam();
+    switch(serachNumber){
+      case 0:
+        this.searchParams.newest = true;
+        break;
+      case 1:
+        this.searchParams.oldest = true;
+        break;
+      case 2:
+        this.searchParams.likes = true;
+        break;    
+    }
+  }
+
+  clearSearchParam(){
+    this.searchParams.newest = false;
+    this.searchParams.oldest = false;
+    this.searchParams.likes = false;
+  }
+
+  markTerm(termNumber: number){
+    this.clearTerm();
+    switch(termNumber){
+      case 0:
+        this.term.allTime  = true;
+        this.activeTerm = "All Time";
+        break;
+      case 1:
+        this.term.today = true;
+        this.activeTerm = "Today";
+        break;
+      case 2:
+        this.term.week = true;
+        this.activeTerm = "This week";
+        break;  
+      case 3:
+        this.term.month = true;
+        this.activeTerm = "This Month";
+        break;
+      case 4:
+        this.term.year = true;
+        this.activeTerm = "This year";
+        break;  
+  }
+}
+
+  clearTerm(){
+    this.term.allTime = false;
+    this.term.today = false;
+    this.term.week = false;
+    this.term.month = false;
+    this.term.year = false;
   }
 
   private getTilesTest(){

@@ -32,7 +32,9 @@
 }
 
 .main-area-top { grid-area: main-area-top;
-background-color: coral;
+  background-color: #eef0ed;
+  border-radius: 5px;
+  border: 2px solid gray; 
 height:3em ; }
 
 .main-area-bottom { grid-area: main-area-bottom;
@@ -199,14 +201,24 @@ height: 900px; }
 .top-utile{
   display: block;
   float: left;
-  background-color: gray;
-  margin: 0.5em;
-  width: 22.5%;
+  margin-top: 0.25em;
+  margin-right: 0.3em;
+  width: 24%;
   text-align: center;
+
+  &:hover{
+    background-color: lightgray;
+    cursor: pointer;
+    border-radius: 0.3em;
+  }
+
   img{
     width: 35px;
     height: 35px;
   }
+}
+.top-left-utile{
+  margin-left: 0.36em;
 }
 .top-utile-scope{
   height: 35px;
@@ -219,5 +231,10 @@ height: 900px; }
 .nav-link{
   color: black;
   padding: 4px;
+}
+.top-utile-active{
+  background-color: green;
+    cursor: pointer;
+    border-radius: 0.3em;
 }
 
