@@ -13,9 +13,9 @@ const routes: Routes = [
   { path: 'group/:id', component: GroupComponent },
   { path: 'tile-detail/:id', component: TileDetailsComponent },
   { path: 'login', component: LoginComponent},
-  { path: '404', component: NoPageComponent},
+  // { path: '404', component: NoPageComponent},
   { path: 'login', component: LoginComponent},
-  { path: '**', redirectTo: '/404'},
+  // { path: '**', component: NoPageComponent},
 
 
 ];

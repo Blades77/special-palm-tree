@@ -1,11 +1,11 @@
 /*Huge thanks to @tobiasahlin at http://tobiasahlin.com/spinkit/ */
-.spinner {
+.loading-dots {
     margin: 100px auto 0;
     width: 70px;
     text-align: center;
   }
   
-  .spinner > div {
+  .loading-dots > div {
     width: 18px;
     height: 18px;
     background-color: #333;
@@ -16,12 +16,12 @@
     animation: sk-bouncedelay 1.4s infinite ease-in-out both;
   }
   
-  .spinner .bounce1 {
+  .loading-dots .d1 {
     -webkit-animation-delay: -0.32s;
     animation-delay: -0.32s;
   }
   
-  .spinner .bounce2 {
+  .loading-dots .d2 {
     -webkit-animation-delay: -0.16s;
     animation-delay: -0.16s;
   }

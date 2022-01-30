@@ -16,6 +16,7 @@ import { TimeaPassedPipe } from './helpers/timePassed.pipe';
 import { LinkyModule } from 'ngx-linky';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { DotsComponent } from './components/dots/dots.component';
+import { TooltipCustomClassComponent } from './components/tooltip-custom-class/tooltip-custom-class.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { DotsComponent } from './components/dots/dots.component';
     ToolbarComponent,
     TimeaPassedPipe,
     DotsComponent,
+    TooltipCustomClassComponent,
   ],
   imports: [
     BrowserModule,

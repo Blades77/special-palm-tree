@@ -162,6 +162,10 @@ export class DashboardComponent implements OnInit {
       }
     )
   }
+  copyLink(tileId: number){
+    const link = "http://localhost:4200/tile-detail/"+tileId;
+    navigator.clipboard.writeText(link);
+  }
 
   getDimensionsByFind(id: number){
     return
@@ -171,45 +175,52 @@ export class DashboardComponent implements OnInit {
     this.currentRoute = this.router.url;
   }
 
-  // doSave(tileId: number){
-  //   this.tileService.doSave(tileId)
-  //   .subscribe(
-  //     (response: any) => {
-  //       if(response === true){
-  //         console.log("Wbijam do ifa tilllllesave");
-  //         const isSaved = this.tiles.find(x => x.tileId === tileId)?.userSavedTile
-  //         this.tiles.find(x => x.tileId === tileId).userSavedTile = !isSaved;
-  //       }
+  doSave(tileId: number){
+    this.tileService.doSave(tileId)
+    .subscribe(
+      (response: any) => {
+        if(response === true){
+          const currentTiles = this.tiles.getValue();
+          var isSaved = currentTiles.find(x => x.tileId === tileId);
+          if(isSaved){
+            isSaved.userSavedTile  = !isSaved.userSavedTile
+          }
+
+          this.tiles.next(currentTiles);
+        }
         
-  //     },
-  //     (error) =>{;
-  //       this.errorHandler.handleError(error);
-  //     })
-  // }
+      },
+      (error) =>{;
+        this.errorHandler.handleError(error);
+      })
+    }
 
 
 
-//   doLike(tileId: number){
-//     this.tileService.doLike(tileId)
-//     .subscribe(
-//       (response: any) => {
-//         if(response === true){
-//           console.log("Wbijam do ifa");
-//           const isLiked = this.tiles.find(x => x.tileId === tileId)?.tileLikedByTheUser
-//           this.tiles.find(x => x.tileId === tileId).tileLikedByTheUser = !isLiked;
-//           if(!isLiked){
-//             this.tiles.find(x => x.tileId === tileId).likesCount+=1
-//           }else{
-//             this.tiles.find(x => x.tileId === tileId).likesCount-=1
-//           }
-//         }
+  doLike(tileId: number){
+    this.tileService.doLike(tileId)
+    .subscribe(
+      (response: any) => {
+        if(response === true){
+          console.log("Wbijam do ifa");
+          const currentTiles = this.tiles.getValue()
+          var tile = currentTiles.find(x => x.tileId === tileId)
+          if(tile){
+            tile.tileLikedByTheUser =!tile.tileLikedByTheUser
+          }
+          if(tile?.tileLikedByTheUser){
+            tile.likesCount+=1
+          }else{
+            if(tile)
+            tile.likesCount-=1
+          }
+          this.tiles.next(currentTiles);
+        }
         
-//       },
-//       (error) =>{;
-//         this.errorHandler.handleError(error);
-//       })
-//   }
+      },
+      (error) =>{;
+        this.errorHandler.handleError(error);
+      })
+  }
 
-
-// }
 }

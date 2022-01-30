@@ -1,27 +1,32 @@
-<!-- <p>dashboard works!</p>
-<div *ngIf="tiles">
-<a *ngFor="let tile of tiles"
-  routerLink="/tile-detail/{{tile.tileId}}">
-  <ul>
-    <li>  {{tile.tileTitle}} <span> {{tile.tileId}}</span></li>
-  </ul>
-</a>
-</div>
-<div>---------------------------------------------------------------</div>
-<div *ngIf="groups">
-  <a *ngFor="let group of groups"
-    routerLink="/group/{{group.groupId}}">
-    <ul>
-      <li>  {{group.groupName}} <span> {{group.groupId}}</span></li>
-    </ul>
-  </a>
-  </div>
- -->
 
  <div class="container">
   <div class="right-area"></div>
   <div class="main-area">
-    <div class="main-area-top"></div>
+    <div class="main-area-top">
+      <div class="top-utile">
+        <img src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/star.svg?alt=media&token=005fbe94-6fd5-45fc-98f3-9302f0635a34">Newest
+      </div>
+      <div class="top-utile">
+        <img src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/time.svg?alt=media&token=407ae589-5144-46c2-93c3-9b75b5ad1509">Oldest
+      </div>
+      <div class="top-utile">
+        <img src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/likes_zakladka.svg?alt=media&token=daed0473-4593-464f-83e2-7ac191d4945e">Likes
+      </div>
+      <div class="top-utile top-utile-scope">
+        <ul class="navbar-nav ml-auto dropdown-li-style">
+          <li class="nav-item" ngbDropdown display="dynamic" placement="bottom-left">
+            <a class="nav-link" tabindex="0" ngbDropdownToggle id="navbarDropdown3" role="button">
+              Dynamic
+            </a>
+            <div ngbDropdownMenu aria-labelledby="navbarDropdown3" class="dropdown-menu">
+              <a ngbDropdownItem href="#" (click)="$event.preventDefault()">Action</a>
+              <a ngbDropdownItem href="#" (click)="$event.preventDefault()">Another action</a>
+              <a ngbDropdownItem href="#" (click)="$event.preventDefault()">Something else here</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
     <div class="main-area-bottom">
       <div
       infiniteScroll
@@ -59,21 +64,18 @@
           <div class="content" [innerHTML]="tile.tileData | linky">
           </div>
           <div class="utiles">
-            <div class="utile">
+            <div class="utile" (click)="doLike(tile.tileId)">
               <img *ngIf="tile.tileLikedByTheUser; else elseImage" src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/like-green.svg?alt=media&token=bec11aa2-1dd0-4a61-814c-48ac2fd4fb27">
               <ng-template #elseImage>
                 <img src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/like.svg?alt=media&token=022c1ee1-1373-4053-906a-19e228517624">
-              </ng-template>
-              {{tile.likesCount}}
-              Like</div>
-            <div class="utile"><img src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/comment.svg?alt=media&token=afa54a04-bb36-471b-9fcc-a3ce1bf83bac">{{tile.commentsCount}}Comments</div>
-            <div class="utile"><img src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/share.svg?alt=media&token=2bb1e60d-c1c5-48c9-836a-6986afd19263">/tile-detail/{{tile.tileId}}Share</div>
-            <div class="utile">
-              <img *ngIf="tile.userSavedTile; else elseBookmarked" src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/bookmark.svg?alt=media&token=98664fc0-6ac5-42ea-8bdc-30e1d844aad7">
+              </ng-template>{{tile.likesCount}} Like</div>
+            <div class="utile"><img src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/comment.svg?alt=media&token=afa54a04-bb36-471b-9fcc-a3ce1bf83bac">{{tile.commentsCount}} Comments</div>
+            <div class="utile" (click)="copyLink(tile.tileId)"><link-tooltip></link-tooltip></div>
+            <div class="utile" (click)="doSave(tile.tileId)">
+              <img *ngIf="tile.userSavedTile; else elseBookmarked" src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/bookmarked.svg?alt=media&token=8d0182aa-5b88-4ad4-bc09-badae666f2c8">
               <ng-template #elseBookmarked>
-                <img src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/bookmarked.svg?alt=media&token=8d0182aa-5b88-4ad4-bc09-badae666f2c8">
-              </ng-template>
-              Save</div>
+                <img src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/bookmark.svg?alt=media&token=98664fc0-6ac5-42ea-8bdc-30e1d844aad7">
+              </ng-template>Save</div>
           </div>
         </div>
 
@@ -85,6 +87,7 @@
         <ng-template #endOfData>
           <div class="end-of-data">End Of Data</div> 
         </ng-template>
+
 
       </div>
     </div>
