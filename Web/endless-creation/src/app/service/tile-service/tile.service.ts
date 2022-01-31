@@ -35,10 +35,12 @@ export class TileService {
     return this.http.get<TileVIEW[]>(this.baseUrl+'tiles/group/'+0+'/'+'asc'+'/'+page);
   }
 
-  getLoggedDashboardTiles(order: string, page: number,sortBy: string,onlyUser: boolean){
-    return this.http.get<TileVIEW[]>(this.baseUrl+"tile/dashboard/l/"+order+"/"+page+"/"+sortBy+"/"+onlyUser);
+  getLoggedDashboardTiles(order: string, page: number,sortBy: string,onlyUser: boolean,period: string){
+    console.log("tu printuje-----"+this.baseUrl+"tile/dashboard/l/"+order+"/"+page+"/"+sortBy+"/"+onlyUser+"/"+period);
+    return this.http.get<TileVIEW[]>(this.baseUrl+"tile/dashboard/l/"+order+"/"+page+"/"+sortBy+"/"+onlyUser+"/"+period);
   }
-  getNotLoggedDashboardTiles(order: string, page: number,sortBy: string){
-    return this.http.get<TileVIEW[]>(this.baseUrl+"tile/dashboard/nl/"+order+"/"+page+"/"+sortBy);
+  getNotLoggedDashboardTiles(order: string, page: number,sortBy: string,period: string){
+    console.log("tu printuje-----"+this.baseUrl+"tile/dashboard/nl/"+order+"/"+page+"/"+sortBy+"/"+period);
+    return this.http.get<TileVIEW[]>(this.baseUrl+"tile/dashboard/nl/"+order+"/"+page+"/"+sortBy+"/"+period);
   }
 }

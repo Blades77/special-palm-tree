@@ -33,17 +33,6 @@ public class TileController {
         return tileService.getFullTileById(id);
     }
 
-//    @ApiOperation(value = "Returns list of tiles")
-//    @GetMapping("/tiles")
-//    private List<TileDTO> getTiles(){
-//       return tileService.getTiles();
-//    }
-
-//    @ApiOperation(value = "Returns list of tiles by groupDataId")
-//    @GetMapping("/tiles/group/{id}")
-//    private List<TileDTO> getTilesByGroupId(@ApiParam(value = "Id of group", example = "1", required = true) @PathVariable Long id) {
-//        return tileService.getTilesByGroupId(id);
-//    }
 
     @ApiOperation(value="Returns list of tiles containing  tags")
     @GetMapping("/tiles/group/{groupId}/{searchType}/{order}/{tagIdList}/")
@@ -54,16 +43,16 @@ public class TileController {
         return tileService.getTilesIncludingAllTagIdList(groupId,searchType,order,tagIdList);
     }
 
-    @ApiOperation(value="Returns list of tiles ordered by date")
-    @GetMapping("/tiles/group/{groupId}/{order}/{page}/{sortBy}")
-    private List<TileDTO> getTilesOrderedByDate(
-            @ApiParam(value = "Id of an group 0 search everywhere", example = "1", required = true) @PathVariable Long groupId,
-            @ApiParam(value = "order : asc returns reviews in ascending order, order : desc return reviews in descending order", example = "asc", required = true) @PathVariable String order,
-            @ApiParam(value = "Page number", example = "1", required = true) @PathVariable Integer page,
-            @ApiParam(value = "Page number", example = "createdAt", required = true) @PathVariable String sortBy)
-    {
-        return tileService.getTilesByGroupId(groupId,order,page,sortBy);
-    }
+//    @ApiOperation(value="Returns list of tiles ordered by date")
+//    @GetMapping("/tiles/group/{groupId}/{order}/{page}/{sortBy}")
+//    private List<TileDTO> getTilesOrderedByDate(
+//            @ApiParam(value = "Id of an group 0 search everywhere", example = "1", required = true) @PathVariable Long groupId,
+//            @ApiParam(value = "order : asc returns reviews in ascending order, order : desc return reviews in descending order", example = "asc", required = true) @PathVariable String order,
+//            @ApiParam(value = "Page number", example = "1", required = true) @PathVariable Integer page,
+//            @ApiParam(value = "Page number", example = "createdAt", required = true) @PathVariable String sortBy)
+//    {
+//        return tileService.getTilesByGroupId(groupId,order,page,sortBy);
+//    }
 
     @ApiOperation(value="Returns list of tiles containing parameter in title")
     @GetMapping("/tile/group/{groupId}/search={searchParameter}")
@@ -136,30 +125,33 @@ public class TileController {
 
 
     @ApiOperation(value="Return list of dashboard tiles for logged user")
-    @GetMapping("/tile/dashboard/l/{order}/{page}/{sortBy}/{onlyUser}")
+    @GetMapping("/tile/dashboard/l/{order}/{page}/{sortBy}/{onlyUser}/{term}")
     private List<TileDTO> dashBoardLoggedIn(@ApiParam(value = "order : asc returns reviews in ascending order, order : desc return reviews in descending order", example = "asc", required = true) @PathVariable String order,
                                             @ApiParam(value = "Page number", example = "1", required = true) @PathVariable Integer page,
                                             @ApiParam(value = "sorting by: likes : createdAt", example = "createdAt", required = true) @PathVariable String sortBy,
-                                            @ApiParam(value = "Is user want all tils he can access or only he is in group with", example = "true", required = true) @PathVariable Boolean onlyUser) {
-        return tileService.dashBoardLoggedIn(order,page,sortBy,onlyUser);
+                                            @ApiParam(value = "Is user want all tils he can access or only he is in group with", example = "true", required = true) @PathVariable Boolean onlyUser,
+                                            @ApiParam(value = "term of sorting", example = "allTime", required = true) @PathVariable String term) {
+        return tileService.dashBoardLoggedIn(order,page,sortBy,onlyUser,term);
     }
 
-    @ApiOperation(value="Return list of dashboard tiles for logged user")
-    @GetMapping("/tile/dashboard/nl/{order}/{page}/{sortBy}")
+    @ApiOperation(value="Return list of dashboard tiles for not logged user")
+    @GetMapping("/tile/dashboard/nl/{order}/{page}/{sortBy}/{term}")
     private List<TileDTO> dashBoardNotLoggedIn(@ApiParam(value = "order : asc returns reviews in ascending order, order : desc return reviews in descending order", example = "asc", required = true) @PathVariable String order,
                                             @ApiParam(value = "Page number", example = "1", required = true) @PathVariable Integer page,
-                                            @ApiParam(value = "sorting by: likes : createdAt", example = "createdAt", required = true) @PathVariable String sortBy){
-        return tileService.dashBoardNotLoggedIn(order,page,sortBy);
+                                            @ApiParam(value = "sorting by: likes : createdAt", example = "createdAt", required = true) @PathVariable String sortBy,
+                                               @ApiParam(value = "term of sorting", example = "allTime", required = true) @PathVariable String term){
+        return tileService.dashBoardNotLoggedIn(order,page,sortBy,term);
     }
 
 
     @ApiOperation(value="Return list of dashboard tiles for logged user")
-    @GetMapping("/tile/group/ll/{order}/{page}/{sortBy}/{groupId}")
+    @GetMapping("/tile/group/ll/{order}/{page}/{sortBy}/{groupId}/{term}")
     private List<TileDTO> doSearchGroup(@ApiParam(value = "order : asc returns reviews in ascending order, order : desc return reviews in descending order", example = "asc", required = true) @PathVariable String order,
                                                @ApiParam(value = "Page number", example = "1", required = true) @PathVariable Integer page,
                                                @ApiParam(value = "sorting by: likes : createdAt", example = "createdAt", required = true) @PathVariable String sortBy,
-                                               @ApiParam(value = "groupId", example = "1", required = true) @PathVariable Long groupId){
-        return tileService.doSearchGroup(order,page,sortBy,groupId);
+                                               @ApiParam(value = "groupId", example = "1", required = true) @PathVariable Long groupId,
+                                                @ApiParam(value = "term of sorting", example = "allTime", required = true) @PathVariable String term){
+        return tileService.doSearchGroup(order,page,sortBy,groupId,term);
     }
 
 }

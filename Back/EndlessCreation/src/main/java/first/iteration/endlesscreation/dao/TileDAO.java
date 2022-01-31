@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
@@ -63,8 +64,8 @@ public class TileDAO {
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot find  any tile with matching param in title"));
     }
 
-    public List<TileEntity> getTileEntitiesByGroupDataIdList(List<Long> groupIdList, Pageable pageable){
-        return tileRepository.getTileEntitiesByGroupDataIdList(groupIdList, pageable)
+    public List<TileEntity> getTileEntitiesByGroupDataIdList(List<Long> groupIdList, LocalDateTime nowDate, LocalDateTime endDate, Pageable pageable){
+        return tileRepository.getTileEntitiesByGroupDataIdList(groupIdList,nowDate,endDate,pageable)
                 .orElseThrow(() -> new ResourceNotFoundException("Something went wrong"));
     }
     public List<TileEntity> getTilesByGroupDataEnityWithSort(GroupDataEntity groupDataEntity,Pageable pageable){
@@ -106,13 +107,13 @@ public class TileDAO {
         return tileRepository.isUserSavedTile(tileId,userName) == 1;
     }
 
-    public List<TileEntity> getTileEntitiesByGroupIdListSortByLikeDESC(List<Long> groupIdList,Pageable pageable){
-        return tileRepository.getTileEntitiesByGroupIdListSortByLikeDESC(groupIdList,pageable)
+    public List<TileEntity> getTileEntitiesByGroupIdListSortByLikeDESC(List<Long> groupIdList,LocalDateTime nowDate, LocalDateTime endDate,Pageable pageable){
+        return tileRepository.getTileEntitiesByGroupIdListSortByLikeDESC(groupIdList,nowDate,endDate,pageable)
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot find  any tile in provided group"));
     }
 
-    public List<TileEntity> getTileEntitiesByGroupIdListSortByLikeASC(List<Long> groupIdList,Pageable pageable){
-        return tileRepository.getTileEntitiesByGroupIdListSortByLikeASC(groupIdList,pageable)
+    public List<TileEntity> getTileEntitiesByGroupIdListSortByLikeASC(List<Long> groupIdList,LocalDateTime nowDate, LocalDateTime endDate,Pageable pageable){
+        return tileRepository.getTileEntitiesByGroupIdListSortByLikeASC(groupIdList,nowDate,endDate,pageable)
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot find  any tile in provided group"));
     }
 

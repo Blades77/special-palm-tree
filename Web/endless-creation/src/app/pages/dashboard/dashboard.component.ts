@@ -7,7 +7,7 @@ import { TileVIEW } from 'src/app/model/tile-view';
 import { AuthenticationService } from 'src/app/service/authentication-service/authentication.service';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
-import * as _ from 'lodash'
+import * as _ from 'lodash';
 
 
 @Component({
@@ -26,6 +26,12 @@ export class DashboardComponent implements OnInit {
   isNotEndOFData = true;
   oldTile!: TileVIEW;
   activeTerm = "All Time";
+  activeTermValue = "allTime";
+  activeSearchParam = "createdAt";
+  order = "asc";
+  isUrlChanged = false;
+
+  //clear page i przy concacie ustawić ze jak zaszła zmiana kafelkow np z newest na oldest to zeby je nadpisywało całkiem
 
   searchParams = {
     newest: true,
@@ -61,21 +67,23 @@ export class DashboardComponent implements OnInit {
     this.loginBasedFunction();
   }
 
-  
+  private prepareParameters(){
+
+  }
 
   private loginBasedFunction(){
     if(this.isLogged){
-        this.getDashboardLoggedTiles("asc","createdAt",true);
+        this.getDashboardLoggedTiles(this.order,this.activeSearchParam,true,this.activeTermValue);
     }else{
-      this.getDashboardNotLoggedTiles("asc","createdAt");
+      this.getDashboardNotLoggedTiles(this.order,this.activeSearchParam,this.activeTermValue);
     }
   }
 
 
 
-  getDashboardLoggedTiles(order: string,sortBy: string,onlyUser: boolean){
+  getDashboardLoggedTiles(order: string,sortBy: string,onlyUser: boolean,period: string){
     this.pages+=1
-    this.tileService.getLoggedDashboardTiles(order,this.pages,sortBy,onlyUser)
+    this.tileService.getLoggedDashboardTiles(order,this.pages,sortBy,onlyUser,period)
     .subscribe(
       (response: any) => {
         this.concatTiles(response);
@@ -88,9 +96,9 @@ export class DashboardComponent implements OnInit {
     )
   }
 
-  getDashboardNotLoggedTiles(order: string,sortBy: string){
+  getDashboardNotLoggedTiles(order: string,sortBy: string,period: string){
     this.pages+=1
-    this.tileService.getNotLoggedDashboardTiles(order,this.pages,sortBy)
+    this.tileService.getNotLoggedDashboardTiles(order,this.pages,sortBy,period)
     .subscribe(
       (response: any) => {
         this.concatTiles(response);
@@ -110,7 +118,12 @@ export class DashboardComponent implements OnInit {
         if(this.oldTile === newLastTile){
           this.isNotEndOFData = false;
         }
-        this.tiles.next(_.concat(currentTiles,this.newTiles))
+        if(this.isUrlChanged){
+          this.tiles.next(this.newTiles);
+          this.isUrlChanged = false;
+        }else{
+          this.tiles.next(_.concat(currentTiles,this.newTiles))
+        }
   }
 
 
@@ -122,11 +135,11 @@ export class DashboardComponent implements OnInit {
           break;
       case 1:
           console.log("Dla logged");
-          this.getDashboardLoggedTiles("asc","createdAt",true);
+          this.getDashboardLoggedTiles(this.order,this.activeSearchParam,true,this.activeTermValue);
           break;
       case 2:
           console.log("Dla not logged");
-          this.getDashboardNotLoggedTiles("asc","createdAt");
+          this.getDashboardNotLoggedTiles(this.order,this.activeSearchParam,this.activeTermValue);
           break;
     }
   }
@@ -135,18 +148,27 @@ export class DashboardComponent implements OnInit {
 
 
   markSearchParam(serachNumber: number){
+    this.pages = 0;
+    this.isUrlChanged = true;
     this.clearSearchParam();
     switch(serachNumber){
       case 0:
         this.searchParams.newest = true;
+        this.activeSearchParam = "createdAt";
+        this.order = "asc";
         break;
       case 1:
         this.searchParams.oldest = true;
+        this.activeSearchParam = "createdAt";
+        this.order = "desc";
         break;
       case 2:
         this.searchParams.likes = true;
+        this.activeSearchParam = "likes";
+        this.order = "asc";
         break;    
     }
+    this.onScroll();
   }
 
   clearSearchParam(){
@@ -156,29 +178,37 @@ export class DashboardComponent implements OnInit {
   }
 
   markTerm(termNumber: number){
+    this.pages = 0;
     this.clearTerm();
+    this.isUrlChanged = true;
     switch(termNumber){
       case 0:
         this.term.allTime  = true;
         this.activeTerm = "All Time";
+        this.activeTermValue = "alltime";
         break;
       case 1:
         this.term.today = true;
         this.activeTerm = "Today";
+        this.activeTermValue="today";
         break;
       case 2:
         this.term.week = true;
         this.activeTerm = "This week";
+        this.activeTermValue="week";
         break;  
       case 3:
         this.term.month = true;
         this.activeTerm = "This Month";
+        this.activeTermValue="month";
         break;
       case 4:
         this.term.year = true;
         this.activeTerm = "This year";
+        this.activeTermValue= "year";
         break;  
   }
+  this.onScroll();
 }
 
   clearTerm(){

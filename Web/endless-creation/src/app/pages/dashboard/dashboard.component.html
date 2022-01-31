@@ -1,5 +1,13 @@
 
  <div class="container">
+  <div
+  infiniteScroll
+  [infiniteScrollDistance]="1"
+  [infiniteScrollThrottle]="200"
+  (scrolled)="onScroll()"
+  >
+
+  </div>
   <div class="right-area"></div>
   <div class="main-area">
     <div class="main-area-top">
@@ -30,14 +38,7 @@
       </div>
     </div>
     <div class="main-area-bottom">
-      <div
-      infiniteScroll
-      [infiniteScrollDistance]="1"
-      [infiniteScrollThrottle]="500"
-      (scrolled)="onScroll()"
-      >
-
-      </div>
+    
       <div *ngFor ="let tile of tiles | async" class="tile" >
         <!-- routerLink="/tile-detail/{{tile.tileId}} -->
         <div class="tile-container">
