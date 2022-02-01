@@ -154,4 +154,22 @@ public class TileController {
         return tileService.doSearchGroup(order,page,sortBy,groupId,term);
     }
 
+
+    @ApiOperation(value="Return list of tiles for dashboard")
+    @GetMapping("/tile/dashboard/{type}/{page}")
+    private List<TileDTO> getDashboardNewestHottestTiles(@ApiParam(value = "page", example = "0", required = true) @PathVariable Integer page,
+                                                         @ApiParam(value = "Param new or hot", example = "new", required = true) @PathVariable String type){
+        return tileService.getDashboardNewestHottestTiles(page,type);
+    }
+
+    @ApiOperation(value="Return list of tiles for dashboard by likes")
+    @GetMapping("/tile/dashboard/likes/{term}/{order}/{page}")
+    private List<TileDTO> getDashboardNewestHottestTiles(@ApiParam(value = "page", example = "0", required = true) @PathVariable Integer page,
+                                                         @ApiParam(value = "sorting by: asc : desc", example = "asc", required = true) @PathVariable String order,
+                                                         @ApiParam(value = "term of sorting", example = "allTime", required = true) @PathVariable String term) {
+
+            return tileService.getDashboardTileForLikes(page, term, order);
+
+    }
+
 }

@@ -2,8 +2,8 @@
  <div class="container">
   <div
   infiniteScroll
-  [infiniteScrollDistance]="1"
-  [infiniteScrollThrottle]="200"
+  [infiniteScrollDistance]="2"
+  [infiniteScrollThrottle]="300"
   (scrolled)="onScroll()"
   >
 
@@ -14,8 +14,8 @@
       <div class="top-utile top-left-utile" [ngClass]="{'top-utile-active':searchParams.newest}" (click)="markSearchParam(0)">
         <img src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/star.svg?alt=media&token=005fbe94-6fd5-45fc-98f3-9302f0635a34">Newest
       </div>
-      <div class="top-utile" [ngClass]="{'top-utile-active':searchParams.oldest}" (click)="markSearchParam(1)">
-        <img src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/time.svg?alt=media&token=407ae589-5144-46c2-93c3-9b75b5ad1509">Oldest
+      <div class="top-utile" [ngClass]="{'top-utile-active':searchParams.hot}" (click)="markSearchParam(1)">
+        <img src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/16138591881631770718.svg?alt=media&token=04cf25ca-c620-43d6-99f2-4b221a997d36">Hot
       </div>
       <div class="top-utile"[ngClass]="{'top-utile-active':searchParams.likes}" (click)="markSearchParam(2)">
         <img src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/likes_zakladka.svg?alt=media&token=daed0473-4593-464f-83e2-7ac191d4945e">Likes

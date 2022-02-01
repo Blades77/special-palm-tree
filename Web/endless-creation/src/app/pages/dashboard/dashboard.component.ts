@@ -28,14 +28,15 @@ export class DashboardComponent implements OnInit {
   activeTerm = "All Time";
   activeTermValue = "allTime";
   activeSearchParam = "createdAt";
-  order = "asc";
+  order = "desc";
   isUrlChanged = false;
+  newOrHot = "new";
 
   //clear page i przy concacie ustawić ze jak zaszła zmiana kafelkow np z newest na oldest to zeby je nadpisywało całkiem
 
   searchParams = {
     newest: true,
-    oldest: false,
+    hot: false,
     likes: false
   };
 
@@ -61,34 +62,19 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.authService.isLoggedIn().subscribe(isLogged => this.isLogged = isLogged);
 
-    // this.getTiles();
-    // this.getGroups();
     this.setCurrentRoute();
-    this.loginBasedFunction();
-  }
-
-  private prepareParameters(){
-
-  }
-
-  private loginBasedFunction(){
-    if(this.isLogged){
-        this.getDashboardLoggedTiles(this.order,this.activeSearchParam,true,this.activeTermValue);
-    }else{
-      this.getDashboardNotLoggedTiles(this.order,this.activeSearchParam,this.activeTermValue);
-    }
+    this.getDashboardNewOrHot(this.newOrHot,this.pages);
   }
 
 
 
-  getDashboardLoggedTiles(order: string,sortBy: string,onlyUser: boolean,period: string){
-    this.pages+=1
-    this.tileService.getLoggedDashboardTiles(order,this.pages,sortBy,onlyUser,period)
+  getDashboardNewOrHot(type: string, page: number){
+    this.tileService.getDashBoardNewOrHot(type,page)
     .subscribe(
       (response: any) => {
         this.concatTiles(response);
         this.currentActiveEndpoint = 1;
-    
+        this.pages+=1;
       },
       (error) =>{;
         this.errorHandler.handleError(error);
@@ -96,13 +82,15 @@ export class DashboardComponent implements OnInit {
     )
   }
 
-  getDashboardNotLoggedTiles(order: string,sortBy: string,period: string){
-    this.pages+=1
-    this.tileService.getNotLoggedDashboardTiles(order,this.pages,sortBy,period)
+  getDashboardLikes(term: string, order: string, page: number){
+    this.tileService.getDashBoardLikes(term,order,page)
     .subscribe(
       (response: any) => {
         this.concatTiles(response);
         this.currentActiveEndpoint = 2;
+        console.log("testuje paggess"+this.pages)
+        this.pages+=1;
+        console.log("testuje pagesss2"+this.pages)
       },
       (error) =>{;
         this.errorHandler.handleError(error);
@@ -134,12 +122,12 @@ export class DashboardComponent implements OnInit {
           console.log("Nothing");
           break;
       case 1:
-          console.log("Dla logged");
-          this.getDashboardLoggedTiles(this.order,this.activeSearchParam,true,this.activeTermValue);
+          console.log("Dla new or hot");
+          this.getDashboardNewOrHot(this.newOrHot,this.pages)
           break;
       case 2:
-          console.log("Dla not logged");
-          this.getDashboardNotLoggedTiles(this.order,this.activeSearchParam,this.activeTermValue);
+          console.log("Dla likes");
+          this.getDashboardLikes(this.activeTermValue,this.order,this.pages);
           break;
     }
   }
@@ -154,18 +142,19 @@ export class DashboardComponent implements OnInit {
     switch(serachNumber){
       case 0:
         this.searchParams.newest = true;
-        this.activeSearchParam = "createdAt";
-        this.order = "asc";
+        this.currentActiveEndpoint = 1;
+        this.newOrHot = "new";
         break;
       case 1:
-        this.searchParams.oldest = true;
-        this.activeSearchParam = "createdAt";
-        this.order = "desc";
+        this.searchParams.hot = true;
+        this.currentActiveEndpoint = 1;
+        this.newOrHot = "hot";
         break;
       case 2:
         this.searchParams.likes = true;
         this.activeSearchParam = "likes";
-        this.order = "asc";
+        this.currentActiveEndpoint = 2;
+        this.order = "desc";
         break;    
     }
     this.onScroll();
@@ -173,7 +162,7 @@ export class DashboardComponent implements OnInit {
 
   clearSearchParam(){
     this.searchParams.newest = false;
-    this.searchParams.oldest = false;
+    this.searchParams.hot = false;
     this.searchParams.likes = false;
   }
 
@@ -219,39 +208,7 @@ export class DashboardComponent implements OnInit {
     this.term.year = false;
   }
 
-  private getTilesTest(){
-    this.pages+=1
-    this.tileService.getTilesTest(this.pages)
 
-    .subscribe(
-      (response: any) => {
-        this.newTiles = response;
-        console.log("Nowe tile"+this.newTiles);
-        const currentTiles  = this.tiles.getValue()
-      this.tiles.next(_.concat(currentTiles,this.newTiles))
-    
-      },
-      (error) =>{;
-        this.errorHandler.handleError(error);
-      }
-      
-    )
-  }
-
-  getTiles(){
-    // if(!this.isLogged){
-      this.tileService.getOrderedTilesFromApi("0","desc")
-    .subscribe(
-      (response: any) => {
-        this.tiles = response;
-        console.log(this.tiles);
-        
-      },
-      (error) =>{;
-        this.errorHandler.handleError(error);
-      })
-    // }
-  }
 
   getGroups(){
     this.groupService.getGroups()

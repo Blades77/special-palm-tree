@@ -284,7 +284,7 @@ public class TileService {
                 date = date.minusDays(365);
                 break;
             default:
-                date = LocalDateTime.of(1970, 1, 1, 1, 1, 1, 1);
+                date = LocalDateTime.of(1970, 01, 01, 01, 01, 01, 01);
                 break;
         }
         return date;
@@ -434,6 +434,56 @@ public class TileService {
         }
         return tileDTOList;
     }
+
+//    -------------------------------------------------------------------------------------------
+
+    private List<Long> scopeTileAcces(){
+        List<Long> groupIdList = new ArrayList<>();
+        String userName = LoggedUserGetter.getUsser();
+        if(userName.equals("anonymousUser")){
+            groupIdList = groupDataService.getPublicGroupsIdList();
+        }else{
+            groupIdList = groupDataService.getUserGroupsIdList(userName);
+        }
+        return  groupIdList;
+    }
+
+   public List<TileDTO> getDashboardNewestHottestTiles(Integer page,String type){
+       List<TileEntity> tileEntityList = new ArrayList<>();
+       List<Long> groupIdList = scopeTileAcces();
+
+       if(type.equals("new")){
+           tileEntityList = tileDAO.getNewestTileEntitiesForDashboard(groupIdList,PageRequest.of(page, 5));
+       }else if(type.equals("hot")){
+            LocalDateTime nowDate = LocalDateTime.now();
+            LocalDateTime hotDate = nowDate.minusDays(30);
+            tileEntityList = tileDAO.getHottestTileEntitiesForDashboard(groupIdList,hotDate,nowDate,PageRequest.of(page, 5));
+       }else{
+           throw new InvalidPathVariableExpection("Invalid search type, should be \"new\" or \"hot\".");
+       }
+       return mapToTileDTOList(tileEntityList);
+   }
+
+   public List<TileDTO> getDashboardTileForLikes(Integer page,String term, String order){
+       List<TileEntity> tileEntityList = new ArrayList<>();
+       List<Long> groupIdList = scopeTileAcces();
+       LocalDateTime scopeDate = dateSetter(term);
+       LocalDateTime nowDate = LocalDateTime.now();
+
+       if(order.equals("asc")){
+           tileEntityList = tileDAO.getTileEntitiesByGroupIdListSortByLikeASC(groupIdList,scopeDate,nowDate,PageRequest.of(page, 3));
+       }else if(order.equals("desc")) {
+           tileEntityList = tileDAO.getTileEntitiesByGroupIdListSortByLikeDESC(groupIdList,scopeDate,nowDate,PageRequest.of(page, 3));
+       }else {
+           throw new InvalidPathVariableExpection("Invalid search type, should be \"asc\" or \"desc\".");
+       }
+       return  mapToTileDTOList(tileEntityList);
+
+   }
+
+
+
+
 
 //    private TileEntity mapCreateToTileEntity(TileCreateDTO tileCreateDTO){
 //        TileEntity tileEntity = new TileEntity();

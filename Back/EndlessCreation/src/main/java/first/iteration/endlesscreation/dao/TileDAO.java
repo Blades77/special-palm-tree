@@ -107,15 +107,26 @@ public class TileDAO {
         return tileRepository.isUserSavedTile(tileId,userName) == 1;
     }
 
-    public List<TileEntity> getTileEntitiesByGroupIdListSortByLikeDESC(List<Long> groupIdList,LocalDateTime nowDate, LocalDateTime endDate,Pageable pageable){
-        return tileRepository.getTileEntitiesByGroupIdListSortByLikeDESC(groupIdList,nowDate,endDate,pageable)
+    public List<TileEntity> getTileEntitiesByGroupIdListSortByLikeDESC(List<Long> groupIdList,LocalDateTime endDate,LocalDateTime nowDate,Pageable pageable){
+        return tileRepository.getTileEntitiesByGroupIdListSortByLikeDESC(groupIdList,endDate,nowDate,pageable)
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot find  any tile in provided group"));
     }
 
-    public List<TileEntity> getTileEntitiesByGroupIdListSortByLikeASC(List<Long> groupIdList,LocalDateTime nowDate, LocalDateTime endDate,Pageable pageable){
-        return tileRepository.getTileEntitiesByGroupIdListSortByLikeASC(groupIdList,nowDate,endDate,pageable)
+    public List<TileEntity> getTileEntitiesByGroupIdListSortByLikeASC(List<Long> groupIdList,LocalDateTime endDate,LocalDateTime nowDate,Pageable pageable){
+        return tileRepository.getTileEntitiesByGroupIdListSortByLikeASC(groupIdList,endDate,nowDate,pageable)
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot find  any tile in provided group"));
     }
+
+    public List<TileEntity> getNewestTileEntitiesForDashboard(List<Long> groupIdList,Pageable pageable){
+        return  tileRepository.getNewestTileEntitiesForDashboard(groupIdList,pageable)
+                .orElseThrow(() -> new ResourceNotFoundException("Something went wrong"));
+    }
+
+    public List<TileEntity> getHottestTileEntitiesForDashboard(List<Long> groupIdList,LocalDateTime endDate,LocalDateTime nowDate,Pageable pageable){
+        return  tileRepository.getHottestTileEntitiesForDashboard(groupIdList,endDate,nowDate,pageable)
+                .orElseThrow(() -> new ResourceNotFoundException("Something went wrong"));
+    }
+
 
 
 

@@ -43,4 +43,13 @@ export class TileService {
     console.log("tu printuje-----"+this.baseUrl+"tile/dashboard/nl/"+order+"/"+page+"/"+sortBy+"/"+period);
     return this.http.get<TileVIEW[]>(this.baseUrl+"tile/dashboard/nl/"+order+"/"+page+"/"+sortBy+"/"+period);
   }
+  getDashBoardNewOrHot(type: string, page: number){
+    console.log(this.baseUrl+"tile/dashboard/"+type+"/"+page)
+    return this.http.get<TileVIEW[]>(this.baseUrl+"tile/dashboard/"+type+"/"+page);
+  }
+
+  getDashBoardLikes(term: string, order: string, page: number){
+    console.log(this.baseUrl+"tile/dashboard/likes/"+term+"/"+order+"/"+page)
+    return this.http.get<TileVIEW[]>(this.baseUrl+"tile/dashboard/likes/"+term+"/"+order+"/"+page);
+  }
 }

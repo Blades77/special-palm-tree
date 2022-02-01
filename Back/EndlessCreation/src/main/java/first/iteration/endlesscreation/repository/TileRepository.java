@@ -68,12 +68,12 @@ public interface TileRepository extends JpaRepository<TileEntity, Long> {
 
     @Query(value="SELECT t.tile_id, t.tile_title, t.tile_data,t.owner_user_id, t.group_id, t.created_at, t.updated_at\n" +
             "FROM tile t WHERE t.group_id IN :groupIdList AND t.created_at BETWEEN :endDate AND :nowDate ORDER BY (SELECT COUNT(*) FROM tile_like WHERE tile_id = t.tile_id) DESC",nativeQuery = true)
-    Optional<List<TileEntity>> getTileEntitiesByGroupIdListSortByLikeDESC(@Param("groupIdList") List<Long> groupIdList,LocalDateTime nowDate, LocalDateTime endDate, Pageable pageable);
+    Optional<List<TileEntity>> getTileEntitiesByGroupIdListSortByLikeDESC(@Param("groupIdList") List<Long> groupIdList,LocalDateTime endDate,LocalDateTime nowDate, Pageable pageable);
 
 
     @Query(value="SELECT  t.tile_id, t.tile_title, t.tile_data,t.owner_user_id, t.group_id, t.created_at, t.updated_at\n" +
             "FROM tile t WHERE t.group_id IN :groupIdList AND t.created_at BETWEEN :endDate AND :nowDate ORDER BY (SELECT COUNT(*) FROM tile_like WHERE tile_id = t.tile_id) ASC",nativeQuery = true)
-    Optional<List<TileEntity>> getTileEntitiesByGroupIdListSortByLikeASC(@Param("groupIdList") List<Long> groupIdList, LocalDateTime nowDate, LocalDateTime endDate, Pageable pageable);
+    Optional<List<TileEntity>> getTileEntitiesByGroupIdListSortByLikeASC(@Param("groupIdList") List<Long> groupIdList, LocalDateTime endDate,LocalDateTime nowDate,  Pageable pageable);
 
     @Modifying
     @Query(value ="DELETE FROM save_tile WHERE tile_id = :tileId AND app_user_id IN (SELECT app_user_id FROM app_user WHERE app_user_name = :userName)",nativeQuery = true)
@@ -84,4 +84,14 @@ public interface TileRepository extends JpaRepository<TileEntity, Long> {
     @Query(value="INSERT INTO save_tile  (app_user_id,tile_id) VALUES ((SELECT app_user_id FROM app_user WHERE app_user_name = :userName),:tileId)", nativeQuery = true)
     @Transactional
     void saveTileToSaveTile(@Param("tileId")Long tileId,@Param("userName") String userName);
+
+
+    @Query(value="SELECT * FROM tile WHERE group_id IN :groupIdList ORDER BY created_at DESC",nativeQuery = true)
+    Optional<List<TileEntity>> getNewestTileEntitiesForDashboard(List<Long> groupIdList,Pageable pageable);
+
+    @Query(value="SELECT  t.tile_id, t.tile_title, t.tile_data,t.owner_user_id, t.group_id, t.created_at, t.updated_at\n" +
+            "     FROM tile t WHERE t.group_id IN :groupIdList AND t.created_at  BETWEEN :endDate AND :nowDate\n" +
+            "\t ORDER BY (SELECT COUNT(*) FROM tile_like WHERE tile_id = t.tile_id) DESC, (SELECT COUNT(*) FROM comment_tile WHERE tile_id = t.tile_id) DESC",nativeQuery = true)
+    Optional<List<TileEntity>> getHottestTileEntitiesForDashboard(List<Long> groupIdList,LocalDateTime endDate,LocalDateTime nowDate,Pageable pageable);
+
 }
