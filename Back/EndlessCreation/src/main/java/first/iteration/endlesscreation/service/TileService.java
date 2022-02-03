@@ -18,8 +18,6 @@ import first.iteration.endlesscreation.repository.GroupDataRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 
@@ -437,6 +435,12 @@ public class TileService {
 
 //    -------------------------------------------------------------------------------------------
 
+//    private String searchChecker(String search){
+//        if(search.equals(default)){
+//            return null;
+//        }
+//    }
+
     private List<Long> scopeTileAcces(){
         List<Long> groupIdList = new ArrayList<>();
         String userName = LoggedUserGetter.getUsser();
@@ -448,38 +452,133 @@ public class TileService {
         return  groupIdList;
     }
 
-   public List<TileDTO> getDashboardNewestHottestTiles(Integer page,String type){
+    public List<TileDTO> getDashboardTilesStringSearch(String typeEnd,Integer page, String type, String search){
+        if(typeEnd.equals("nh")){
+            return getDashboardNewestHottestTiles(page,type,search,new ArrayList<>());
+        }
+        return null;
+
+    }
+    public List<TileDTO> getDashboardTilesTagIdListSearch(String typeEnd,Integer page, String type, List<Long> tagIdList){
+        if(typeEnd.equals("nh")) {
+            return getDashboardNewestHottestTiles(page, type, "", tagIdList);
+        }
+        return null;
+    }
+    public List<TileDTO> getDashboardTiles(String typeEnd,Integer page, String type){
+        if(typeEnd.equals("nh")) {
+            return getDashboardNewestHottestTiles(page, type, "", new ArrayList<>());
+        }
+        return null;
+    }
+
+   public List<TileDTO> getDashboardNewestHottestTiles(Integer page,String type,String search,List<Long> tagIdList){
        List<TileEntity> tileEntityList = new ArrayList<>();
        List<Long> groupIdList = scopeTileAcces();
 
        if(type.equals("new")){
-           tileEntityList = tileDAO.getNewestTileEntitiesForDashboard(groupIdList,PageRequest.of(page, 5));
+           if(search.equals("") && tagIdList.isEmpty()){
+               tileEntityList = tileDAO.getNewestTileEntitiesForDashboard(groupIdList,PageRequest.of(page, 5));
+               System.out.println("Tu leci opcja pierwsza----------------new---------");
+           }else if(!tagIdList.isEmpty()){
+               int listLength = tagIdList.size();
+               tileEntityList = tileDAO.getNewestTileEntitiesForDashboardWithTags(groupIdList,tagIdList,listLength,PageRequest.of(page, 5));
+               System.out.println("Tu leci opcja druga----------------new---------");
+           }else if(!search.isEmpty()){
+               tileEntityList = tileDAO.getNewestTileEntitiesForDashboardWithSearch(groupIdList,search,PageRequest.of(page, 5));
+               System.out.println("Tu leci opcja trzecia-----------new--------------");
+           }
        }else if(type.equals("hot")){
             LocalDateTime nowDate = LocalDateTime.now();
             LocalDateTime hotDate = nowDate.minusDays(30);
-            tileEntityList = tileDAO.getHottestTileEntitiesForDashboard(groupIdList,hotDate,nowDate,PageRequest.of(page, 5));
+
+           if(search.equals("") && tagIdList.isEmpty()){
+               tileEntityList = tileDAO.getHottestTileEntitiesForDashboard(groupIdList,hotDate,nowDate,PageRequest.of(page, 5));
+               System.out.println("Tu leci opcja pierwsza hot-------------------------");
+           }else if(!tagIdList.isEmpty()){
+               int listLength = tagIdList.size();
+               tileEntityList = tileDAO.getHottestTileEntitiesForDashboardWithTags(groupIdList,hotDate,nowDate,tagIdList,listLength,PageRequest.of(page, 5));
+               System.out.println("Tu leci opcja druga-------hot------------------");
+           }else if(!search.isEmpty()){
+               tileEntityList = tileDAO.getHottestTileEntitiesForDashboardWithSearch(groupIdList,hotDate,nowDate,search,PageRequest.of(page, 5));
+               System.out.println("Tu leci opcja trzecia--------hot-----------------");
+           }
        }else{
            throw new InvalidPathVariableExpection("Invalid search type, should be \"new\" or \"hot\".");
        }
        return mapToTileDTOList(tileEntityList);
    }
 
-   public List<TileDTO> getDashboardTileForLikes(Integer page,String term, String order){
-       List<TileEntity> tileEntityList = new ArrayList<>();
-       List<Long> groupIdList = scopeTileAcces();
-       LocalDateTime scopeDate = dateSetter(term);
-       LocalDateTime nowDate = LocalDateTime.now();
+    public List<TileDTO> getDashboardLikesTilesStringSearch(Integer page, String term, String order,String search){
+        return getDashboardTileForLikes(page,term,order,search,new ArrayList<>());
 
-       if(order.equals("asc")){
-           tileEntityList = tileDAO.getTileEntitiesByGroupIdListSortByLikeASC(groupIdList,scopeDate,nowDate,PageRequest.of(page, 3));
-       }else if(order.equals("desc")) {
-           tileEntityList = tileDAO.getTileEntitiesByGroupIdListSortByLikeDESC(groupIdList,scopeDate,nowDate,PageRequest.of(page, 3));
-       }else {
-           throw new InvalidPathVariableExpection("Invalid search type, should be \"asc\" or \"desc\".");
-       }
-       return  mapToTileDTOList(tileEntityList);
+    }
+    public List<TileDTO> getDashboardLikesTilesTagIdListSearch(Integer page, String term, String order, List<Long> tagIdList){
+        return getDashboardTileForLikes(page, term,order, "", tagIdList);
+    }
+    public List<TileDTO> getDashboardLikesTiles(Integer page, String term,String order){
+        return getDashboardTileForLikes(page, term, order,"",  new ArrayList<>());
 
-   }
+    }
+
+
+    public List<TileDTO> getDashboardTileForLikes(Integer page,String term, String order,String search,List<Long> tagIdList){
+        List<TileEntity> tileEntityList = new ArrayList<>();
+        List<Long> groupIdList = scopeTileAcces();
+        LocalDateTime scopeDate = dateSetter(term);
+        LocalDateTime nowDate = LocalDateTime.now();
+
+        if(order.equals("asc")){
+            if(search.equals("") && tagIdList.isEmpty()){
+                tileEntityList = tileDAO.getTileEntitiesByGroupIdListSortByLikeASC(groupIdList,scopeDate,nowDate,PageRequest.of(page, 5));
+                System.out.println("Tu leci opcja pierwsza----------------asc normal---------");
+            }else if(!tagIdList.isEmpty()){
+                int listLength = tagIdList.size();
+                tileEntityList = tileDAO.getTileEntitiesByGroupIdListAndTagIdListSortByLikeASC(groupIdList,scopeDate,nowDate,tagIdList,listLength,PageRequest.of(page, 5));
+                System.out.println("Tu leci opcja druga----------------asc tags---------");
+            }else if(!search.isEmpty()){
+                tileEntityList = tileDAO.getTileEntitiesByGroupIdListAndSearchSortByLikeASC(groupIdList,scopeDate,nowDate,search,PageRequest.of(page, 5));
+                System.out.println("Tu leci opcja trzecia-----------asc search--------------");
+            }
+        }else if(order.equals("desc")) {
+            if(search.equals("") && tagIdList.isEmpty()){
+                tileEntityList = tileDAO.getTileEntitiesByGroupIdListSortByLikeDESC(groupIdList,scopeDate,nowDate,PageRequest.of(page, 5));
+                System.out.println("Tu leci opcja pierwsza----------------desc normal---------");
+            }else if(!tagIdList.isEmpty()){
+                int listLength = tagIdList.size();
+                tileEntityList = tileDAO.getTileEntitiesByGroupIdListAndTagIdListSortByLikeDESC(groupIdList,scopeDate,nowDate,tagIdList,listLength,PageRequest.of(page, 5));
+                System.out.println("Tu leci opcja druga----------------desc tags---------");
+            }else if(!search.isEmpty()){
+                tileEntityList = tileDAO.getTileEntitiesByGroupIdListAndSearchSortByLikeDESC(groupIdList,scopeDate,nowDate,search,PageRequest.of(page, 5));
+                System.out.println("Tu leci opcja trzecia-----------desc search--------------");
+            }
+        }else {
+            throw new InvalidPathVariableExpection("Invalid search type, should be \"asc\" or \"desc\".");
+        }
+        return  mapToTileDTOList(tileEntityList);
+
+    }
+
+
+//   public List<TileDTO> getDashboardTileForLikes(Integer page,String term, String order){
+//       List<TileEntity> tileEntityList = new ArrayList<>();
+//       List<Long> groupIdList = scopeTileAcces();
+//       LocalDateTime scopeDate = dateSetter(term);
+//       LocalDateTime nowDate = LocalDateTime.now();
+//
+//       if(order.equals("asc")){
+//           tileEntityList = tileDAO.getTileEntitiesByGroupIdListSortByLikeASC(groupIdList,scopeDate,nowDate,PageRequest.of(page, 3));
+//       }else if(order.equals("desc")) {
+//           tileEntityList = tileDAO.getTileEntitiesByGroupIdListSortByLikeDESC(groupIdList,scopeDate,nowDate,PageRequest.of(page, 3));
+//       }else {
+//           throw new InvalidPathVariableExpection("Invalid search type, should be \"asc\" or \"desc\".");
+//       }
+//       return  mapToTileDTOList(tileEntityList);
+//
+//   }
+
+
+//------------------------------------------------------------------------- dla like
 
 
 

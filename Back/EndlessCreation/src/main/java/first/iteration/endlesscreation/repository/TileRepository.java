@@ -66,14 +66,38 @@ public interface TileRepository extends JpaRepository<TileEntity, Long> {
     @Query(value ="SELECT ISNULL((SELECT 1 FROM save_tile WHERE tile_id = :tileId AND app_user_id IN (SELECT app_user_id FROM app_user WHERE app_user_name = :userName)),0)",nativeQuery = true)
     int isUserSavedTile(@Param("tileId") Long tileId,@Param("userName") String userName);
 
+    //----------------------------------------------------------------------------- likes start
+
     @Query(value="SELECT t.tile_id, t.tile_title, t.tile_data,t.owner_user_id, t.group_id, t.created_at, t.updated_at\n" +
             "FROM tile t WHERE t.group_id IN :groupIdList AND t.created_at BETWEEN :endDate AND :nowDate ORDER BY (SELECT COUNT(*) FROM tile_like WHERE tile_id = t.tile_id) DESC",nativeQuery = true)
     Optional<List<TileEntity>> getTileEntitiesByGroupIdListSortByLikeDESC(@Param("groupIdList") List<Long> groupIdList,LocalDateTime endDate,LocalDateTime nowDate, Pageable pageable);
+
+    @Query(value="SELECT t.tile_id, t.tile_title, t.tile_data,t.owner_user_id, t.group_id, t.created_at, t.updated_at\n" +
+            "FROM tile t WHERE t.group_id IN :groupIdList AND t.created_at BETWEEN :endDate AND :nowDate\n" +
+            "AND t.tile_id IN ( SELECT tile_id FROM tile_tag WHERE tag_id IN :tagIdList GROUP BY tile_id HAVING COUNT(tile_id) = :listLength)\n" +
+            " ORDER BY (SELECT COUNT(*) FROM tile_like WHERE tile_id = t.tile_id) DESC",nativeQuery = true)
+    Optional<List<TileEntity>> getTileEntitiesByGroupIdListAndTagIdListSortByLikeDESC(@Param("groupIdList") List<Long> groupIdList,LocalDateTime endDate,LocalDateTime nowDate,List<Long> tagIdList,int listLength, Pageable pageable);
+
+    @Query(value="SELECT t.tile_id, t.tile_title, t.tile_data,t.owner_user_id, t.group_id, t.created_at, t.updated_at\n" +
+            "FROM tile t WHERE t.group_id IN :groupIdList AND t.created_at BETWEEN :endDate AND :nowDate AND t.tile_title LIKE %:search% ORDER BY (SELECT COUNT(*) FROM tile_like WHERE tile_id = t.tile_id) DESC",nativeQuery = true)
+    Optional<List<TileEntity>> getTileEntitiesByGroupIdListAndSearchSortByLikeDESC(@Param("groupIdList") List<Long> groupIdList,LocalDateTime endDate,LocalDateTime nowDate,String search, Pageable pageable);
 
 
     @Query(value="SELECT  t.tile_id, t.tile_title, t.tile_data,t.owner_user_id, t.group_id, t.created_at, t.updated_at\n" +
             "FROM tile t WHERE t.group_id IN :groupIdList AND t.created_at BETWEEN :endDate AND :nowDate ORDER BY (SELECT COUNT(*) FROM tile_like WHERE tile_id = t.tile_id) ASC",nativeQuery = true)
     Optional<List<TileEntity>> getTileEntitiesByGroupIdListSortByLikeASC(@Param("groupIdList") List<Long> groupIdList, LocalDateTime endDate,LocalDateTime nowDate,  Pageable pageable);
+
+    @Query(value="SELECT  t.tile_id, t.tile_title, t.tile_data,t.owner_user_id, t.group_id, t.created_at, t.updated_at\n" +
+            "FROM tile t WHERE t.group_id IN :groupIdList AND t.created_at BETWEEN :endDate AND :nowDate\n" +
+            "AND t.tile_id IN ( SELECT tile_id FROM tile_tag WHERE tag_id IN :tagIdList GROUP BY tile_id HAVING COUNT(tile_id) = :listLength)\n" +
+            " ORDER BY (SELECT COUNT(*) FROM tile_like WHERE tile_id = t.tile_id) ASC",nativeQuery = true)
+    Optional<List<TileEntity>> getTileEntitiesByGroupIdListAndTagIdListSortByLikeASC(@Param("groupIdList") List<Long> groupIdList, LocalDateTime endDate,LocalDateTime nowDate, List<Long> tagIdList,int listLength, Pageable pageable);
+
+    @Query(value="SELECT  t.tile_id, t.tile_title, t.tile_data,t.owner_user_id, t.group_id, t.created_at, t.updated_at\n" +
+            "FROM tile t WHERE t.group_id IN :groupIdList AND t.created_at BETWEEN :endDate AND :nowDate AND t.tile_title LIKE %:search% ORDER BY (SELECT COUNT(*) FROM tile_like WHERE tile_id = t.tile_id) ASC",nativeQuery = true)
+    Optional<List<TileEntity>> getTileEntitiesByGroupIdListAndSearchSortByLikeASC(@Param("groupIdList") List<Long> groupIdList, LocalDateTime endDate,LocalDateTime nowDate, String search, Pageable pageable);
+
+    //----------------------------------------------------------------------------- likes end
 
     @Modifying
     @Query(value ="DELETE FROM save_tile WHERE tile_id = :tileId AND app_user_id IN (SELECT app_user_id FROM app_user WHERE app_user_name = :userName)",nativeQuery = true)
@@ -89,9 +113,28 @@ public interface TileRepository extends JpaRepository<TileEntity, Long> {
     @Query(value="SELECT * FROM tile WHERE group_id IN :groupIdList ORDER BY created_at DESC",nativeQuery = true)
     Optional<List<TileEntity>> getNewestTileEntitiesForDashboard(List<Long> groupIdList,Pageable pageable);
 
+    @Query(value="SELECT * FROM tile W WHERE tile_title LIKE %:search% AND group_id IN :groupIdList ORDER BY created_at DESC",nativeQuery = true)
+    Optional<List<TileEntity>> getNewestTileEntitiesForDashboardWithSearch(List<Long> groupIdList,String search,Pageable pageable);
+//
+
+    @Query(value="SELECT * FROM tile WHERE group_id IN :groupIdList AND tile_id IN ( SELECT tile_id FROM tile_tag WHERE tag_id IN :tagIdList\n" +
+            " GROUP BY tile_id HAVING COUNT(tile_id) = :listLength) ORDER BY created_at DESC",nativeQuery = true)
+    Optional<List<TileEntity>> getNewestTileEntitiesForDashboardWithTagIdList(List<Long> groupIdList,List<Long> tagIdList,int listLength,Pageable pageable);
+
     @Query(value="SELECT  t.tile_id, t.tile_title, t.tile_data,t.owner_user_id, t.group_id, t.created_at, t.updated_at\n" +
             "     FROM tile t WHERE t.group_id IN :groupIdList AND t.created_at  BETWEEN :endDate AND :nowDate\n" +
             "\t ORDER BY (SELECT COUNT(*) FROM tile_like WHERE tile_id = t.tile_id) DESC, (SELECT COUNT(*) FROM comment_tile WHERE tile_id = t.tile_id) DESC",nativeQuery = true)
     Optional<List<TileEntity>> getHottestTileEntitiesForDashboard(List<Long> groupIdList,LocalDateTime endDate,LocalDateTime nowDate,Pageable pageable);
+
+    @Query(value="SELECT  t.tile_id, t.tile_title, t.tile_data,t.owner_user_id, t.group_id, t.created_at, t.updated_at\n" +
+            "     FROM tile t WHERE t.group_id IN :groupIdList AND tile_title LIKE %:search% AND t.created_at  BETWEEN :endDate AND :nowDate\n" +
+            "\t ORDER BY (SELECT COUNT(*) FROM tile_like WHERE tile_id = t.tile_id) DESC, (SELECT COUNT(*) FROM comment_tile WHERE tile_id = t.tile_id) DESC",nativeQuery = true)
+    Optional<List<TileEntity>> getHottestTileEntitiesForDashboardWithSearch(List<Long> groupIdList,LocalDateTime endDate,LocalDateTime nowDate,String search,Pageable pageable);
+//
+    @Query(value="SELECT  t.tile_id, t.tile_title, t.tile_data,t.owner_user_id, t.group_id, t.created_at, t.updated_at\n" +
+            "     FROM tile t WHERE t.group_id IN :groupIdList AND t.created_at  BETWEEN :endDate AND :nowDate\n" +
+            "AND tile_id IN ( SELECT tile_id FROM tile_tag WHERE tag_id IN :tagIdList GROUP BY tile_id HAVING COUNT(tile_id) = :listLength)\n"+
+            "\t ORDER BY (SELECT COUNT(*) FROM tile_like WHERE tile_id = t.tile_id) DESC, (SELECT COUNT(*) FROM comment_tile WHERE tile_id = t.tile_id) DESC",nativeQuery = true)
+    Optional<List<TileEntity>> getHottestTileEntitiesForDashboardWithTags(List<Long> groupIdList,LocalDateTime endDate,LocalDateTime nowDate,List<Long> tagIdList,int listLength,Pageable pageable);
 
 }

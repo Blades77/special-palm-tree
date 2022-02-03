@@ -106,9 +106,21 @@ public class TileDAO {
     public boolean isUserSavedTile(Long tileId,String userName){
         return tileRepository.isUserSavedTile(tileId,userName) == 1;
     }
+    //likes --------------------------- start
 
     public List<TileEntity> getTileEntitiesByGroupIdListSortByLikeDESC(List<Long> groupIdList,LocalDateTime endDate,LocalDateTime nowDate,Pageable pageable){
         return tileRepository.getTileEntitiesByGroupIdListSortByLikeDESC(groupIdList,endDate,nowDate,pageable)
+                .orElseThrow(() -> new ResourceNotFoundException("Cannot find  any tile in provided group"));
+    }
+
+    public List<TileEntity> getTileEntitiesByGroupIdListAndSearchSortByLikeDESC(List<Long> groupIdList,LocalDateTime endDate,LocalDateTime nowDate,String search,Pageable pageable){
+        return tileRepository.getTileEntitiesByGroupIdListAndSearchSortByLikeDESC(groupIdList,endDate,nowDate,search,pageable)
+                .orElseThrow(() -> new ResourceNotFoundException("Cannot find  any tile in provided group"));
+    }
+
+
+    public List<TileEntity> getTileEntitiesByGroupIdListAndTagIdListSortByLikeDESC(List<Long> groupIdList,LocalDateTime endDate,LocalDateTime nowDate,List<Long> tagIdList, Integer listLength,Pageable pageable){
+        return tileRepository.getTileEntitiesByGroupIdListAndTagIdListSortByLikeDESC(groupIdList,endDate,nowDate,tagIdList,listLength,pageable)
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot find  any tile in provided group"));
     }
 
@@ -117,13 +129,44 @@ public class TileDAO {
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot find  any tile in provided group"));
     }
 
+    public List<TileEntity> getTileEntitiesByGroupIdListAndTagIdListSortByLikeASC(List<Long> groupIdList,LocalDateTime endDate,LocalDateTime nowDate,List<Long> tagIdList, Integer listLength,Pageable pageable){
+        return tileRepository.getTileEntitiesByGroupIdListAndTagIdListSortByLikeASC(groupIdList,endDate,nowDate,tagIdList,listLength,pageable)
+                .orElseThrow(() -> new ResourceNotFoundException("Cannot find  any tile in provided group"));
+    }
+
+    public List<TileEntity> getTileEntitiesByGroupIdListAndSearchSortByLikeASC(List<Long> groupIdList,LocalDateTime endDate,LocalDateTime nowDate,String search,Pageable pageable){
+        return tileRepository.getTileEntitiesByGroupIdListAndSearchSortByLikeASC(groupIdList,endDate,nowDate,search,pageable)
+                .orElseThrow(() -> new ResourceNotFoundException("Cannot find  any tile in provided group"));
+    }
+    //likes --------------------------- end
+
     public List<TileEntity> getNewestTileEntitiesForDashboard(List<Long> groupIdList,Pageable pageable){
         return  tileRepository.getNewestTileEntitiesForDashboard(groupIdList,pageable)
                 .orElseThrow(() -> new ResourceNotFoundException("Something went wrong"));
     }
 
+    public List<TileEntity> getNewestTileEntitiesForDashboardWithSearch(List<Long> groupIdList,String search,Pageable pageable){
+        return  tileRepository.getNewestTileEntitiesForDashboardWithSearch(groupIdList,search,pageable)
+                .orElseThrow(() -> new ResourceNotFoundException("Something went wrong"));
+    }
+
+    public List<TileEntity> getNewestTileEntitiesForDashboardWithTags(List<Long> groupIdList,List<Long> tagIdList, int listLength,Pageable pageable){
+        return  tileRepository.getNewestTileEntitiesForDashboardWithTagIdList(groupIdList,tagIdList,listLength,pageable)
+                .orElseThrow(() -> new ResourceNotFoundException("Something went wrong"));
+    }
+
     public List<TileEntity> getHottestTileEntitiesForDashboard(List<Long> groupIdList,LocalDateTime endDate,LocalDateTime nowDate,Pageable pageable){
         return  tileRepository.getHottestTileEntitiesForDashboard(groupIdList,endDate,nowDate,pageable)
+                .orElseThrow(() -> new ResourceNotFoundException("Something went wrong"));
+    }
+
+    public List<TileEntity> getHottestTileEntitiesForDashboardWithSearch(List<Long> groupIdList,LocalDateTime endDate,LocalDateTime nowDate,String search,Pageable pageable){
+        return  tileRepository.getHottestTileEntitiesForDashboardWithSearch(groupIdList,endDate,nowDate,search,pageable)
+                .orElseThrow(() -> new ResourceNotFoundException("Something went wrong"));
+    }
+
+    public List<TileEntity> getHottestTileEntitiesForDashboardWithTags(List<Long> groupIdList,LocalDateTime endDate,LocalDateTime nowDate,List<Long> tagIdList, int listLength,Pageable pageable){
+        return  tileRepository.getHottestTileEntitiesForDashboardWithTags(groupIdList,endDate,nowDate,tagIdList,listLength,pageable)
                 .orElseThrow(() -> new ResourceNotFoundException("Something went wrong"));
     }
 

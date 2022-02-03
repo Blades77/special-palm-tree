@@ -7,7 +7,6 @@ import first.iteration.endlesscreation.dto.TileDTO;
 import first.iteration.endlesscreation.dto.create.TileCreateDTO;
 import first.iteration.endlesscreation.configuration.SpringFoxConfig;
 import io.swagger.annotations.ApiParam;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import io.swagger.annotations.Api;
@@ -156,20 +155,70 @@ public class TileController {
 
 
     @ApiOperation(value="Return list of tiles for dashboard")
-    @GetMapping("/tile/dashboard/{type}/{page}")
-    private List<TileDTO> getDashboardNewestHottestTiles(@ApiParam(value = "page", example = "0", required = true) @PathVariable Integer page,
-                                                         @ApiParam(value = "Param new or hot", example = "new", required = true) @PathVariable String type){
-        return tileService.getDashboardNewestHottestTiles(page,type);
+    @GetMapping("/tile/dashboard/{type}/{page}/s/{search}")
+    private List<TileDTO> getDashboardNewestHottestTilesStringSearch(@ApiParam(value = "page", example = "0", required = true) @PathVariable Integer page,
+                                                         @ApiParam(value = "Param new or hot", example = "new", required = true) @PathVariable String type,
+                                                         @ApiParam(value="  string for search", example = "string")@PathVariable String search){
+
+        return tileService.getDashboardTilesStringSearch("nh",page,type,search);
     }
 
+    @ApiOperation(value="Return list of tiles for dashboard")
+    @GetMapping( "/tile/dashboard/{type}/{page}/t/{tagIdList}")
+    private List<TileDTO> getDashboardNewestHottestTilesListSearch(@ApiParam(value = "page", example = "0", required = true) @PathVariable Integer page,
+                                                         @ApiParam(value = "Param new or hot", example = "new", required = true) @PathVariable String type,
+                                                         @ApiParam(value = "List of ids of tags", example = "1034,1035") @PathVariable List<Long> tagIdList){
+
+        return tileService.getDashboardTilesTagIdListSearch("nh",page,type, tagIdList);
+    }
+
+    @ApiOperation(value="Return list of tiles for dashboard")
+    @GetMapping( "/tile/dashboard/{type}/{page}/")
+    private List<TileDTO> getDashboardNewestHottestTilesList(@ApiParam(value = "page", example = "0", required = true) @PathVariable Integer page,
+                                                                   @ApiParam(value = "Param new or hot", example = "new", required = true) @PathVariable String type){
+
+        return tileService.getDashboardTiles("nh",page,type);
+    }
+
+// likes -------------------------------------------------------------
     @ApiOperation(value="Return list of tiles for dashboard by likes")
     @GetMapping("/tile/dashboard/likes/{term}/{order}/{page}")
-    private List<TileDTO> getDashboardNewestHottestTiles(@ApiParam(value = "page", example = "0", required = true) @PathVariable Integer page,
+    private List<TileDTO> getDashboardTilesLikes(@ApiParam(value = "page", example = "0", required = true) @PathVariable Integer page,
                                                          @ApiParam(value = "sorting by: asc : desc", example = "asc", required = true) @PathVariable String order,
                                                          @ApiParam(value = "term of sorting", example = "allTime", required = true) @PathVariable String term) {
 
-            return tileService.getDashboardTileForLikes(page, term, order);
+            return tileService.getDashboardLikesTiles(page, term, order);
 
     }
+
+    @ApiOperation(value="Return list of tiles for dashboard by likes")
+    @GetMapping("/tile/dashboard/likes/{term}/{order}/{page}/s/{search}")
+    private List<TileDTO> getDashboardTilesLikesSearch(@ApiParam(value = "page", example = "0", required = true) @PathVariable Integer page,
+                                                         @ApiParam(value = "sorting by: asc : desc", example = "asc", required = true) @PathVariable String order,
+                                                         @ApiParam(value = "term of sorting", example = "allTime", required = true) @PathVariable String term,
+                                                         @ApiParam(value = "search", example = "allTime", required = true) @PathVariable String search) {
+
+        return tileService.getDashboardLikesTilesStringSearch(page, term, order,search);
+
+    }
+
+    @ApiOperation(value="Return list of tiles for dashboard by likes")
+    @GetMapping("/tile/dashboard/likes/{term}/{order}/{page}/t/{tagIdList}")
+    private List<TileDTO> getDashboardTilesLikesTagIdList(@ApiParam(value = "page", example = "0", required = true) @PathVariable Integer page,
+                                                         @ApiParam(value = "sorting by: asc : desc", example = "asc", required = true) @PathVariable String order,
+                                                         @ApiParam(value = "term of sorting", example = "allTime", required = true) @PathVariable String term,
+                                                          @ApiParam(value = "List of ids of tags", example = "1034,1035") @PathVariable List<Long> tagIdList) {
+
+        return tileService.getDashboardLikesTilesTagIdListSearch(page, term, order,tagIdList);
+
+    }
+
+//           if(search.isEmpty()){
+//        search = Optional.of("default");
+//    }
+//        if(tagIdList.isPresent()){
+//        tagIdList = Optional.of(new ArrayList<>());
+//
+//    }
 
 }
