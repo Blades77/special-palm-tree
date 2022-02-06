@@ -18,6 +18,9 @@ export class GroupService {
     return this.http.get<GroupVIEW>(this.baseUrl+'groups');
   }
 
+  getGroupsForUser(): Observable<GroupVIEW>{
+    return this.http.get<GroupVIEW>(this.baseUrl+'groups/user');
+  }
   
 
 }

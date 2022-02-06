@@ -3,6 +3,9 @@ import { AuthenticationService } from 'src/app/service/authentication-service/au
 import { StrintgSearch } from 'src/app/model/string-search';
 import { RouterEventsService } from 'src/app/service/router-events-service/router-events.service';
 import { RouteState } from 'src/app/model/routeState';
+import { GroupService } from 'src/app/service/group-service/group.service';
+import { GroupVIEW } from 'src/app/model/group-view';
+import { ErrorHandlerService } from 'src/app/service/error-handler-service/error-handler.service';
 
 @Component({
   selector: 'app-toolbar',
@@ -15,8 +18,11 @@ export class ToolbarComponent implements OnInit {
   isLogged!: boolean;
   loggedUser!: String;
   routeState!: RouteState;
+  groups!: GroupVIEW[];
   constructor(private authService: AuthenticationService,
-              private routerEventService: RouterEventsService
+              private routerEventService: RouterEventsService,
+              private groupService: GroupService,
+              private errorHandler: ErrorHandlerService
               ) { }
 
   ngOnInit(): void {
@@ -27,6 +33,19 @@ export class ToolbarComponent implements OnInit {
 
   logoutUser(): void {
     this.authService.logout().subscribe();
+  }
+
+  getGroupsForUser(){
+    this.groupService.getGroupsForUser()
+    .subscribe(
+      (response: any) => {
+        this.groups = response;
+        console.log(this.groups);
+      },
+      (error) =>{;
+        this.errorHandler.handleError(error);
+      }
+    )
   }
 
 }

@@ -3,6 +3,7 @@ package first.iteration.endlesscreation.service;
 
 import first.iteration.endlesscreation.Model.TileEntity;
 import first.iteration.endlesscreation.Model.UserEntity;
+import first.iteration.endlesscreation.configuration.LoggedUserGetter;
 import first.iteration.endlesscreation.dao.GroupDataDAO;
 import first.iteration.endlesscreation.dto.GroupDataDTO;
 import first.iteration.endlesscreation.exception.ResourceNotFoundException;
@@ -53,6 +54,17 @@ public class GroupDataService {
         return groupDataDAO.checkIfUserCanOperateTile(userId,groupId);
     }
 
+    public List<GroupDataDTO> getGroupsThatUserIsPartOf(){
+        String userName = LoggedUserGetter.getUsser();
+        List<Long> groupIdList = getUserGroupsIdList(userName);
+        List<GroupDataEntity> groupDataEntityList = groupDataDAO.getGroupsForGroupIdLIst(groupIdList);
+        List<GroupDataDTO> groupDataDTOList = new ArrayList<>();
+        for(GroupDataEntity groupDataEntity : groupDataEntityList){
+            String imageLink = generateImageLink(groupDataEntity.getImageLink());
+            groupDataDTOList.add(GroupDataMapper.mapToGroupDataDTO(groupDataEntity,imageLink));
+        }
+        return groupDataDTOList;
+    }
 
     public List<Long> getPublicGroupsIdList(){
         return groupDataDAO.getPublicGroupsIdList();

@@ -65,7 +65,8 @@
     font-size: 1.2em;
     font-weight: bolder }
   
-  .group-dropdown { grid-area: group-dropdown; }
+  .group-dropdown { grid-area: group-dropdown;
+   }
   
   .search-bar { grid-area: search-bar; }
   
@@ -110,5 +111,25 @@
   .active{
     background-color: crimson;
   }
+  .dropdown-li-style{
+    color: black;
+  }
+  .nav-link{
+    color: black;
+    padding: 10px;
+  }
+  .top-utile-active{
+    background-color: green;
+      cursor: pointer;
+      border-radius: 0.3em;
+  }
+  
  
-
+.spacer{
+  width: 10em;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.3em;
+  color: gray;
+  padding-top: 0.25em;
+}

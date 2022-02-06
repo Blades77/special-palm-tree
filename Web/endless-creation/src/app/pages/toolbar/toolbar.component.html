@@ -61,18 +61,28 @@
     <div class="book book-tiles float" routerLink="/book" [ngClass]="{'active':routeState.isBooksActive}">Books</div>
   </div>
   <div class="group-dropdown float">
-    <div class="row">
-      <div class="col">
-        <div ngbDropdown class="d-inline-block">
-          <button class="btn btn-primary" id="dropdownBasic1" ngbDropdownToggle>Toggle dropdown</button>
-          <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-            <button ngbDropdownItem>Action - 1</button>
-            <button ngbDropdownItem>Another Action</button>
-            <button ngbDropdownItem>Something else is here</button>
+
+    <ng-container *ngIf="isLogged">
+    <div class="top-utile top-utile-scope" (click)="getGroupsForUser()">
+      <ul class="navbar-nav ml-auto dropdown-li-style">
+        <li class="nav-item" ngbDropdown display="dynamic" placement="bottom-left">
+          <a class="nav-link" tabindex="0" ngbDropdownToggle id="navbarDropdown3" role="button">
+              Group Dropdown
+          </a>
+          <div ngbDropdownMenu aria-labelledby="navbarDropdown3" class="dropdown-menu" *ngFor="let group of groups">
+            <div ngbDropdownItem  >{{group.groupName}}</div>
+            <!-- <div ngbDropdownItem  >Today</div>
+            <div ngbDropdownItem  >This week</div>
+            <div ngbDropdownItem  >This month</div>
+            <div ngbDropdownItem  >This year</div> -->
           </div>
-        </div>
-      </div>
-      </div>
+        </li>
+      </ul>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="!isLogged">
+    <div class="spacer">Group</div>
+  </ng-container>
   </div>
   <div class="search-bar float">        
 

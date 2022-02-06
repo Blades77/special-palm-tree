@@ -33,6 +33,13 @@ public class GroupController {
         return groupDataService.getGroups();
     }
 
+    @ApiOperation(value ="Return groups containing user")
+    @GetMapping("groups/user")
+    private List<GroupDataDTO> getGroupsForUser() {
+
+        return groupDataService.getGroupsThatUserIsPartOf();
+    }
+
 //    @ApiOperation(value ="Return groups by search parametr")
 //    @GetMapping("groups/{search}")
 //    private List<GroupDataDTO> getGroupsByParametr(@ApiParam(value = "Id of tile", example = "1", required = true) @PathVariable String search) {
