@@ -173,7 +173,7 @@ public class TileController {
     }
 
     @ApiOperation(value="Return list of tiles for dashboard")
-    @GetMapping( "/tile/dashboard/{type}/{page}/")
+    @GetMapping( "/tile/dashboard/{type}/{page}")
     private List<TileDTO> getDashboardNewestHottestTilesList(@ApiParam(value = "page", example = "0", required = true) @PathVariable Integer page,
                                                                    @ApiParam(value = "Param new or hot", example = "new", required = true) @PathVariable String type){
 

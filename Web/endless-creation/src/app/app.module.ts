@@ -17,6 +17,8 @@ import { LinkyModule } from 'ngx-linky';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { DotsComponent } from './components/dots/dots.component';
 import { TooltipCustomClassComponent } from './components/tooltip-custom-class/tooltip-custom-class.component';
+import { FormsModule } from '@angular/forms';
+import { BookComponent } from './pages/book/book.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +32,7 @@ import { TooltipCustomClassComponent } from './components/tooltip-custom-class/t
     TimeaPassedPipe,
     DotsComponent,
     TooltipCustomClassComponent,
+    BookComponent,
   ],
   imports: [
     BrowserModule,
@@ -39,6 +42,7 @@ import { TooltipCustomClassComponent } from './components/tooltip-custom-class/t
     NgbModule,
     LinkyModule,
     InfiniteScrollModule,
+    FormsModule,
     
   ],
   providers: [

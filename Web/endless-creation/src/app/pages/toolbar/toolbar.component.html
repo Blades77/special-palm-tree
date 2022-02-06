@@ -1,4 +1,4 @@
-<div class="toolbar">
+<!-- <div class="toolbar">
     <div class="left dropdown">
     <div class="row">
         <div class="col">
@@ -14,6 +14,12 @@
         </div>
     </div>
         <div class="spacer"></div>
+        <div class="string-search-input">
+          <div class="string-search-blocks">Search:</div>
+          <input class="string-search-blocks" type="text" name="stringSearch" [(ngModel)]="stringSearch">
+          {{stringSearch}}
+        </div>
+        <div class="tag-search-input">tag</div>
         <div class="right-dropdown">
             <ng-container *ngIf="!isLogged">
                 <button class="btn btn-primary" routerLink="/login">Login</button>
@@ -39,6 +45,68 @@
                   </div>
                 </div>
                 </div>
+</div> -->
+
+
+
+
+<div class="toolbar">
+<!-- <div class="container"> -->
+  <div class="logo float" routerLink="/dashboard">
+
+    <img src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/book-logo-1.svg?alt=media&token=b7d965a8-6c53-4759-88e4-242db400e0d5">Endless Creation
+  </div>
+  <div class="switch float ">
+    <div class="tiles book-tiles float"routerLink="/dashboard"  [ngClass]="{'active':routeState.isTilesActive}">Tiles</div>
+    <div class="book book-tiles float" routerLink="/book" [ngClass]="{'active':routeState.isBooksActive}">Books</div>
+  </div>
+  <div class="group-dropdown float">
+    <div class="row">
+      <div class="col">
+        <div ngbDropdown class="d-inline-block">
+          <button class="btn btn-primary" id="dropdownBasic1" ngbDropdownToggle>Toggle dropdown</button>
+          <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+            <button ngbDropdownItem>Action - 1</button>
+            <button ngbDropdownItem>Another Action</button>
+            <button ngbDropdownItem>Something else is here</button>
+          </div>
+        </div>
+      </div>
+      </div>
+  </div>
+  <div class="search-bar float">        
+
+    <div class="string-search-blocks">Search:</div>
+    <input class="string-search-blocks" type="text" name="stringSearch" [(ngModel)]="stringSearch">
+    {{stringSearch}}
+  </div>
+  <div class="tags-bar float">tags</div>
+
+  <div class="login-settings float-right">
+    <ng-container *ngIf="!isLogged">
+      <button class="btn btn-primary" routerLink="/login">Login</button>
+  </ng-container>
+  <ng-container *ngIf="isLogged">
+      <button class="btn btn-primary btn-right disabled-button">{{loggedUser}}</button>
+    </ng-container>
+
+  <div class="row">
+      <div class="col">
+          
+        <div ngbDropdown class="d-inline-block">
+          <button class="btn btn-primary btn-right" id="dropdownBasic1" ngbDropdownToggle>Drop downo</button>
+          <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+            <button ngbDropdownItem>Action - 1</button>
+            <button ngbDropdownItem>Another Action</button>
+            <button ngbDropdownItem (click)="logoutUser()">Something else is here</button>
+            <ng-container *ngIf="isLogged">
+              <button ngbDropdownItem (click)="logoutUser()">Logout</button>
+            </ng-container>
+
+          </div>
+        </div>
+      </div>
+      </div>
+  </div>
+<!-- </div> -->
 </div>
-
-

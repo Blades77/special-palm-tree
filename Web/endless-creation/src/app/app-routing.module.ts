@@ -5,6 +5,7 @@ import { TileDetailsComponent } from './pages/tile-details/tile-details.componen
 import { GroupComponent} from './pages/group/group.component';
 import { NoPageComponent } from './pages/no-page/no-page.component';
 import { LoginComponent } from './pages/login/login.component';
+import { BookComponent } from './pages/book/book.component';
 
 
 const routes: Routes = [
@@ -13,6 +14,7 @@ const routes: Routes = [
   { path: 'group/:id', component: GroupComponent },
   { path: 'tile-detail/:id', component: TileDetailsComponent },
   { path: 'login', component: LoginComponent},
+  { path: 'book', component: BookComponent},
   // { path: '404', component: NoPageComponent},
   { path: 'login', component: LoginComponent},
   // { path: '**', component: NoPageComponent},
