@@ -1,14 +1,26 @@
 .container {  display: grid;
   width: 60.375em;
   grid-template-columns: 40em 19.375em;
-  grid-template-rows: 1fr;
+  // grid-template-rows: 1fr 1fr;
   gap: 0em 1em;
   grid-auto-flow: row;
   margin-top: 3em;
   padding-left: auto;
   padding-right: auto;
   grid-template-areas:
+    "search-info search-info"
     "main-area right-area";
+}
+
+.search-info{ grid-area: search-info;
+  background-color: #eef0ed;
+  border-radius: 5px;
+  border: 2px solid gray; 
+  height:2em ;
+  margin-bottom: 0.7em;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.3em;
 }
 
 // [ngClass]="{'tile-no-tags':tile.tags.size === 0}"

@@ -6,6 +6,9 @@ import { RouteState } from 'src/app/model/routeState';
 import { GroupService } from 'src/app/service/group-service/group.service';
 import { GroupVIEW } from 'src/app/model/group-view';
 import { ErrorHandlerService } from 'src/app/service/error-handler-service/error-handler.service';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { SearchService } from 'src/app/service/search-service/search.service';
+import { Search } from 'src/app/model/search';
 
 @Component({
   selector: 'app-toolbar',
@@ -19,16 +22,59 @@ export class ToolbarComponent implements OnInit {
   loggedUser!: String;
   routeState!: RouteState;
   groups!: GroupVIEW[];
+
+  searchParams = {
+    isStringSearchActive: false,
+    isTagSearchActive: false,
+    scope: "Everywhere",
+    searchString: "",
+    searchTags: [1]
+  };
   constructor(private authService: AuthenticationService,
               private routerEventService: RouterEventsService,
               private groupService: GroupService,
-              private errorHandler: ErrorHandlerService
+              private errorHandler: ErrorHandlerService,
+              private searchService: SearchService
               ) { }
 
   ngOnInit(): void {
     this.authService.isLoggedIn().subscribe(isLogged => this.isLogged = isLogged);
     this.authService.loggedUser().subscribe(loggedUser => this.loggedUser = loggedUser);
     this.routerEventService.getRouteStatus().subscribe(routeState => this.routeState = routeState);
+    this.searchService.getSearchBoolean().subscribe(isClearSearch =>{
+      if(isClearSearch){
+        this.clearSearchParams();
+        this.stringSearch = "";
+        console.log("działaaaa")
+      }
+      // this.searchService.clearSearchFalse();
+    })
+  }
+
+  clearSearchParams(){
+    this.searchParams.isStringSearchActive = false,
+    this.searchParams.isTagSearchActive = false,
+    this.searchParams.scope ="Everywhere",
+    this.searchParams.searchString = "",
+    this.searchParams.searchTags = [1]
+  }
+
+  changeStringSearch(){
+    this.searchParams.isStringSearchActive = true;
+    this.searchParams.searchString = this.stringSearch;
+    this.searchService.setSearch(this.searchParams);
+  
+  }
+
+  
+
+  changeScope(){
+    if(this.searchParams.scope == "Everywhere"){
+      this.searchParams.scope = "This Group";
+    }else{
+      this.searchParams.scope = "Everywhere";
+    }
+    this.searchService.setSearch(this.searchParams);
   }
 
   logoutUser(): void {

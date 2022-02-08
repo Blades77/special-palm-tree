@@ -441,13 +441,19 @@ public class TileService {
 //        }
 //    }
 
-    private List<Long> scopeTileAcces(){
+    private List<Long> scopeTileAcces(Integer groupsType){
         List<Long> groupIdList = new ArrayList<>();
         String userName = LoggedUserGetter.getUsser();
         if(userName.equals("anonymousUser")){
             groupIdList = groupDataService.getPublicGroupsIdList();
         }else{
-            groupIdList = groupDataService.getUserGroupsIdList(userName);
+            if(groupsType == 1)
+            {
+                groupIdList = groupDataService.getUserGroupsIdList(userName);
+            }else{
+                groupIdList = groupDataService.getPublicAndUserGroupsIdList(userName);
+            }
+
         }
         return  groupIdList;
     }
@@ -474,17 +480,21 @@ public class TileService {
 
    public List<TileDTO> getDashboardNewestHottestTiles(Integer page,String type,String search,List<Long> tagIdList){
        List<TileEntity> tileEntityList = new ArrayList<>();
-       List<Long> groupIdList = scopeTileAcces();
+       List<Long> groupIdList = new ArrayList<>();
+
 
        if(type.equals("new")){
            if(search.equals("") && tagIdList.isEmpty()){
+               groupIdList = scopeTileAcces(1);
                tileEntityList = tileDAO.getNewestTileEntitiesForDashboard(groupIdList,PageRequest.of(page, 5));
                System.out.println("Tu leci opcja pierwsza----------------new---------");
            }else if(!tagIdList.isEmpty()){
                int listLength = tagIdList.size();
+               groupIdList = scopeTileAcces(0);
                tileEntityList = tileDAO.getNewestTileEntitiesForDashboardWithTags(groupIdList,tagIdList,listLength,PageRequest.of(page, 5));
                System.out.println("Tu leci opcja druga----------------new---------");
            }else if(!search.isEmpty()){
+               groupIdList = scopeTileAcces(0);
                tileEntityList = tileDAO.getNewestTileEntitiesForDashboardWithSearch(groupIdList,search,PageRequest.of(page, 5));
                System.out.println("Tu leci opcja trzecia-----------new--------------");
            }
@@ -493,13 +503,16 @@ public class TileService {
             LocalDateTime hotDate = nowDate.minusDays(30);
 
            if(search.equals("") && tagIdList.isEmpty()){
+               groupIdList = scopeTileAcces(1);
                tileEntityList = tileDAO.getHottestTileEntitiesForDashboard(groupIdList,hotDate,nowDate,PageRequest.of(page, 5));
                System.out.println("Tu leci opcja pierwsza hot-------------------------");
            }else if(!tagIdList.isEmpty()){
                int listLength = tagIdList.size();
+               groupIdList = scopeTileAcces(0);
                tileEntityList = tileDAO.getHottestTileEntitiesForDashboardWithTags(groupIdList,hotDate,nowDate,tagIdList,listLength,PageRequest.of(page, 5));
                System.out.println("Tu leci opcja druga-------hot------------------");
            }else if(!search.isEmpty()){
+               groupIdList = scopeTileAcces(0);
                tileEntityList = tileDAO.getHottestTileEntitiesForDashboardWithSearch(groupIdList,hotDate,nowDate,search,PageRequest.of(page, 5));
                System.out.println("Tu leci opcja trzecia--------hot-----------------");
            }
@@ -524,31 +537,37 @@ public class TileService {
 
     public List<TileDTO> getDashboardTileForLikes(Integer page,String term, String order,String search,List<Long> tagIdList){
         List<TileEntity> tileEntityList = new ArrayList<>();
-        List<Long> groupIdList = scopeTileAcces();
+        List<Long> groupIdList = new ArrayList<>();
         LocalDateTime scopeDate = dateSetter(term);
         LocalDateTime nowDate = LocalDateTime.now();
 
         if(order.equals("asc")){
             if(search.equals("") && tagIdList.isEmpty()){
+                groupIdList = scopeTileAcces(1);
                 tileEntityList = tileDAO.getTileEntitiesByGroupIdListSortByLikeASC(groupIdList,scopeDate,nowDate,PageRequest.of(page, 5));
                 System.out.println("Tu leci opcja pierwsza----------------asc normal---------");
             }else if(!tagIdList.isEmpty()){
                 int listLength = tagIdList.size();
+                groupIdList = scopeTileAcces(0);
                 tileEntityList = tileDAO.getTileEntitiesByGroupIdListAndTagIdListSortByLikeASC(groupIdList,scopeDate,nowDate,tagIdList,listLength,PageRequest.of(page, 5));
                 System.out.println("Tu leci opcja druga----------------asc tags---------");
             }else if(!search.isEmpty()){
+                groupIdList = scopeTileAcces(0);
                 tileEntityList = tileDAO.getTileEntitiesByGroupIdListAndSearchSortByLikeASC(groupIdList,scopeDate,nowDate,search,PageRequest.of(page, 5));
                 System.out.println("Tu leci opcja trzecia-----------asc search--------------");
             }
         }else if(order.equals("desc")) {
             if(search.equals("") && tagIdList.isEmpty()){
+                groupIdList = scopeTileAcces(1);
                 tileEntityList = tileDAO.getTileEntitiesByGroupIdListSortByLikeDESC(groupIdList,scopeDate,nowDate,PageRequest.of(page, 5));
                 System.out.println("Tu leci opcja pierwsza----------------desc normal---------");
             }else if(!tagIdList.isEmpty()){
                 int listLength = tagIdList.size();
+                groupIdList = scopeTileAcces(0);
                 tileEntityList = tileDAO.getTileEntitiesByGroupIdListAndTagIdListSortByLikeDESC(groupIdList,scopeDate,nowDate,tagIdList,listLength,PageRequest.of(page, 5));
                 System.out.println("Tu leci opcja druga----------------desc tags---------");
             }else if(!search.isEmpty()){
+                groupIdList = scopeTileAcces(0);
                 tileEntityList = tileDAO.getTileEntitiesByGroupIdListAndSearchSortByLikeDESC(groupIdList,scopeDate,nowDate,search,PageRequest.of(page, 5));
                 System.out.println("Tu leci opcja trzecia-----------desc search--------------");
             }

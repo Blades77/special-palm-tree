@@ -8,6 +8,8 @@ import { AuthenticationService } from 'src/app/service/authentication-service/au
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import * as _ from 'lodash';
+import { Search } from 'src/app/model/search';
+import { SearchService } from 'src/app/service/search-service/search.service';
 
 
 @Component({
@@ -31,6 +33,7 @@ export class DashboardComponent implements OnInit {
   order = "desc";
   isUrlChanged = false;
   newOrHot = "new";
+  search!: Search;
 
   //clear page i przy concacie ustawić ze jak zaszła zmiana kafelkow np z newest na oldest to zeby je nadpisywało całkiem
 
@@ -57,13 +60,55 @@ export class DashboardComponent implements OnInit {
     private groupService: GroupService,
     private errorHandler: ErrorHandlerService,
     private authService: AuthenticationService,
+    private searchService: SearchService,
     private router: Router){}
 
   ngOnInit(): void {
     this.authService.isLoggedIn().subscribe(isLogged => this.isLogged = isLogged);
+    this.searchService.getSearch().subscribe(search => {
+      this.search = search;
+      this.doSearch();
+    });
 
     this.setCurrentRoute();
     this.getDashboardNewOrHot(this.newOrHot,this.pages);
+  }
+
+  doSearch(){
+    console.log("serchuje byk")
+    if(this.search.isStringSearchActive){
+      this.searchString();
+    }else if(this.search.isTagSearchActive){
+      this.searchTags();
+    }
+  }
+
+  clearSearch(){
+    this.searchService.clearSearchTrue();
+    this.isUrlChanged = true;
+    this.markSearchParam(0);
+    this.onScroll();
+  }
+
+
+  searchString(){
+    console.log("search string")
+    this.isUrlChanged = true;
+    this.markSearchParam(0);
+    this.onScroll();
+  }
+  searchTags(){
+    this.isUrlChanged = true;
+    this.markSearchParam(0);
+    this.onScroll();
+  }
+
+  setSearchEndpoint(){
+    if(this.searchParams.newest || this.searchParams.hot){
+      this.currentActiveEndpoint = 1;
+    }else if(this.searchParams.likes){
+      this.currentActiveEndpoint = 2;
+    }
   }
 
 
@@ -82,8 +127,71 @@ export class DashboardComponent implements OnInit {
     )
   }
 
+
+  getDashboardNewOrHotWithStringSearch(type: string, page: number){
+    this.searchService.getSearchHotNewForString(type,page,this.search.searchString)
+    .subscribe(
+      (response: any) => {
+        this.concatTiles(response);
+        this.currentActiveEndpoint = 1;
+        this.pages+=1;
+      },
+      (error) =>{;
+        this.errorHandler.handleError(error);
+      }
+    )
+  }
+
+
+  getDashboardNewOrHotWithTagSearch(type: string, page: number){
+    this.searchService.getSearchHotNewForTags(type,page,this.search.searchTags)
+    .subscribe(
+      (response: any) => {
+        this.concatTiles(response);
+        this.currentActiveEndpoint = 1;
+        this.pages+=1;
+      },
+      (error) =>{;
+        this.errorHandler.handleError(error);
+      }
+    )
+  }
+
   getDashboardLikes(term: string, order: string, page: number){
     this.tileService.getDashBoardLikes(term,order,page)
+    .subscribe(
+      (response: any) => {
+        this.concatTiles(response);
+        this.currentActiveEndpoint = 2;
+        console.log("testuje paggess"+this.pages)
+        this.pages+=1;
+        console.log("testuje pagesss2"+this.pages)
+      },
+      (error) =>{;
+        this.errorHandler.handleError(error);
+      }
+    )
+  }
+
+  getDashboardLikesWithStringSearch(term: string, order: string, page: number){
+    this.searchService.getSearcLikesForString(term,order,page,this.search.searchString)
+    .subscribe(
+      (response: any) => {
+        this.concatTiles(response);
+        this.currentActiveEndpoint = 2;
+        console.log("testuje paggess"+this.pages)
+        this.pages+=1;
+        console.log("testuje pagesss2"+this.pages)
+      },
+      (error) =>{;
+        this.errorHandler.handleError(error);
+      }
+    )
+  }
+
+
+  getDashboardLikesWithTagSearch(term: string, order: string, page: number){
+    this.searchService.getSearcLikesForTags(term,order,page,this.search.searchTags)
     .subscribe(
       (response: any) => {
         this.concatTiles(response);
@@ -123,11 +231,24 @@ export class DashboardComponent implements OnInit {
           break;
       case 1:
           console.log("Dla new or hot");
-          this.getDashboardNewOrHot(this.newOrHot,this.pages)
+          if(this.search.isStringSearchActive == false && this.search.isTagSearchActive == false){
+            this.getDashboardNewOrHot(this.newOrHot,this.pages);
+          }else if(this.search.isStringSearchActive){
+            this.getDashboardNewOrHotWithStringSearch(this.newOrHot,this.pages);
+          }else if(this.search.isTagSearchActive){
+            this.getDashboardNewOrHotWithTagSearch(this.newOrHot,this.pages);
+          }
+
           break;
       case 2:
           console.log("Dla likes");
-          this.getDashboardLikes(this.activeTermValue,this.order,this.pages);
+          if(this.search.isStringSearchActive == false && this.search.isTagSearchActive == false){
+            this.getDashboardLikes(this.activeTermValue,this.order,this.pages);
+          }else if(this.search.isStringSearchActive){
+            this.getDashboardLikesWithStringSearch(this.activeTermValue,this.order,this.pages);
+          }else if(this.search.isTagSearchActive){
+            this.getDashboardLikesWithTagSearch(this.activeTermValue,this.order,this.pages);
+          }
           break;
     }
   }

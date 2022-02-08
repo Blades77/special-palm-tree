@@ -66,9 +66,12 @@
     font-weight: bolder }
   
   .group-dropdown { grid-area: group-dropdown;
+    width: 15em;
    }
   
-  .search-bar { grid-area: search-bar; }
+  .search-bar { grid-area: search-bar; 
+  background-color: red;
+width: 27em;}
   
   .tags-bar { grid-area: tags-bar; }
   
@@ -126,7 +129,7 @@
   
  
 .spacer{
-  width: 10em;
+ 
   text-align: center;
   font-weight: 600;
   font-size: 1.3em;

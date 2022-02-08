@@ -86,9 +86,11 @@
   </div>
   <div class="search-bar float">        
 
-    <div class="string-search-blocks">Search:</div>
-    <input class="string-search-blocks" type="text" name="stringSearch" [(ngModel)]="stringSearch">
-    {{stringSearch}}
+    <!-- <div class="string-search-blocks float">Search:</div> -->
+    <input class="string-search-blocks float" placeholder = "Search titles by words" type="text" name="stringSearch" [(ngModel)]="stringSearch">
+    <div class="scope-button float" (click)="changeScope()">{{searchParams.scope}}</div>
+    <div class="search-button float" (click)="changeStringSearch()">Search</div>
+    {{searchParams.searchString}}
   </div>
   <div class="tags-bar float">tags</div>
 
