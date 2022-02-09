@@ -12,6 +12,7 @@ private baseUrl = environment.apiUrl;
 search = new BehaviorSubject<Search>({isStringSearchActive: false,isTagSearchActive: false,scope: "",searchString: "",searchTags: []})
 isClearSearch = new BehaviorSubject<boolean>(false);
   constructor( private http: HttpClient,) { }
+clearToolbarFromHome = new BehaviorSubject<boolean>(false);
 
 
 setSearch(search: Search){
@@ -29,6 +30,16 @@ clearSearchTrue(){
 
 getSearchBoolean(): Observable<boolean>{
   return this.isClearSearch.asObservable();
+}
+
+setClearToolbarFromHome(){
+  this.clearToolbarFromHome.next(true);
+}
+setClearToolbarFromHomeFalse(){
+  this.clearToolbarFromHome.next(false);
+}
+getClearToolbarFromHome(): Observable<boolean>{
+  return this.clearToolbarFromHome.asObservable();
 }
 
 

@@ -1,64 +1,20 @@
-<!-- <div class="toolbar">
-    <div class="left dropdown">
-    <div class="row">
-        <div class="col">
-          <div ngbDropdown class="d-inline-block">
-            <button class="btn btn-primary" id="dropdownBasic1" ngbDropdownToggle>Toggle dropdown</button>
-            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-              <button ngbDropdownItem>Action - 1</button>
-              <button ngbDropdownItem>Another Action</button>
-              <button ngbDropdownItem>Something else is here</button>
-            </div>
-          </div>
-        </div>
-        </div>
-    </div>
-        <div class="spacer"></div>
-        <div class="string-search-input">
-          <div class="string-search-blocks">Search:</div>
-          <input class="string-search-blocks" type="text" name="stringSearch" [(ngModel)]="stringSearch">
-          {{stringSearch}}
-        </div>
-        <div class="tag-search-input">tag</div>
-        <div class="right-dropdown">
-            <ng-container *ngIf="!isLogged">
-                <button class="btn btn-primary" routerLink="/login">Login</button>
-            </ng-container>
-            <ng-container *ngIf="isLogged">
-                <button class="btn btn-primary btn-right disabled-button">{{loggedUser}}</button>
-              </ng-container>
-
-            <div class="row">
-                <div class="col">
-                    
-                  <div ngbDropdown class="d-inline-block">
-                    <button class="btn btn-primary btn-right" id="dropdownBasic1" ngbDropdownToggle>Drop downo</button>
-                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                      <button ngbDropdownItem>Action - 1</button>
-                      <button ngbDropdownItem>Another Action</button>
-                      <button ngbDropdownItem (click)="logoutUser()">Something else is here</button>
-                      <ng-container *ngIf="isLogged">
-                        <button ngbDropdownItem (click)="logoutUser()">Logout</button>
-                      </ng-container>
-
-                    </div>
-                  </div>
-                </div>
-                </div>
-</div> -->
-
-
-
-
 <div class="toolbar">
 <!-- <div class="container"> -->
-  <div class="logo float" routerLink="/dashboard">
+  <div class="logo float" routerLink="/dashboard" (click)="clearAllToolbar()">
 
     <img src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/book-logo-1.svg?alt=media&token=b7d965a8-6c53-4759-88e4-242db400e0d5">Endless Creation
   </div>
   <div class="switch float ">
-    <div class="tiles book-tiles float"routerLink="/dashboard"  [ngClass]="{'active':routeState.isTilesActive}">Tiles</div>
-    <div class="book book-tiles float" routerLink="/book" [ngClass]="{'active':routeState.isBooksActive}">Books</div>
+    <!-- <div class="tiles book-tiles float"routerLink="/dashboard"  [ngClass]="{'active':routeState.isTilesActive}">Tiles</div>
+    <div class="book book-tiles float" routerLink="/book" [ngClass]="{'active':routeState.isBooksActive}">Books</div> -->
+    <div class="btn-group btn-group-toggle">
+      <label class="btn-primary shadow-none  tiles" ngbButtonLabel>
+        <input type="checkbox" routerLink="/dashboard" ngbButton [(ngModel)]="routeState.isTilesActive"> Tiles
+      </label>
+      <label class="btn-primary shadow-none  book"  ngbButtonLabel>
+        <input type="checkbox" routerLink="/book" ngbButton [(ngModel)]="routeState.isBooksActive"> Books
+      </label>
+    </div>
   </div>
   <div class="group-dropdown float">
 
@@ -81,31 +37,42 @@
     </div>
   </ng-container>
   <ng-container *ngIf="!isLogged">
-    <div class="spacer">Group</div>
+    <div class="spacer">Your Communities</div>
   </ng-container>
   </div>
   <div class="search-bar float">        
 
     <!-- <div class="string-search-blocks float">Search:</div> -->
-    <input class="string-search-blocks float" placeholder = "Search titles by words" type="text" name="stringSearch" [(ngModel)]="stringSearch">
+    <!-- <input class="string-search-blocks float" placeholder = "Search communities" type="text" name="stringSearch" [(ngModel)]="stringSearch">
     <div class="scope-button float" (click)="changeScope()">{{searchParams.scope}}</div>
     <div class="search-button float" (click)="changeStringSearch()">Search</div>
-    {{searchParams.searchString}}
+    {{searchParams.searchString}} -->
+
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text"><img src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/lup2.svg?alt=media&token=0d415cf7-0811-4909-ab8c-62b87432f220"></span>
+      </div>
+      <input type="text" class="form-control" placeholder = "Search communities" aria-label="Recipient's username" aria-describedby="basic-addon2" name="stringSearch" [(ngModel)]="stringSearch">
+      <div class="input-group-append">
+        <button class="btn btn-outline-secondary" type="button" (click)="changeScope()">{{searchParams.scope}}</button>
+        <button class="btn btn-outline-secondary" type="button"(click)="changeStringSearch()">Search</button>
+      </div>
+    </div>
   </div>
   <div class="tags-bar float">tags</div>
 
   <div class="login-settings float-right">
     <ng-container *ngIf="!isLogged">
-      <button class="btn btn-primary" routerLink="/login">Login</button>
+      <button class="btn btn-primary float" routerLink="/login">Login</button>
   </ng-container>
   <ng-container *ngIf="isLogged">
-      <button class="btn btn-primary btn-right disabled-button">{{loggedUser}}</button>
+      <button class="btn btn-primary btn-right disabled-button float">{{loggedUser}}</button>
     </ng-container>
 
   <div class="row">
       <div class="col">
           
-        <div ngbDropdown class="d-inline-block">
+        <div ngbDropdown class="d-inline-block float">
           <button class="btn btn-primary btn-right" id="dropdownBasic1" ngbDropdownToggle>Drop downo</button>
           <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
             <button ngbDropdownItem>Action - 1</button>

@@ -544,31 +544,31 @@ public class TileService {
         if(order.equals("asc")){
             if(search.equals("") && tagIdList.isEmpty()){
                 groupIdList = scopeTileAcces(1);
-                tileEntityList = tileDAO.getTileEntitiesByGroupIdListSortByLikeASC(groupIdList,scopeDate,nowDate,PageRequest.of(page, 5));
+                tileEntityList = tileDAO.getTileEntitiesByGroupIdListSortByLikeASC(groupIdList,scopeDate,nowDate,PageRequest.of(page, 3));
                 System.out.println("Tu leci opcja pierwsza----------------asc normal---------");
             }else if(!tagIdList.isEmpty()){
                 int listLength = tagIdList.size();
                 groupIdList = scopeTileAcces(0);
-                tileEntityList = tileDAO.getTileEntitiesByGroupIdListAndTagIdListSortByLikeASC(groupIdList,scopeDate,nowDate,tagIdList,listLength,PageRequest.of(page, 5));
+                tileEntityList = tileDAO.getTileEntitiesByGroupIdListAndTagIdListSortByLikeASC(groupIdList,scopeDate,nowDate,tagIdList,listLength,PageRequest.of(page, 3));
                 System.out.println("Tu leci opcja druga----------------asc tags---------");
             }else if(!search.isEmpty()){
                 groupIdList = scopeTileAcces(0);
-                tileEntityList = tileDAO.getTileEntitiesByGroupIdListAndSearchSortByLikeASC(groupIdList,scopeDate,nowDate,search,PageRequest.of(page, 5));
+                tileEntityList = tileDAO.getTileEntitiesByGroupIdListAndSearchSortByLikeASC(groupIdList,scopeDate,nowDate,search,PageRequest.of(page, 3));
                 System.out.println("Tu leci opcja trzecia-----------asc search--------------");
             }
         }else if(order.equals("desc")) {
             if(search.equals("") && tagIdList.isEmpty()){
                 groupIdList = scopeTileAcces(1);
-                tileEntityList = tileDAO.getTileEntitiesByGroupIdListSortByLikeDESC(groupIdList,scopeDate,nowDate,PageRequest.of(page, 5));
+                tileEntityList = tileDAO.getTileEntitiesByGroupIdListSortByLikeDESC(groupIdList,scopeDate,nowDate,PageRequest.of(page, 3));
                 System.out.println("Tu leci opcja pierwsza----------------desc normal---------");
             }else if(!tagIdList.isEmpty()){
                 int listLength = tagIdList.size();
                 groupIdList = scopeTileAcces(0);
-                tileEntityList = tileDAO.getTileEntitiesByGroupIdListAndTagIdListSortByLikeDESC(groupIdList,scopeDate,nowDate,tagIdList,listLength,PageRequest.of(page, 5));
+                tileEntityList = tileDAO.getTileEntitiesByGroupIdListAndTagIdListSortByLikeDESC(groupIdList,scopeDate,nowDate,tagIdList,listLength,PageRequest.of(page, 3));
                 System.out.println("Tu leci opcja druga----------------desc tags---------");
             }else if(!search.isEmpty()){
                 groupIdList = scopeTileAcces(0);
-                tileEntityList = tileDAO.getTileEntitiesByGroupIdListAndSearchSortByLikeDESC(groupIdList,scopeDate,nowDate,search,PageRequest.of(page, 5));
+                tileEntityList = tileDAO.getTileEntitiesByGroupIdListAndSearchSortByLikeDESC(groupIdList,scopeDate,nowDate,search,PageRequest.of(page, 3));
                 System.out.println("Tu leci opcja trzecia-----------desc search--------------");
             }
         }else {

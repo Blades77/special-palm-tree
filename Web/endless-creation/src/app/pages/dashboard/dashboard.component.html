@@ -2,8 +2,8 @@
  <div class="container">
   <div
   infiniteScroll
-  [infiniteScrollDistance]="2"
-  [infiniteScrollThrottle]="300"
+  [infiniteScrollDistance]="99"
+  [infiniteScrollThrottle]="100"
   (scrolled)="onScroll()"
   >
 
@@ -17,7 +17,7 @@
   <div class="main-area">
     <div class="main-area-top">
       <div class="top-utile top-left-utile" [ngClass]="{'top-utile-active':searchParams.newest}" (click)="markSearchParam(0)">
-        <img src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/star.svg?alt=media&token=005fbe94-6fd5-45fc-98f3-9302f0635a34">Newest{{search.isStringSearchActive}}
+        <img src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/star.svg?alt=media&token=005fbe94-6fd5-45fc-98f3-9302f0635a34">Newest
       </div>
       <div class="top-utile" [ngClass]="{'top-utile-active':searchParams.hot}" (click)="markSearchParam(1)">
         <img src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/16138591881631770718.svg?alt=media&token=04cf25ca-c620-43d6-99f2-4b221a997d36">Hot

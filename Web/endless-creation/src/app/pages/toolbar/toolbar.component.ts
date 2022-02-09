@@ -51,6 +51,10 @@ export class ToolbarComponent implements OnInit {
     })
   }
 
+  clearAllToolbar(){
+    this.searchService.setClearToolbarFromHome();
+  }
+
   clearSearchParams(){
     this.searchParams.isStringSearchActive = false,
     this.searchParams.isTagSearchActive = false,

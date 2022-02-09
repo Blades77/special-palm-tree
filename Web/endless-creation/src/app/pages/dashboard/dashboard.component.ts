@@ -67,8 +67,15 @@ export class DashboardComponent implements OnInit {
     this.authService.isLoggedIn().subscribe(isLogged => this.isLogged = isLogged);
     this.searchService.getSearch().subscribe(search => {
       this.search = search;
+      console.log("coś tu prewywołuje")
       this.doSearch();
     });
+    this.searchService.getClearToolbarFromHome().subscribe(home =>{
+      if(home==true){
+        this.clearSearch();
+        this.searchService.setClearToolbarFromHomeFalse();
+      }
+    })
 
     this.setCurrentRoute();
     this.getDashboardNewOrHot(this.newOrHot,this.pages);
@@ -84,6 +91,7 @@ export class DashboardComponent implements OnInit {
   }
 
   clearSearch(){
+    console.log("tu se srpawdam clear search")
     this.searchService.clearSearchTrue();
     this.isUrlChanged = true;
     this.markSearchParam(0);
@@ -233,10 +241,13 @@ export class DashboardComponent implements OnInit {
           console.log("Dla new or hot");
           if(this.search.isStringSearchActive == false && this.search.isTagSearchActive == false){
             this.getDashboardNewOrHot(this.newOrHot,this.pages);
+            console.log("New or hot first");
           }else if(this.search.isStringSearchActive){
             this.getDashboardNewOrHotWithStringSearch(this.newOrHot,this.pages);
+            console.log("New or hot second");
           }else if(this.search.isTagSearchActive){
             this.getDashboardNewOrHotWithTagSearch(this.newOrHot,this.pages);
+            console.log("New or hot third");
           }
 
           break;
