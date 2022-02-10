@@ -9,6 +9,7 @@ import { ErrorHandlerService } from 'src/app/service/error-handler-service/error
 import { BehaviorSubject, Observable } from 'rxjs';
 import { SearchService } from 'src/app/service/search-service/search.service';
 import { Search } from 'src/app/model/search';
+import { expand } from 'rxjs/operators';
 
 @Component({
   selector: 'app-toolbar',
@@ -22,6 +23,7 @@ export class ToolbarComponent implements OnInit {
   loggedUser!: String;
   routeState!: RouteState;
   groups!: GroupVIEW[];
+  isAriaExpanded = false;
 
   searchParams = {
     isStringSearchActive: false,
@@ -98,4 +100,9 @@ export class ToolbarComponent implements OnInit {
     )
   }
 
+  readAriaExpanded(){
+      this.isAriaExpanded = !this.isAriaExpanded;
+    }
+  
+  
 }
