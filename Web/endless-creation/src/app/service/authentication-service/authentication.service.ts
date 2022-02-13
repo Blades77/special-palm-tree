@@ -41,8 +41,9 @@ login(credentials: any): Observable<any> {
       localStorage.setItem(this.AUTH_TOKEN, token.accessToken);
       localStorage.setItem(this.REFRESH_TOKEN, token.refreshToken);
       this.user.next(credentials.username);
-      this.setUserShortInfo();
       this.isLoginSubject.next(true);
+      this.setUserShortInfo();
+      // return this.isLoginSubject.asObservable();
       }));
 }
 
@@ -128,6 +129,7 @@ refreshToken(refreshToken: string){
       this.startRefreshTokenTimer();
       return this.isLoginSubject.asObservable();
       }));
+      
 }
 
 private refreshTokenTimeout: any;

@@ -1,16 +1,23 @@
 import { AuthenticationService } from 'src/app/service/authentication-service/authentication.service';
 
 export function appInitializer(authenticationService: AuthenticationService) {
-    return () => new Promise(resolve => {
-        // attempt to refresh token on app start up to auto authenticate
-        console.log("tu atemptuje")
-        if(authenticationService.getRefreshToken()){
-            authenticationService.refreshToken(authenticationService.getRefreshToken())
+
+
+        if(authenticationService.hasToken()){
+            return () => new Promise(resolve => {
+            const refreshToken = authenticationService.getRefreshToken();
+            console.log("tu jak jest")
+            authenticationService.refreshToken(refreshToken)
             .subscribe()
             .add(resolve);
+        });
+        }else{
+            console.log("tu jak token nie jest null")
+            return () => new Promise((resolve) => resolve(true));
         }
         
-    });
+        
+
 }
 
 

@@ -22,6 +22,7 @@ import { BookComponent } from './pages/book/book.component';
 import { AuthenticationService } from './service/authentication-service/authentication.service';
 import { appInitializer } from './helpers/appInitializer';
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -48,7 +49,7 @@ import { appInitializer } from './helpers/appInitializer';
     
   ],
   providers: [
-    // { provide: APP_INITIALIZER, useFactory: appInitializer, multi: true, deps: [AuthenticationService] },
+    { provide: APP_INITIALIZER, useFactory: appInitializer, multi: true, deps: [AuthenticationService] },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
   ],
   bootstrap: [AppComponent]
