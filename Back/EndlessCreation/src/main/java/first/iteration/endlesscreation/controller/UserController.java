@@ -9,10 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import first.iteration.endlesscreation.Model.RoleEntity;
 import first.iteration.endlesscreation.Model.UserEntity;
 import first.iteration.endlesscreation.configuration.SpringFoxConfig;
-import first.iteration.endlesscreation.dto.BookDTO;
-import first.iteration.endlesscreation.dto.JWTokenDTO;
-import first.iteration.endlesscreation.dto.UserDTO;
-import first.iteration.endlesscreation.dto.UserLoginDTO;
+import first.iteration.endlesscreation.dto.*;
 import first.iteration.endlesscreation.dto.create.BookCreateDTO;
 import first.iteration.endlesscreation.repository.UserRepository;
 import first.iteration.endlesscreation.service.UserService;
@@ -67,9 +64,14 @@ public class UserController {
     }
 
     @ApiOperation(value ="Refresh token")
-    @PostMapping("user/refresh")
-    private JWTokenDTO authenticateAndRefreshToken(@Valid @RequestBody JWTokenDTO jwTokenDTO) throws Exception {
-        return userService.authenticateAndRefreshToken(jwTokenDTO);
+    @PostMapping("user/refresh/")
+    private JWTokenDTO authenticateAndRefreshToken(@Valid @RequestBody RefresTokenDTO refreshTokenDTO)throws Exception {
+        return userService.authenticateAndRefreshToken(refreshTokenDTO);
+    }
+
+    @ApiOperation(value="getUserBasicData")
+    @GetMapping("user/basicData") private UserSendDTO getUserBasicData(){
+        return userService.getBasicUserData();
     }
 
     @ApiOperation(value = "Creates user")

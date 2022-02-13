@@ -14,7 +14,8 @@ export class JwtInterceptor implements HttpInterceptor {
         
 
         intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-            if (this.authenticationService.hasToken()) {
+            if (this.authenticationService.hasToken() && this.authenticationService.isUserLogedBool()) {
+              console.log("ja z interceptroa i sprawdzam czy logged"+this.authenticationService.isUserLogedBool())
               request = request.clone({
                 setHeaders: { Authorization: 'Bearer ' + this.authenticationService.getAccessToken() },
               });

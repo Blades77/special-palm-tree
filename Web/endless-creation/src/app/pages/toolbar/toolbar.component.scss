@@ -246,3 +246,48 @@
   color: gray;
   padding-top: 0.25em;
 }
+
+
+// .dropdown-toggle::after {
+//   display:none;
+// }
+
+.login-settings{
+  .form-control{
+    border: 1px solid #ad5d50;
+  }
+  .sign-button{
+    width: 6rem;
+        height: 3rem;
+        text-align: center;
+        background-color: #ad5d50;
+        color: #45523e;
+        border: 1px solid #ad5d50;
+        font-size: 1.35rem;
+        &:hover{
+          background-color: #f5ece5;
+          border: 1px solid #f5ece5;
+        }
+        
+  }
+
+  .dropdown-menu{
+    background-color: #b0aca2;
+  }
+
+}
+.logged-button{
+  width: 6rem;
+  height: 3rem;
+  text-align: center;
+  background-color: #ad5d50;
+  color: #45523e;
+  border: 1px solid #ad5d50;
+  font-size: 1.35rem;
+  outline: none;
+  cursor: pointer;
+  &:hover{
+    background-color: #f5ece5;
+    border: 1px solid #f5ece5;
+  }
+}

@@ -35,6 +35,15 @@ public class JWTUtils {
         return new JWTokenDTO(access_token,refresh_token);
     }
 
+    public static String generateRefreshToken(UserDetails userDetails){
+        return JWT.create()
+                .withSubject(userDetails.getUsername())
+                .withExpiresAt(new Date(System.currentTimeMillis() + 240 * 60 * 1000)) // tu jest 240 minut
+                .withIssuer("EndlessCreation")
+                .sign(algorithm);
+
+    }
+
     public static String generateAccessToken(UserDetails userDetails){
         return JWT.create()
                 .withSubject(userDetails.getUsername())

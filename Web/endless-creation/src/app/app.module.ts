@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
@@ -19,6 +19,8 @@ import { DotsComponent } from './components/dots/dots.component';
 import { TooltipCustomClassComponent } from './components/tooltip-custom-class/tooltip-custom-class.component';
 import { FormsModule } from '@angular/forms';
 import { BookComponent } from './pages/book/book.component';
+import { AuthenticationService } from './service/authentication-service/authentication.service';
+import { appInitializer } from './helpers/appInitializer';
 
 @NgModule({
   declarations: [
@@ -46,6 +48,7 @@ import { BookComponent } from './pages/book/book.component';
     
   ],
   providers: [
+    // { provide: APP_INITIALIZER, useFactory: appInitializer, multi: true, deps: [AuthenticationService] },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
   ],
   bootstrap: [AppComponent]

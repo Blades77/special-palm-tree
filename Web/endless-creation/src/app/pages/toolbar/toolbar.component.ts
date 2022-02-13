@@ -10,6 +10,9 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { SearchService } from 'src/app/service/search-service/search.service';
 import { Search } from 'src/app/model/search';
 import { expand } from 'rxjs/operators';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { LoggedUserShortView } from 'src/app/model/logged-user-short-view';
+
 
 @Component({
   selector: 'app-toolbar',
@@ -24,6 +27,8 @@ export class ToolbarComponent implements OnInit {
   routeState!: RouteState;
   groups!: GroupVIEW[];
   isAriaExpanded = false;
+  loginForm!: FormGroup;
+  loggedUserShortInfo!: LoggedUserShortView;
 
   searchParams = {
     isStringSearchActive: false,
@@ -36,12 +41,19 @@ export class ToolbarComponent implements OnInit {
               private routerEventService: RouterEventsService,
               private groupService: GroupService,
               private errorHandler: ErrorHandlerService,
-              private searchService: SearchService
-              ) { }
+              private searchService: SearchService,
+              private readonly fb: FormBuilder,
+              ){
+                this.loginForm = this.fb.group({
+                  username: ['',[Validators.required]],
+                  password: ['',[Validators.required]]
+                });
+               }
 
   ngOnInit(): void {
     this.authService.isLoggedIn().subscribe(isLogged => this.isLogged = isLogged);
     this.authService.loggedUser().subscribe(loggedUser => this.loggedUser = loggedUser);
+    this.authService.loggedUserShortInfo().subscribe(loggedUserInfo => this.loggedUserShortInfo = loggedUserInfo);
     this.routerEventService.getRouteStatus().subscribe(routeState => this.routeState = routeState);
     this.searchService.getSearchBoolean().subscribe(isClearSearch =>{
       if(isClearSearch){
@@ -104,5 +116,32 @@ export class ToolbarComponent implements OnInit {
       this.isAriaExpanded = !this.isAriaExpanded;
     }
   
+    submitForm() {
+      if (this.loginForm.valid) {
+          console.log(this.loginForm.get('username')?.value);
+      } else {
+          console.log('There is a problem with the form');
+      }
+    }
+  
+  
+  
+  
+  
+  
+    onSubmit(){
+      const passwordValue = this.loginForm.get('password')?.value;
+      const usernameValue = this.loginForm.get('username')?.value;
+      this.authService.login({password: passwordValue, username: usernameValue}).subscribe(
+        (response) => {
+          console.log("udało się!!!");
+        },
+        (error) => {
+          console.log("nie udało sie!!!");
+        }
+      )
+      
+  
+    }
   
 }
