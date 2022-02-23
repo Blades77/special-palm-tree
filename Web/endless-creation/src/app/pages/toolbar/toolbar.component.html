@@ -23,10 +23,16 @@
         <ul class="navbar-nav ml-auto dropdown-li-style">
           <li class="nav-item" ngbDropdown display="dynamic" placement="bottom-left">
             <a class="nav-link" tabindex="0" ngbDropdownToggle id="navbarDropdown3" role="button">
-              Group Dropdown
+              Your Communities
             </a>
-            <div ngbDropdownMenu aria-labelledby="navbarDropdown3" class="dropdown-menu" *ngFor="let group of groups">
-              <div ngbDropdownItem>{{group.groupName}}</div>
+            <div ngbDropdownMenu aria-labelledby="navbarDropdown3" class="dropdown-menu">
+              <div ngbDropdownItem *ngFor="let group of groups">
+                <div class="dropdown-tile">
+                  <a  routerLink="/group/{{group.groupId}}" [ngClass]="{'active-group': group.groupId === currentActiveGroupId}">
+                    {{group.groupName}}
+                    </a>
+                </div>
+              </div>
             </div>
           </li>
         </ul>

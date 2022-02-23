@@ -26,9 +26,11 @@ export class ToolbarComponent implements OnInit {
   loggedUser!: String;
   routeState!: RouteState;
   groups!: GroupVIEW[];
+  currentActiveGroupId!: number;
   isAriaExpanded = false;
   loginForm!: FormGroup;
   loggedUserShortInfo!: LoggedUserShortView;
+  currentURL!: string;
 
   searchParams = {
     isStringSearchActive: false,
@@ -55,6 +57,7 @@ export class ToolbarComponent implements OnInit {
     this.authService.loggedUser().subscribe(loggedUser => this.loggedUser = loggedUser);
     this.authService.loggedUserShortInfo().subscribe(loggedUserInfo => this.loggedUserShortInfo = loggedUserInfo);
     this.routerEventService.getRouteStatus().subscribe(routeState => this.routeState = routeState);
+    this.routerEventService.getCurrentURL().subscribe(currentURL => this.currentURL = currentURL);
     this.searchService.getSearchBoolean().subscribe(isClearSearch =>{
       if(isClearSearch){
         this.clearSearchParams();
@@ -104,13 +107,21 @@ export class ToolbarComponent implements OnInit {
     .subscribe(
       (response: any) => {
         this.groups = response;
-        console.log(this.groups);
+
+        const activeGroup: number = +this.currentURL.substring(7,8)
+
+        const findedGroup = this.groups.find(x => x.groupId === activeGroup);
+        if(findedGroup){
+          this.currentActiveGroupId = findedGroup.groupId;
+        }
       },
       (error) =>{;
         this.errorHandler.handleError(error);
       }
     )
   }
+
+
 
   readAriaExpanded(){
       this.isAriaExpanded = !this.isAriaExpanded;

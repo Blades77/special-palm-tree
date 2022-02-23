@@ -93,8 +93,27 @@ $primary-color-4: #f5ece5;
       background-color: $primary-color-4;
       cursor: pointer;
     }
+
+    .dropdown-tile{
+      // background-color: black;
+      // background-color: $primary-color-2;
+      &:hover {
+        background-color: $primary-color-4;
+        cursor: pointer;
+      }
+      a{
+        width: 15rem;
+        text-decoration: none;
+        display: block;
+        color: $primary-color-3;
+        margin-bottom: 0.1rem;
+        font-size: 1.2rem;
+        text-align: center;
+      }
+    }
   }
 
+  
   .dropdown-toggle::after {
     display: none;
   }
@@ -107,7 +126,15 @@ $primary-color-4: #f5ece5;
     color: gray;
     padding-top: 0.25em;
   }
+  
+  
+.dropdown-item{
+  padding: 0px;
+}
 
+.dropdown-menu{
+  background-color: $primary-color-2;
+}
 }
 
 .search-bar {
@@ -161,8 +188,8 @@ $primary-color-4: #f5ece5;
 .login-settings {
   display: block;
   float: right;
-  padding-right: 3em;
   height: 3rem;
+  width: 15rem;
 
   .form-control {
     border: 1px solid $primary-color-1;
@@ -173,7 +200,7 @@ $primary-color-4: #f5ece5;
   }
 
   .login-button {
-    width: 6rem;
+    width: 15rem;
     height: 3rem;
     text-align: center;
     background-color: $primary-color-1;
@@ -207,7 +234,7 @@ $primary-color-4: #f5ece5;
 
   
 .logged-button {
-  width: 6rem;
+  width: 15rem;
   height: 3rem;
   text-align: center;
   background-color: $primary-color-1;
@@ -232,13 +259,6 @@ $primary-color-4: #f5ece5;
     border: 1px solid $primary-color-4 !important;
   }
 }
-
-
-
-
-
-
-
 
 
 
@@ -282,8 +302,9 @@ $primary-color-4: #f5ece5;
 
 
 
-
-
+.active-group{
+  background-color: black;
+}
 
 
 

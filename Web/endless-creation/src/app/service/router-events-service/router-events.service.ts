@@ -11,7 +11,8 @@ import { RouteState } from 'src/app/model/routeState';
 export class RouterEventsService {
 
   isTilesActive = new BehaviorSubject<boolean>(true);
-  routeState  = new BehaviorSubject<RouteState>({isTilesActive: true,isBooksActive: false});
+  routeState  = new BehaviorSubject<RouteState>({isTilesActive: true,isBooksActive: false,currentURL: ""});
+  currentURL = new BehaviorSubject<string>("");
   public routeState2!: Observable<RouteState>;
 
   constructor(public router: Router) {
@@ -19,6 +20,7 @@ export class RouterEventsService {
        filter((e: Event): e is RouterEvent => e instanceof NavigationEnd)
     ).subscribe((e: RouterEvent) => {
       this.checkRoute(e.url);
+      this.currentURL.next(e.url);
     });
 
   }
@@ -28,10 +30,10 @@ export class RouterEventsService {
   
     switch (url) {
       case "/dashboard":
-          this.routeState.next({isTilesActive: true,isBooksActive: false});
+          this.routeState.next({isTilesActive: true,isBooksActive: false,currentURL: url});
           break;
       case "/book":
-        this.routeState.next({isTilesActive: false,isBooksActive: true});
+        this.routeState.next({isTilesActive: false,isBooksActive: true,currentURL: url});
           break;
       default:
           console.log("No such day exists!");
@@ -41,6 +43,10 @@ export class RouterEventsService {
   }
   getRouteStatus(): Observable<RouteState> {
     return this.routeState.asObservable();
+  }
+
+  getCurrentURL(): Observable<string>{
+    return this.currentURL.asObservable();
   }
 }
 
