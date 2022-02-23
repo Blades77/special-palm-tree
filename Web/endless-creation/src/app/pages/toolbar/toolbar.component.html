@@ -1,14 +1,11 @@
 <div class="toolbar">
 
   <div class="logo float" routerLink="/dashboard" (click)="clearAllToolbar()">
-
     <img
       src="https://firebasestorage.googleapis.com/v0/b/endless-creation7.appspot.com/o/book-logo-1.svg?alt=media&token=b7d965a8-6c53-4759-88e4-242db400e0d5">Endless
     Creation
   </div>
-  <div class="switch float ">
-    <!-- <div class="tiles book-tiles float"routerLink="/dashboard"  [ngClass]="{'active':routeState.isTilesActive}">Tiles</div>
-    <div class="book book-tiles float" routerLink="/book" [ngClass]="{'active':routeState.isBooksActive}">Books</div> -->
+  <div class="switch float">
     <div class="btn-group btn-group-toggle">
       <label class="btn-primary shadow-none rounded-0 book-tiles" ngbButtonLabel>
         <input type="checkbox" routerLink="/dashboard" ngbButton [(ngModel)]="routeState.isTilesActive"> Tiles
@@ -18,9 +15,10 @@
       </label>
     </div>
   </div>
-  <div class="group-dropdown float">
 
+  <div class="group-dropdown float">
     <ng-container *ngIf="isLogged">
+
       <div class="top-utile top-utile-scope" (click)="getGroupsForUser()">
         <ul class="navbar-nav ml-auto dropdown-li-style">
           <li class="nav-item" ngbDropdown display="dynamic" placement="bottom-left">
@@ -29,10 +27,6 @@
             </a>
             <div ngbDropdownMenu aria-labelledby="navbarDropdown3" class="dropdown-menu" *ngFor="let group of groups">
               <div ngbDropdownItem>{{group.groupName}}</div>
-              <!-- <div ngbDropdownItem  >Today</div>
-            <div ngbDropdownItem  >This week</div>
-            <div ngbDropdownItem  >This month</div>
-            <div ngbDropdownItem  >This year</div> -->
             </div>
           </li>
         </ul>
@@ -42,14 +36,8 @@
       <div class="spacer">Your Communities</div>
     </ng-container>
   </div>
+
   <div class="search-bar float">
-
-    <!-- <div class="string-search-blocks float">Search:</div> -->
-    <!-- <input class="string-search-blocks float" placeholder = "Search communities" type="text" name="stringSearch" [(ngModel)]="stringSearch">
-    <div class="scope-button float" (click)="changeScope()">{{searchParams.scope}}</div>
-    <div class="search-button float" (click)="changeStringSearch()">Search</div>
-    {{searchParams.searchString}} -->
-
     <div class="input-group">
       <div class="input-group-prepend">
         <span class="input-group-text shadow-none rounded-0"><img
@@ -60,37 +48,49 @@
         [(ngModel)]="stringSearch">
       <div class="input-group-append">
         <div class="border-container">
-          <button class="btn btn-outline-secondary shadow-none rounded-0 search-button" type="button"
+          <button class="btn btn-outline-secondary shadow-none rounded-0 search-button float" type="button"
             (click)="changeScope()">{{searchParams.scope}}</button>
-          <button class="btn btn-outline-secondary shadow-none rounded-0 search-button" type="button"
+          <div ngbDropdown class="float">
+            <button class="btn btn-outline-secondary shadow-none rounded-0 search-button" id="dropdownBasic1"
+              ngbDropdownToggle type="button">Tags Search</button>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+              <div class="tags-inner">Pisze sobie tutaj tagi</div>
+            </div>
+          </div>
+          <button class="btn btn-outline-secondary shadow-none rounded-0 search-button float" type="button"
             (click)="changeStringSearch()">Search</button>
         </div>
       </div>
     </div>
   </div>
-  <div class="tags-bar float">tags</div>
+
 
   <div class="login-settings float-right">
     <ng-container *ngIf="!isLogged">
       <div class="row float">
         <div class="col">
           <div ngbDropdown class="d-inline-block">
-            <button class="btn btn-outline-primary login-button shadow-none rounded-0" id="dropdownForm1" ngbDropdownToggle (click)="readAriaExpanded()" [ngClass]="{'expanded':isAriaExpanded}">Login</button>
+            <button class="btn btn-outline-primary login-button shadow-none rounded-0" id="dropdownForm1"
+              ngbDropdownToggle (click)="readAriaExpanded()" [ngClass]="{'expanded':isAriaExpanded}">Login</button>
             <div ngbDropdownMenu aria-labelledby="dropdownForm1">
-              <form  [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="loginForm px-4 py-3">
+              <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="loginForm px-4 py-3">
                 <div class="form-group">
                   <label for="exampleDropdownFormEmail1">Your Username</label>
-                  <input type="email" class="form-control" [formControlName]="'username'" id="exampleDropdownFormEmail1" placeholder="Username" autocomplete="username">
-                  <div class="alert-div" *ngIf="loginForm.get('username').dirty && loginForm.get('username').errors?.required">
+                  <input type="email" class="form-control" [formControlName]="'username'" id="exampleDropdownFormEmail1"
+                    placeholder="Username" autocomplete="username">
+                  <div class="alert-div"
+                    *ngIf="loginForm.get('username').dirty && loginForm.get('username').errors?.required">
                     Username field is a required field.
-                 </div>
+                  </div>
                 </div>
                 <div class="form-group">
                   <label for="exampleDropdownFormPassword1">Password</label>
-                  <input type="password" class="form-control" [formControlName]="'password'" id="exampleDropdownFormPassword1" placeholder="Password" autocomplete="current-password">
-                  <div class="alert-div" *ngIf="loginForm.get('password').dirty && loginForm.get('password').errors?.required">
+                  <input type="password" class="form-control" [formControlName]="'password'"
+                    id="exampleDropdownFormPassword1" placeholder="Password" autocomplete="current-password">
+                  <div class="alert-div"
+                    *ngIf="loginForm.get('password').dirty && loginForm.get('password').errors?.required">
                     Password field is a required field.
-         </div>
+                  </div>
                 </div>
                 <!-- <div class="form-check">
                   <input type="checkbox" class="form-check-input" id="dropdownCheck">
@@ -98,7 +98,8 @@
                     Remember me
                   </label>
                 </div> -->
-                <button [disabled]="!loginForm.valid" type="submit" class="btn btn-primary sign-button shadow-none ">Sign in</button>
+                <button [disabled]="!loginForm.valid" type="submit"
+                  class="btn btn-primary sign-button shadow-none ">Sign in</button>
               </form>
               <div class="dropdown-divider"></div>
               <button ngbDropdownItem>New around here? Sign up</button>
@@ -111,9 +112,10 @@
     <ng-container *ngIf="isLogged">
       <div class="row">
         <div class="col">
-  
+
           <div ngbDropdown class="d-inline-block float">
-            <button class="btn btn-primary btn-right logged-button shadow-none rounded-0" id="dropdownBasic1" ngbDropdownToggle>
+            <button class="btn btn-primary btn-right logged-button shadow-none rounded-0" id="dropdownBasic1"
+              ngbDropdownToggle>
               <img src="{{loggedUserShortInfo.userImageLink}}">
               {{loggedUserShortInfo.username}}</button>
             <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
@@ -123,14 +125,14 @@
               <ng-container *ngIf="isLogged">
                 <button ngbDropdownItem (click)="logoutUser()">Logout</button>
               </ng-container>
-  
+
             </div>
           </div>
         </div>
       </div>
     </ng-container>
 
- 
+
   </div>
 
 </div>
