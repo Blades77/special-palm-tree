@@ -12,7 +12,7 @@ import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ToolbarComponent } from './pages/toolbar/toolbar.component';
-import { TimeaPassedPipe } from './helpers/timePassed.pipe';
+import { TimeaPassedPipe} from './helpers/timePassed.pipe';
 import { LinkyModule } from 'ngx-linky';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { DotsComponent } from './components/dots/dots.component';
@@ -21,6 +21,8 @@ import { FormsModule } from '@angular/forms';
 import { BookComponent } from './pages/book/book.component';
 import { AuthenticationService } from './service/authentication-service/authentication.service';
 import { appInitializer } from './helpers/appInitializer';
+import { MatchesCategoryPipe } from './helpers/groupFilterPipe';
+
 
 
 @NgModule({
@@ -36,6 +38,7 @@ import { appInitializer } from './helpers/appInitializer';
     DotsComponent,
     TooltipCustomClassComponent,
     BookComponent,
+    MatchesCategoryPipe
   ],
   imports: [
     BrowserModule,

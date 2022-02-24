@@ -20,8 +20,8 @@ import { LoggedUserShortView } from 'src/app/model/logged-user-short-view';
   styleUrls: ['./toolbar.component.scss']
 })
 export class ToolbarComponent implements OnInit {
-  search: StrintgSearch = {search:"asdasdasd"};
-  stringSearch ="";
+  search: StrintgSearch = { search: "asdasdasd" };
+  stringSearch = "";
   isLogged!: boolean;
   loggedUser!: String;
   routeState!: RouteState;
@@ -32,6 +32,8 @@ export class ToolbarComponent implements OnInit {
   loggedUserShortInfo!: LoggedUserShortView;
   currentURL!: string;
 
+  groupFilter = "";
+
   searchParams = {
     isStringSearchActive: false,
     isTagSearchActive: false,
@@ -40,17 +42,17 @@ export class ToolbarComponent implements OnInit {
     searchTags: [1]
   };
   constructor(private authService: AuthenticationService,
-              private routerEventService: RouterEventsService,
-              private groupService: GroupService,
-              private errorHandler: ErrorHandlerService,
-              private searchService: SearchService,
-              private readonly fb: FormBuilder,
-              ){
-                this.loginForm = this.fb.group({
-                  username: ['',[Validators.required]],
-                  password: ['',[Validators.required]]
-                });
-               }
+    private routerEventService: RouterEventsService,
+    private groupService: GroupService,
+    private errorHandler: ErrorHandlerService,
+    private searchService: SearchService,
+    private readonly fb: FormBuilder,
+  ) {
+    this.loginForm = this.fb.group({
+      username: ['', [Validators.required]],
+      password: ['', [Validators.required]]
+    });
+  }
 
   ngOnInit(): void {
     this.authService.isLoggedIn().subscribe(isLogged => this.isLogged = isLogged);
@@ -58,8 +60,8 @@ export class ToolbarComponent implements OnInit {
     this.authService.loggedUserShortInfo().subscribe(loggedUserInfo => this.loggedUserShortInfo = loggedUserInfo);
     this.routerEventService.getRouteStatus().subscribe(routeState => this.routeState = routeState);
     this.routerEventService.getCurrentURL().subscribe(currentURL => this.currentURL = currentURL);
-    this.searchService.getSearchBoolean().subscribe(isClearSearch =>{
-      if(isClearSearch){
+    this.searchService.getSearchBoolean().subscribe(isClearSearch => {
+      if (isClearSearch) {
         this.clearSearchParams();
         this.stringSearch = "";
         console.log("działaaaa")
@@ -68,31 +70,31 @@ export class ToolbarComponent implements OnInit {
     })
   }
 
-  clearAllToolbar(){
+  clearAllToolbar() {
     this.searchService.setClearToolbarFromHome();
   }
 
-  clearSearchParams(){
+  clearSearchParams() {
     this.searchParams.isStringSearchActive = false,
-    this.searchParams.isTagSearchActive = false,
-    this.searchParams.scope ="Everywhere",
-    this.searchParams.searchString = "",
-    this.searchParams.searchTags = [1]
+      this.searchParams.isTagSearchActive = false,
+      this.searchParams.scope = "Everywhere",
+      this.searchParams.searchString = "",
+      this.searchParams.searchTags = [1]
   }
 
-  changeStringSearch(){
+  changeStringSearch() {
     this.searchParams.isStringSearchActive = true;
     this.searchParams.searchString = this.stringSearch;
     this.searchService.setSearch(this.searchParams);
-  
+
   }
 
-  
 
-  changeScope(){
-    if(this.searchParams.scope == "Everywhere"){
+
+  changeScope() {
+    if (this.searchParams.scope == "Everywhere") {
       this.searchParams.scope = "This Group";
-    }else{
+    } else {
       this.searchParams.scope = "Everywhere";
     }
     this.searchService.setSearch(this.searchParams);
@@ -102,57 +104,73 @@ export class ToolbarComponent implements OnInit {
     this.authService.logout().subscribe();
   }
 
-  getGroupsForUser(){
+  getGroupsForUser() {
     this.groupService.getGroupsForUser()
-    .subscribe(
-      (response: any) => {
-        this.groups = response;
+      .subscribe(
+        (response: any) => {
+          this.groups = response;
+          this.finderGroupStatus();
+        },
+        (error) => {
+          ;
+          this.errorHandler.handleError(error);
+        }
+      )
+  }
 
-        const activeGroup: number = +this.currentURL.substring(7,8)
+
+  finderGroupStatus() {
+    switch (this.currentURL) {
+      case "/dashboard":
+        this.currentActiveGroupId = 0;
+        break;
+      case "/book":
+        this.currentActiveGroupId = 0;
+        break;
+      default:
+
+        const activeGroup: number = +this.currentURL.substring(7, 8)
 
         const findedGroup = this.groups.find(x => x.groupId === activeGroup);
-        if(findedGroup){
+        if (findedGroup) {
           this.currentActiveGroupId = findedGroup.groupId;
+          break;
         }
-      },
-      (error) =>{;
-        this.errorHandler.handleError(error);
-      }
-    )
+
+    }
+  }
+
+
+  readAriaExpanded() {
+    this.isAriaExpanded = !this.isAriaExpanded;
+  }
+
+  submitForm() {
+    if (this.loginForm.valid) {
+      console.log(this.loginForm.get('username')?.value);
+    } else {
+      console.log('There is a problem with the form');
+    }
   }
 
 
 
-  readAriaExpanded(){
-      this.isAriaExpanded = !this.isAriaExpanded;
-    }
-  
-    submitForm() {
-      if (this.loginForm.valid) {
-          console.log(this.loginForm.get('username')?.value);
-      } else {
-          console.log('There is a problem with the form');
+
+
+
+  onSubmit() {
+    const passwordValue = this.loginForm.get('password')?.value;
+    const usernameValue = this.loginForm.get('username')?.value;
+    this.authService.login({ password: passwordValue, username: usernameValue }).subscribe(
+      (response) => {
+        console.log("udało się!!!");
+      },
+      (error) => {
+        console.log("nie udało sie!!!");
       }
-    }
-  
-  
-  
-  
-  
-  
-    onSubmit(){
-      const passwordValue = this.loginForm.get('password')?.value;
-      const usernameValue = this.loginForm.get('username')?.value;
-      this.authService.login({password: passwordValue, username: usernameValue}).subscribe(
-        (response) => {
-          console.log("udało się!!!");
-        },
-        (error) => {
-          console.log("nie udało sie!!!");
-        }
-      )
-      
-  
-    }
-  
+    )
+
+
+  }
+
 }
