@@ -52,6 +52,10 @@ public class TagService {
         return tagEntity;
     }
 
+    public List<Long> getTagIdListByTagNameList(List <String> tagNameList){
+        return tagDAO.getTagIdListByTagNameList(tagNameList);
+    }
+
     public List<TagEntity> getTagsEntityListByTagCreateDTOList(List<TagCreateDTO> tagCreateDTOList){
         List<TagEntity> tagEntityList = new ArrayList<>();
         for(TagCreateDTO tagCreateDTO: tagCreateDTOList){

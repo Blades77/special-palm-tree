@@ -114,13 +114,15 @@ public class TileDAO {
     }
 
     public List<TileEntity> getTileEntitiesByGroupIdListAndSearchSortByLikeDESC(List<Long> groupIdList,LocalDateTime endDate,LocalDateTime nowDate,String search,Pageable pageable){
+
         return tileRepository.getTileEntitiesByGroupIdListAndSearchSortByLikeDESC(groupIdList,endDate,nowDate,search,pageable)
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot find  any tile in provided group"));
     }
 
 
     public List<TileEntity> getTileEntitiesByGroupIdListAndTagIdListSortByLikeDESC(List<Long> groupIdList,LocalDateTime endDate,LocalDateTime nowDate,List<Long> tagIdList, Integer listLength,Pageable pageable){
-        return tileRepository.getTileEntitiesByGroupIdListAndTagIdListSortByLikeDESC(groupIdList,endDate,nowDate,tagIdList,listLength,pageable)
+        System.out.println("Zwracam dane z124124asd TileDao"+tagIdList);
+        return tileRepository.getTileEntitiesByGroupIdListAndTagIdListSortByLikeDESC(groupIdList,endDate,nowDate,tagIdList,pageable)
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot find  any tile in provided group"));
     }
 
@@ -130,7 +132,8 @@ public class TileDAO {
     }
 
     public List<TileEntity> getTileEntitiesByGroupIdListAndTagIdListSortByLikeASC(List<Long> groupIdList,LocalDateTime endDate,LocalDateTime nowDate,List<Long> tagIdList, Integer listLength,Pageable pageable){
-        return tileRepository.getTileEntitiesByGroupIdListAndTagIdListSortByLikeASC(groupIdList,endDate,nowDate,tagIdList,listLength,pageable)
+        System.out.println("Zwracam dane z124124asd TileDao"+tagIdList);
+        return tileRepository.getTileEntitiesByGroupIdListAndTagIdListSortByLikeASC(groupIdList,endDate,nowDate,tagIdList,pageable)
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot find  any tile in provided group"));
     }
 
@@ -151,7 +154,8 @@ public class TileDAO {
     }
 
     public List<TileEntity> getNewestTileEntitiesForDashboardWithTags(List<Long> groupIdList,List<Long> tagIdList, int listLength,Pageable pageable){
-        return  tileRepository.getNewestTileEntitiesForDashboardWithTagIdList(groupIdList,tagIdList,listLength,pageable)
+        System.out.println("Zwracam dane z 2223TileDao"+tagIdList+"grop"+groupIdList+"list length"+listLength);
+        return  tileRepository.getNewestTileEntitiesForDashboardWithTagIdList(groupIdList,tagIdList,pageable)
                 .orElseThrow(() -> new ResourceNotFoundException("Something went wrong"));
     }
 
@@ -166,6 +170,7 @@ public class TileDAO {
     }
 
     public List<TileEntity> getHottestTileEntitiesForDashboardWithTags(List<Long> groupIdList,LocalDateTime endDate,LocalDateTime nowDate,List<Long> tagIdList, int listLength,Pageable pageable){
+        System.out.println("Zwracam dane z 22TileDao"+tagIdList);
         return  tileRepository.getHottestTileEntitiesForDashboardWithTags(groupIdList,endDate,nowDate,tagIdList,listLength,pageable)
                 .orElseThrow(() -> new ResourceNotFoundException("Something went wrong"));
     }

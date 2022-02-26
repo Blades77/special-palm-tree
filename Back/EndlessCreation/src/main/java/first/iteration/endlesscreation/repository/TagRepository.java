@@ -8,6 +8,7 @@ import first.iteration.endlesscreation.Model.TileEntity;
 import first.iteration.endlesscreation.dto.TagDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -22,4 +23,7 @@ public interface TagRepository extends JpaRepository<TagEntity, Long>{
 //    TagDTO getTagEntityByTagNameAndTagColor(String TagName,String TagColor);
     List<TagEntity> getTagEntityByColorEntity(ColorEntity colorEntity);
     Optional<TagEntity> getTagEntityByTagNameAndColorEntity(String tagName, ColorEntity colorEntity);
+
+    @Query(value=" SELECT tag_id FROM tag WHERE tag_name IN :tagNameList", nativeQuery = true)
+    Optional<List<Long>>getTagIdListByTagNameList(@Param("tagNameList") List<String> tagNameList);
 }

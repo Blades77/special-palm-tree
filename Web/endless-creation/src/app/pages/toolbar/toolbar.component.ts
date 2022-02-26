@@ -33,6 +33,7 @@ export class ToolbarComponent implements OnInit {
   currentURL!: string;
 
   groupFilter = "";
+  tagsFilter = "";
 
   searchParams = {
     isStringSearchActive: false,
@@ -87,6 +88,12 @@ export class ToolbarComponent implements OnInit {
     this.searchParams.searchString = this.stringSearch;
     this.searchService.setSearch(this.searchParams);
 
+  }
+
+  changeTagSearch(){
+    this.searchParams.isTagSearchActive = true;
+    this.searchParams.searchString = this.stringSearch;
+    this.searchService.setSearch(this.searchParams);
   }
 
 

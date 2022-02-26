@@ -2,6 +2,7 @@
   width: 60.375em;
   grid-template-columns: 40em 19.375em;
   // grid-template-rows: 1fr 1fr;
+  height: 100%;
   gap: 0em 1em;
   grid-auto-flow: row;
   margin-top: 3em;
@@ -40,7 +41,7 @@
     "main-area-bottom";
   grid-area: main-area;
   // background-color: lightblue;
-  height: 1000px;
+  height: 100%
 }
 
 .main-area-top { grid-area: main-area-top;
@@ -51,7 +52,7 @@ height:3em ; }
 
 .main-area-bottom { grid-area: main-area-bottom;
   // background-color: lightcoral;
-height: 900px; }
+height:100% }
 
 .tile{
   width: 100%;

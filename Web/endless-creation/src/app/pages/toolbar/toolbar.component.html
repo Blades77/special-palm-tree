@@ -72,15 +72,10 @@
         <div class="border-container">
           <button class="btn btn-outline-secondary shadow-none rounded-0 search-button float" type="button"
             (click)="changeScope()">{{searchParams.scope}}</button>
-          <div ngbDropdown class="float">
-            <button class="btn btn-outline-secondary shadow-none rounded-0 search-button" id="dropdownBasic1"
-              ngbDropdownToggle type="button">Tags Search</button>
-            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-              <div class="tags-inner">Pisze sobie tutaj tagi</div>
-            </div>
-          </div>
+            <button class="btn btn-outline-secondary shadow-none rounded-0 search-button float" type="button"
+            (click)="changeTagSearch()">Search Tags</button>
           <button class="btn btn-outline-secondary shadow-none rounded-0 search-button float" type="button"
-            (click)="changeStringSearch()">Search</button>
+            (click)="changeStringSearch()">Search Titles</button>
         </div>
       </div>
     </div>

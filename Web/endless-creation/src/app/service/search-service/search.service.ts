@@ -49,7 +49,7 @@ getSearchHotNewForString(type: string,page: number,searchString: string){
   return this.http.get<TileVIEW>(this.baseUrl+"tile/dashboard/"+type+"/"+page+"/s/"+searchString);
 }
 
-getSearchHotNewForTags(type: string,page: number,tags: number[]){
+getSearchHotNewForTags(type: string,page: number,tags: string){
   console.log(this.baseUrl+"tile/dashboard/"+type+"/"+page+"/t/"+tags)
   return this.http.get<TileVIEW>(this.baseUrl+"tile/dashboard/"+type+"/"+page+"/t/"+tags);
 }
@@ -59,7 +59,7 @@ getSearcLikesForString(term: string,order: string,page: number,searchString: str
   return this.http.get<TileVIEW>(this.baseUrl+"tile/dashboard/likes/"+term+"/"+order+"/"+page+"/s/"+searchString);
 }
 
-getSearcLikesForTags(term: string,order: string,page: number,tags: number[]){
+getSearcLikesForTags(term: string,order: string,page: number,tags: string){
   console.log(this.baseUrl+"tile/dashboard/likes/"+term+"/"+order+"/"+page+"/t/"+tags);
   return this.http.get<TileVIEW>(this.baseUrl+"tile/dashboard/likes/"+term+"/"+order+"/"+page+"/t/"+tags);
 }

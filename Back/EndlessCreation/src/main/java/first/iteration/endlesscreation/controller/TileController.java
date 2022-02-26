@@ -34,12 +34,12 @@ public class TileController {
 
 
     @ApiOperation(value="Returns list of tiles containing  tags")
-    @GetMapping("/tiles/group/{groupId}/{searchType}/{order}/{tagIdList}/")
+    @GetMapping("/tiles/group/{groupId}/{searchType}/{order}/{tagNameString}/")
     private List<TileDTO> getTilesByAllTagsId(@ApiParam(value = "Search type: all returns Tiles with all tags included, one returns Tiles with at least one tile included", example = "all", required = true) @PathVariable String searchType,
                                               @ApiParam(value = "Order", example = "asc", required = true) @PathVariable String order,
-                                              @ApiParam(value = "List of ids of tags", example = "1034,1035", required = true) @PathVariable List<Long> tagIdList,
+                                              @ApiParam(value = "List of ids of tags", example = "1034,1035", required = true) @PathVariable String tagNameString,
                                               @ApiParam(value = "Current Group Id or 0 for all group search", example = "1", required = true) @PathVariable Long groupId) {
-        return tileService.getTilesIncludingAllTagIdList(groupId,searchType,order,tagIdList);
+        return tileService.getTilesIncludingAllTagIdList(groupId,searchType,order,tileService.processStringTagsIntoTagStringList(tagNameString));
     }
 
 //    @ApiOperation(value="Returns list of tiles ordered by date")
@@ -164,12 +164,12 @@ public class TileController {
     }
 
     @ApiOperation(value="Return list of tiles for dashboard")
-    @GetMapping( "/tile/dashboard/{type}/{page}/t/{tagIdList}")
+    @GetMapping( "/tile/dashboard/{type}/{page}/t/{tagNameString}")
     private List<TileDTO> getDashboardNewestHottestTilesListSearch(@ApiParam(value = "page", example = "0", required = true) @PathVariable Integer page,
                                                          @ApiParam(value = "Param new or hot", example = "new", required = true) @PathVariable String type,
-                                                         @ApiParam(value = "List of ids of tags", example = "1034,1035") @PathVariable List<Long> tagIdList){
+                                                         @ApiParam(value = "List of ids of tags", example = "1034,1035") @PathVariable String tagNameString){
 
-        return tileService.getDashboardTilesTagIdListSearch("nh",page,type, tagIdList);
+        return tileService.getDashboardTilesTagIdListSearch("nh",page,type, tileService.processStringTagsIntoTagStringList(tagNameString));
     }
 
     @ApiOperation(value="Return list of tiles for dashboard")
@@ -203,13 +203,13 @@ public class TileController {
     }
 
     @ApiOperation(value="Return list of tiles for dashboard by likes")
-    @GetMapping("/tile/dashboard/likes/{term}/{order}/{page}/t/{tagIdList}")
+    @GetMapping("/tile/dashboard/likes/{term}/{order}/{page}/t/{tagNameString}")
     private List<TileDTO> getDashboardTilesLikesTagIdList(@ApiParam(value = "page", example = "0", required = true) @PathVariable Integer page,
                                                          @ApiParam(value = "sorting by: asc : desc", example = "asc", required = true) @PathVariable String order,
                                                          @ApiParam(value = "term of sorting", example = "allTime", required = true) @PathVariable String term,
-                                                          @ApiParam(value = "List of ids of tags", example = "1034,1035") @PathVariable List<Long> tagIdList) {
+                                                          @ApiParam(value = "List of ids of tags", example = "1034,1035") @PathVariable  String tagNameString) {
 
-        return tileService.getDashboardLikesTilesTagIdListSearch(page, term, order,tagIdList);
+        return tileService.getDashboardLikesTilesTagIdListSearch(page, term, order,tileService.processStringTagsIntoTagStringList(tagNameString));
 
     }
 

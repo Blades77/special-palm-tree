@@ -37,4 +37,9 @@ public class TagDAO {
     public List<TagEntity> getTagEntityListByBook(BookEntity bookEntity){
         return  tagRepository.getTagEntityByBooks(bookEntity);
     }
+
+    public List<Long> getTagIdListByTagNameList(List<String> tagStringList){
+        return  tagRepository.getTagIdListByTagNameList(tagStringList)
+                .orElseThrow(() -> new ResourceNotFoundException("No tags matches your search"));
+    }
 }

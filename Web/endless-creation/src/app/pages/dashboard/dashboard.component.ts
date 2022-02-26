@@ -67,7 +67,7 @@ export class DashboardComponent implements OnInit {
     this.authService.isLoggedIn().subscribe(isLogged => this.isLogged = isLogged);
     this.searchService.getSearch().subscribe(search => {
       this.search = search;
-      console.log("coś tu prewywołuje")
+      console.log("Subscirbe wywołuje doSearch()")
       this.doSearch();
     });
     this.searchService.getClearToolbarFromHome().subscribe(home =>{
@@ -82,7 +82,7 @@ export class DashboardComponent implements OnInit {
   }
 
   doSearch(){
-    console.log("serchuje byk")
+    console.log("Log z ciała doSearch()")
     if(this.search.isStringSearchActive){
       this.searchString();
     }else if(this.search.isTagSearchActive){
@@ -91,7 +91,7 @@ export class DashboardComponent implements OnInit {
   }
 
   clearSearch(){
-    console.log("tu se srpawdam clear search")
+    console.log("Wywoałnie clearSearch()")
     this.searchService.clearSearchTrue();
     this.isUrlChanged = true;
     this.markSearchParam(0);
@@ -100,12 +100,13 @@ export class DashboardComponent implements OnInit {
 
 
   searchString(){
-    console.log("search string")
+    console.log("Search by String")
     this.isUrlChanged = true;
     this.markSearchParam(0);
     this.onScroll();
   }
   searchTags(){
+    console.log("Search by tags")
     this.isUrlChanged = true;
     this.markSearchParam(0);
     this.onScroll();
@@ -152,7 +153,7 @@ export class DashboardComponent implements OnInit {
 
 
   getDashboardNewOrHotWithTagSearch(type: string, page: number){
-    this.searchService.getSearchHotNewForTags(type,page,this.search.searchTags)
+    this.searchService.getSearchHotNewForTags(type,page,this.search.searchString)
     .subscribe(
       (response: any) => {
         this.concatTiles(response);
@@ -199,7 +200,7 @@ export class DashboardComponent implements OnInit {
 
 
   getDashboardLikesWithTagSearch(term: string, order: string, page: number){
-    this.searchService.getSearcLikesForTags(term,order,page,this.search.searchTags)
+    this.searchService.getSearcLikesForTags(term,order,page,this.search.searchString)
     .subscribe(
       (response: any) => {
         this.concatTiles(response);
@@ -241,13 +242,13 @@ export class DashboardComponent implements OnInit {
           console.log("Dla new or hot");
           if(this.search.isStringSearchActive == false && this.search.isTagSearchActive == false){
             this.getDashboardNewOrHot(this.newOrHot,this.pages);
-            console.log("New or hot first");
+            console.log("New or hot");
           }else if(this.search.isStringSearchActive){
             this.getDashboardNewOrHotWithStringSearch(this.newOrHot,this.pages);
-            console.log("New or hot second");
+            console.log("New or hot search by string");
           }else if(this.search.isTagSearchActive){
             this.getDashboardNewOrHotWithTagSearch(this.newOrHot,this.pages);
-            console.log("New or hot third");
+            console.log("New or hot search by tags");
           }
 
           break;
@@ -255,9 +256,12 @@ export class DashboardComponent implements OnInit {
           console.log("Dla likes");
           if(this.search.isStringSearchActive == false && this.search.isTagSearchActive == false){
             this.getDashboardLikes(this.activeTermValue,this.order,this.pages);
+            console.log("Likes")
           }else if(this.search.isStringSearchActive){
+            console.log("Likes search by string");
             this.getDashboardLikesWithStringSearch(this.activeTermValue,this.order,this.pages);
           }else if(this.search.isTagSearchActive){
+            console.log("Likes search by tags")
             this.getDashboardLikesWithTagSearch(this.activeTermValue,this.order,this.pages);
           }
           break;

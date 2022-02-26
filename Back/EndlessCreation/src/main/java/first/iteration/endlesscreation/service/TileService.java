@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -456,6 +457,14 @@ public class TileService {
 
         }
         return  groupIdList;
+    }
+
+
+    public List<Long> processStringTagsIntoTagStringList(String stringTags){
+
+    List<String> tags = new ArrayList<String>(Arrays.asList(stringTags.split(",")));
+    System.out.println(stringTags+" ok dalej"+ tags +" ok daljj" + tagService.getTagIdListByTagNameList(tags));
+    return tagService.getTagIdListByTagNameList(tags);
     }
 
     public List<TileDTO> getDashboardTilesStringSearch(String typeEnd,Integer page, String type, String search){

@@ -1,16 +1,16 @@
-
- <div class="container">
-  <div
+<div
   infiniteScroll
-  [infiniteScrollDistance]="99"
-  [infiniteScrollThrottle]="100"
+  [infiniteScrollDistance]="200"
+  [infiniteScrollThrottle]="800"
   (scrolled)="onScroll()"
   >
+ <div class="container">
+  
 
-  </div>
+ 
   <div class="search-info"*ngIf="search.isStringSearchActive || search.isTagSearchActive">Search results for 
     <span *ngIf="search.isStringSearchActive">word: {{search.searchString}}</span>
-    <span *ngIf="search.isTagSearchActive">Tags:</span>
+    <span *ngIf="search.isTagSearchActive">Tags: {{search.searchString}}</span>
     <button (click)="clearSearch()">Clearuje search</button>
   </div>
   <div class="right-area"></div>
@@ -100,4 +100,5 @@
       </div>
     </div>
   </div>
+</div>
 </div>
