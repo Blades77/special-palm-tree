@@ -167,7 +167,7 @@ public class TileController {
     @GetMapping( "/tile/dashboard/{type}/{page}/t/{tagNameString}")
     private List<TileDTO> getDashboardNewestHottestTilesListSearch(@ApiParam(value = "page", example = "0", required = true) @PathVariable Integer page,
                                                          @ApiParam(value = "Param new or hot", example = "new", required = true) @PathVariable String type,
-                                                         @ApiParam(value = "List of ids of tags", example = "1034,1035") @PathVariable String tagNameString){
+                                                         @ApiParam(value = "List of ids of tags", example = "as,Bloody") @PathVariable String tagNameString){
 
         return tileService.getDashboardTilesTagIdListSearch("nh",page,type, tileService.processStringTagsIntoTagStringList(tagNameString));
     }

@@ -22,6 +22,31 @@
   text-align: center;
   font-weight: bold;
   font-size: 1.3em;
+
+  .float {
+    display: block;
+    float: left;
+    background-color: #929394;
+    margin-top: 0.2rem;
+    margin-left: 0.2rem;
+  }
+
+  .clear-search{
+    display: block;
+    float: right;
+    background-color: #929394;
+    margin-top: 0.2rem;
+    margin-left: 0.2rem;
+
+    img{
+      margin-bottom: 0.2rem;
+    }
+
+    &:hover{
+      cursor: pointer;
+      background-color: crimson;
+    }
+  }
 }
 
 // [ngClass]="{'tile-no-tags':tile.tags.size === 0}"
@@ -250,4 +275,6 @@ height:100% }
     cursor: pointer;
     border-radius: 0.3em;
 }
+
+
 

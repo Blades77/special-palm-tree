@@ -463,8 +463,11 @@ public class TileService {
     public List<Long> processStringTagsIntoTagStringList(String stringTags){
 
     List<String> tags = new ArrayList<String>(Arrays.asList(stringTags.split(",")));
-    System.out.println(stringTags+" ok dalej"+ tags +" ok daljj" + tagService.getTagIdListByTagNameList(tags));
-    return tagService.getTagIdListByTagNameList(tags);
+    List<Long> tagIdList = tagService.getTagIdListByTagNameList(tags);
+        if(tagIdList.isEmpty()){
+            tagIdList.add(99999l);
+        }
+        return tagIdList;
     }
 
     public List<TileDTO> getDashboardTilesStringSearch(String typeEnd,Integer page, String type, String search){
@@ -496,7 +499,7 @@ public class TileService {
            if(search.equals("") && tagIdList.isEmpty()){
                groupIdList = scopeTileAcces(1);
                tileEntityList = tileDAO.getNewestTileEntitiesForDashboard(groupIdList,PageRequest.of(page, 5));
-               System.out.println("Tu leci opcja pierwsza----------------new---------");
+               System.out.println("Tu leci opcja pierwsza----------------new---------"+tagIdList.isEmpty());
            }else if(!tagIdList.isEmpty()){
                int listLength = tagIdList.size();
                groupIdList = scopeTileAcces(0);

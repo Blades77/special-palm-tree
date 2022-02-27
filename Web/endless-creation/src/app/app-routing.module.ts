@@ -9,15 +9,16 @@ import { BookComponent } from './pages/book/book.component';
 
 
 const routes: Routes = [
-  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+  { path: '',  component: DashboardComponent },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'group/:id', component: GroupComponent },
   { path: 'tile-detail/:id', component: TileDetailsComponent },
   { path: 'login', component: LoginComponent},
   { path: 'book', component: BookComponent},
+
   // { path: '404', component: NoPageComponent},
   { path: 'login', component: LoginComponent},
-  // { path: '**', component: NoPageComponent},
+  // { path: '**', component: NoPageComponent}
 
 
 ];

@@ -9,6 +9,7 @@ import { environment } from 'src/environments/environment';
 import { UserStatus } from 'src/app/model/user-status';
 import { LoggedUserShortView } from 'src/app/model/logged-user-short-view';
 import { ErrorHandlerService } from '../error-handler-service/error-handler.service';
+import { OnDestroy } from '@angular/core';
 
 
 @Injectable({
@@ -19,10 +20,14 @@ export class AuthenticationService {
   private baseUrl= environment.apiUrl;
   private AUTH_TOKEN = "JWT_TOKEN";
   private REFRESH_TOKEN="REFRESH_TOKEN";
+  private IS_REMEMBER = "IS_REMEMBER";
 
   isLoginSubject = new BehaviorSubject<boolean>(false);
   loggedUserShortView = new BehaviorSubject<LoggedUserShortView>({username: "",userId: 0,userImageLink: ""});
   user = new BehaviorSubject<String>("");
+
+
+  isRememberMe = true;
 
   
   constructor(
@@ -33,13 +38,13 @@ export class AuthenticationService {
 
   }
 
+
 login(credentials: any): Observable<any> {
   console.log("jestem w serwisie logowania")
   return this.http.post<TokenVIEW>(this.baseUrl+"login",credentials).pipe(
     tap((token) => {
       console.log('jestem po d koniec')
-      localStorage.setItem(this.AUTH_TOKEN, token.accessToken);
-      localStorage.setItem(this.REFRESH_TOKEN, token.refreshToken);
+      this.setTokensLocal(token);
       this.user.next(credentials.username);
       this.isLoginSubject.next(true);
       this.setUserShortInfo();
@@ -67,8 +72,7 @@ logout(): Observable<any> {
 }
 
 removeTokenAndSetLayout(): void {
-  localStorage.removeItem(this.AUTH_TOKEN);
-  localStorage.removeItem(this.REFRESH_TOKEN);
+  this.removeLocalJWT();
   this.user.next("");
   this.isLoginSubject.next(false);
   this.loggedUserShortView.next({username: "",userId: 0,userImageLink: ""});
@@ -76,7 +80,14 @@ removeTokenAndSetLayout(): void {
 }
 
 hasToken(): boolean{
-  return !!localStorage.getItem(this.AUTH_TOKEN);
+  const authLocal = !!localStorage.getItem(this.AUTH_TOKEN);
+  const authSes =!!sessionStorage.getItem(this.AUTH_TOKEN);
+  if(authLocal || authSes){
+    return true;
+  }else{
+    return false;
+  }
+
 }
 
 isUserLogedBool(){
@@ -100,12 +111,24 @@ loggedUserShortInfo(): Observable<LoggedUserShortView> {
 }
 
 getAccessToken(): string {
-  return String(localStorage.getItem(this.AUTH_TOKEN));
+  const localJWT = localStorage.getItem(this.AUTH_TOKEN);
+  if(localJWT){
+  return String(localJWT);
+  }else{
+    const localSesJWT = sessionStorage.getItem(this.AUTH_TOKEN);
+    return String(localSesJWT);
+  }
 
 }
 
 getRefreshToken(): string {
-  return String(localStorage.getItem(this.REFRESH_TOKEN));
+  const localJWT = localStorage.getItem(this.REFRESH_TOKEN);
+  if(localJWT){
+  return String(localJWT);
+  }else{
+    const localSesJWT = sessionStorage.getItem(this.REFRESH_TOKEN);
+    return String(localSesJWT);
+  }
 
 }
 // refreshTokenWithAppIni(){
@@ -121,8 +144,7 @@ refreshToken(refreshToken: string){
   return this.http.post<TokenVIEW>(this.baseUrl+"user/refresh/",{refreshToken: "Bearer "+refreshToken}).pipe(
     tap((token) => {
       console.log('jestem po d koniec tokenowania refreshu')
-      localStorage.setItem(this.AUTH_TOKEN, token.accessToken);
-      localStorage.setItem(this.REFRESH_TOKEN, token.refreshToken);
+      this.setTokensAfterRefresh(token);
       this.user.next("stringuje4444");
       this.isLoginSubject.next(true);
       this.setUserShortInfo();
@@ -135,7 +157,7 @@ refreshToken(refreshToken: string){
 private refreshTokenTimeout: any;
 
 private startRefreshTokenTimer(){
-  const refreshToken = localStorage.getItem(this.REFRESH_TOKEN);
+  const refreshToken = this.getRefreshToken();
   if(refreshToken){
     const expiry = (JSON.parse(atob(refreshToken.split('.')[1]))).exp;
     const expires = new Date(expiry * 1000);
@@ -151,6 +173,51 @@ private stopRefreshTokenTimer() {
   clearTimeout(this.refreshTokenTimeout);
 }
 
+
+setIsRemember(isRemember: boolean){
+  this.isRememberMe = isRemember;
 }
+
+setTokensAfterRefresh(token: TokenVIEW){
+  const authLocal = !!localStorage.getItem(this.AUTH_TOKEN);
+  const authSes = !!sessionStorage.getItem(this.AUTH_TOKEN);
+  if(authLocal){
+    console.log(" authlocal z setTokens"+authLocal);
+    localStorage.setItem(this.AUTH_TOKEN, token.accessToken);
+    localStorage.setItem(this.REFRESH_TOKEN, token.refreshToken);
+  }else if(authSes){
+    console.log(" authlocalses z setTokens"+authSes);
+    sessionStorage.setItem(this.AUTH_TOKEN, token.accessToken);
+    sessionStorage.setItem(this.REFRESH_TOKEN, token.refreshToken);
+  }
+}
+
+setTokensLocal(token: TokenVIEW){
+  if(this.isRememberMe === true){
+    localStorage.setItem(this.AUTH_TOKEN, token.accessToken);
+    localStorage.setItem(this.REFRESH_TOKEN, token.refreshToken);
+  }else if(this.isRememberMe === false){
+    sessionStorage.setItem(this.AUTH_TOKEN, token.accessToken);
+    sessionStorage.setItem(this.REFRESH_TOKEN, token.refreshToken);
+  }
+}
+
+removeLocalJWT(){
+  const authLocal = !!localStorage.getItem(this.AUTH_TOKEN);
+  const authSes = !!sessionStorage.getItem(this.AUTH_TOKEN);
+  if(authLocal){
+    console.log("jestem w lokal")
+    localStorage.removeItem(this.AUTH_TOKEN);
+    localStorage.removeItem(this.REFRESH_TOKEN);
+  }else if(authSes){
+    console.log("jestem w lokal sesss")
+    sessionStorage.removeItem(this.AUTH_TOKEN);
+    sessionStorage.removeItem(this.REFRESH_TOKEN);
+  }
+}
+
+}
+
+
 
 

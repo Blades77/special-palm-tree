@@ -32,6 +32,8 @@ export class ToolbarComponent implements OnInit {
   loggedUserShortInfo!: LoggedUserShortView;
   currentURL!: string;
 
+  private IS_REMEMBER = "IS_REMEMBER";
+
   groupFilter = "";
   tagsFilter = "";
 
@@ -51,7 +53,8 @@ export class ToolbarComponent implements OnInit {
   ) {
     this.loginForm = this.fb.group({
       username: ['', [Validators.required]],
-      password: ['', [Validators.required]]
+      password: ['', [Validators.required]],
+      isRemember: [false]
     });
   }
 
@@ -85,6 +88,7 @@ export class ToolbarComponent implements OnInit {
 
   changeStringSearch() {
     this.searchParams.isStringSearchActive = true;
+    this.searchParams.isTagSearchActive = false;
     this.searchParams.searchString = this.stringSearch;
     this.searchService.setSearch(this.searchParams);
 
@@ -92,6 +96,7 @@ export class ToolbarComponent implements OnInit {
 
   changeTagSearch(){
     this.searchParams.isTagSearchActive = true;
+    this.searchParams.isStringSearchActive = false;
     this.searchParams.searchString = this.stringSearch;
     this.searchService.setSearch(this.searchParams);
   }
@@ -168,6 +173,9 @@ export class ToolbarComponent implements OnInit {
   onSubmit() {
     const passwordValue = this.loginForm.get('password')?.value;
     const usernameValue = this.loginForm.get('username')?.value;
+    const isRemember = this.loginForm.get('isRemember')?.value;
+    this.authService.setIsRemember(isRemember);
+
     this.authService.login({ password: passwordValue, username: usernameValue }).subscribe(
       (response) => {
         console.log("udało się!!!");
