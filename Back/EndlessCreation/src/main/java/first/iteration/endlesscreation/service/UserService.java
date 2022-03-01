@@ -1,6 +1,7 @@
 package first.iteration.endlesscreation.service;
 
 
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import first.iteration.endlesscreation.Model.RoleEntity;
 import first.iteration.endlesscreation.Model.UserDetailsImpl;
@@ -21,6 +22,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -61,21 +63,19 @@ public class UserService {
     }
 
     public JWTokenDTO authenticateAndRefreshToken(RefresTokenDTO refreshTokenDTO) throws Exception{
-        System.out.println("sprawdzam czy wogóle jestrem w tym tam gdize ten ------------------------------------------------");
         JWTokenDTO jwTokenDTO = new JWTokenDTO();
         try{
             DecodedJWT decodedRefreshJWT = JWTUtils.verifyToken(refreshTokenDTO.getRefreshToken());
-            log.info("Doszło za decoded");
             UserEntity userEntity = userDAO.getUserEntityByUserName(decodedRefreshJWT.getSubject());
-            log.info("Doszło za entity");
             UserDetailsImpl userDetails = UserDetailsImpl.build(userEntity);
-            log.info("Doszło za userDetails");
             jwTokenDTO.setAccessToken(JWTUtils.generateAccessToken(userDetails));
             jwTokenDTO.setRefreshToken(JWTUtils.generateRefreshToken(userDetails));
-            log.info("Doszło za setAccess");
+        }catch (JWTVerificationException jw){
+            throw new ResourceNotFoundException("Jakis problem z userem"+jw.getMessage());
         }catch(Exception e){
-            throw new ResourceNotFoundException("Jakis problem z userem"+e.getMessage());
+            throw new UsernameNotFoundException(e.getMessage());
         }
+
         return jwTokenDTO;
     }
 

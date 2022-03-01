@@ -13,11 +13,6 @@ public class AuthDAO {
         this.authRepository = authRepository;
     }
 
-    //    public TagEntity getTagEntityById(long id){
-//        return tagRepository.findById(id)
-//                .orElseThrow(() -> new ResourceNotFoundException("Cannot find specified tag"));
-//    }
-
     public boolean isTileInPublicGroup(Long tileId){
         return authRepository.isTileInPublicGroup(tileId) == 1;
     }

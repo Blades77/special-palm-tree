@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import first.iteration.endlesscreation.configuration.JWTUtils;
 import first.iteration.endlesscreation.configuration.LoggedUserGetter;
 import first.iteration.endlesscreation.dao.GroupDataDAO;
+import first.iteration.endlesscreation.exception.DefaultExpection;
 import first.iteration.endlesscreation.exception.ResourceNotFoundException;
 import first.iteration.endlesscreation.repository.GroupDataRepository;
 import first.iteration.endlesscreation.service.*;
@@ -66,7 +67,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                     if(authHelper.loggedAccessCheck(path)){
                         filterChain.doFilter(request,response);
                     }else {
-                        throw new ResourceNotFoundException("Rzuca errorem Byq z autoryzacji");
+                        throw new DefaultExpection("Access denied");
                     }
 
 
@@ -90,10 +91,10 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request,response);
             }
             else if(authHelper.notLoggedAccessCheck(path)){
-                logger.info("jestem po autoryzacji");
+//                logger.info("jestem po autoryzacji");
                 filterChain.doFilter(request,response);
             }else{
-                throw new ResourceNotFoundException("Rzuca errorem Byq");
+                throw new DefaultExpection("Access denied");
             }
         }
 

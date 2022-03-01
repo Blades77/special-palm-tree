@@ -37,4 +37,15 @@ public class ExceptionController {
         );
         return new ResponseEntity<>(apiExpection, invalidPathVariableStatus);
     }
+
+    @ExceptionHandler(value = {DefaultExpection.class})
+    public ResponseEntity<Object> handleApiRequestExpection(DefaultExpection e){
+        HttpStatus defaultExceptionStatus = HttpStatus.BAD_REQUEST;
+        ApiExpection apiExpection = new ApiExpection(
+                e.getMessage(),
+                defaultExceptionStatus,
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(apiExpection, defaultExceptionStatus);
+    }
 }
