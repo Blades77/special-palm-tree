@@ -154,7 +154,6 @@ public class TileDAO {
     }
 
     public List<TileEntity> getNewestTileEntitiesForDashboardWithTags(List<Long> groupIdList,List<Long> tagIdList, int listLength,Pageable pageable){
-        System.out.println("Zwracam dane z 2223TileDao"+tagIdList+"grop"+groupIdList+"list length"+listLength);
         return  tileRepository.getNewestTileEntitiesForDashboardWithTagIdList(groupIdList,tagIdList,pageable)
                 .orElseThrow(() -> new ResourceNotFoundException("Something went wrong"));
     }
@@ -170,7 +169,6 @@ public class TileDAO {
     }
 
     public List<TileEntity> getHottestTileEntitiesForDashboardWithTags(List<Long> groupIdList,LocalDateTime endDate,LocalDateTime nowDate,List<Long> tagIdList, int listLength,Pageable pageable){
-        System.out.println("Zwracam dane z 22TileDao"+tagIdList);
         return  tileRepository.getHottestTileEntitiesForDashboardWithTags(groupIdList,endDate,nowDate,tagIdList,listLength,pageable)
                 .orElseThrow(() -> new ResourceNotFoundException("Something went wrong"));
     }

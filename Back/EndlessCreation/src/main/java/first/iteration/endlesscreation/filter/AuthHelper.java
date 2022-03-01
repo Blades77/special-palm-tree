@@ -24,9 +24,7 @@ public class AuthHelper {
 
     private final AuthDAO authDAO;
 
-    public String test(){
-        return "LOLOLO";
-    }
+
     public boolean loggedAccessCheck(String path){
         String[] pathArr = path.split("/");
         if(Pattern.matches("/tile/[0-9]+",path)){
